@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { updateProfileAction } from "@/actions/profile";
+import { ImageUploadField } from "@/components/admin/image-upload-field";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -103,7 +104,7 @@ export function ProfileEditForm({ profile }: ProfileEditFormProps) {
               Profile preview
             </p>
             <p className="mt-0.5 text-xs text-muted-foreground">
-              Add an avatar URL for a personal image.
+              Paste an image URL or upload directly.
             </p>
           </div>
         </div>
@@ -183,19 +184,19 @@ export function ProfileEditForm({ profile }: ProfileEditFormProps) {
         </div>
 
         {/* ── Avatar URL ── */}
-        <div className="mt-4 space-y-1.5">
-          <Label htmlFor="profile-avatar-url" className="text-xs sm:text-sm">
-            Avatar URL
-          </Label>
-          <Input
+        <div className="mt-4">
+          <ImageUploadField
             id="profile-avatar-url"
+            label="Avatar URL"
             value={form.avatarUrl}
-            onChange={(event) =>
-              setForm((prev) => ({ ...prev, avatarUrl: event.target.value }))
+            onChange={(value) =>
+              setForm((prev) => ({ ...prev, avatarUrl: value }))
             }
-            maxLength={500}
+            uploadPath="/api/profile/upload-avatar"
             placeholder="https://example.com/avatar.jpg"
-            className="h-10"
+            hint="Paste an image URL or upload an image directly."
+            showPreview={false}
+            disabled={isPending}
           />
         </div>
 

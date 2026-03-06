@@ -12,9 +12,11 @@ type ImageUploadFieldProps = {
   label: string;
   value: string;
   onChange: (value: string) => void;
+  uploadPath?: string;
   placeholder?: string;
   hint?: string;
   previewClassName?: string;
+  showPreview?: boolean;
   disabled?: boolean;
 };
 
@@ -23,9 +25,11 @@ export function ImageUploadField({
   label,
   value,
   onChange,
+  uploadPath = "/api/admin/upload-image",
   placeholder = "https://...",
   hint,
   previewClassName = "h-24 w-full object-contain",
+  showPreview = true,
   disabled = false,
 }: ImageUploadFieldProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -42,7 +46,7 @@ export function ImageUploadField({
       const formData = new FormData();
       formData.append("file", file);
 
-      const response = await fetch("/api/admin/upload-image", {
+      const response = await fetch(uploadPath, {
         method: "POST",
         body: formData,
       });
@@ -104,7 +108,7 @@ export function ImageUploadField({
           {hint}
         </p>
       ) : null}
-      {value ? (
+      {showPreview && value ? (
         <div className="rounded-lg border border-border/50 bg-muted/30 p-3">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={value} alt={`${label} preview`} className={previewClassName} />
