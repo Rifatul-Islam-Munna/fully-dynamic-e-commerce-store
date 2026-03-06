@@ -104,7 +104,10 @@ const PRODUCT_FLAG_LABELS: Record<ProductFlag, string> = {
   isBestSell: "Best sellers",
 };
 
-function buildHomeSettingsQuery(target?: { mainNavUrl?: string; subNavUrl?: string }) {
+function buildHomeSettingsQuery(target?: {
+  mainNavUrl?: string;
+  subNavUrl?: string;
+}) {
   const params = new URLSearchParams();
   if (target?.mainNavUrl) {
     params.set("mainNavUrl", target.mainNavUrl);
@@ -115,12 +118,18 @@ function buildHomeSettingsQuery(target?: { mainNavUrl?: string; subNavUrl?: stri
   return params.toString();
 }
 
-function buildHomeSettingsUrl(target?: { mainNavUrl?: string; subNavUrl?: string }) {
+function buildHomeSettingsUrl(target?: {
+  mainNavUrl?: string;
+  subNavUrl?: string;
+}) {
   const query = buildHomeSettingsQuery(target);
   return query ? `/web-settings/home?${query}` : "/web-settings/home";
 }
 
-async function getHomeSettings(target?: { mainNavUrl?: string; subNavUrl?: string }) {
+async function getHomeSettings(target?: {
+  mainNavUrl?: string;
+  subNavUrl?: string;
+}) {
   const query = buildHomeSettingsQuery(target);
   try {
     return await GetRequestNormal<HomeSettingsResponse>(
@@ -352,26 +361,26 @@ function DetailTile({
   return (
     <div
       className={cn(
-        "rounded-[24px] border px-4 py-4",
+        "rounded-2xl border px-3 py-3 sm:rounded-[24px] sm:px-4 sm:py-4",
         inverse
           ? "border-white/12 bg-white/8 text-white"
           : "border-border/70 bg-background/82 text-foreground",
         className,
       )}
     >
-      <div className="flex items-start gap-3">
+      <div className="flex items-start gap-2.5 sm:gap-3">
         <div
           className={cn(
-            "mt-0.5 flex size-9 items-center justify-center rounded-2xl",
+            "mt-0.5 flex size-8 items-center justify-center rounded-xl sm:size-9 sm:rounded-2xl",
             inverse ? "bg-white/12 text-white" : "bg-primary/10 text-primary",
           )}
         >
-          <Icon className="size-4" />
+          <Icon className="size-3.5 sm:size-4" />
         </div>
-        <div className="space-y-1.5">
+        <div className="space-y-1">
           <p
             className={cn(
-              "text-sm font-semibold",
+              "text-[13px] font-semibold sm:text-sm",
               inverse ? "text-white" : "text-foreground",
             )}
           >
@@ -379,7 +388,7 @@ function DetailTile({
           </p>
           <p
             className={cn(
-              "text-sm leading-6",
+              "text-xs leading-5 sm:text-sm sm:leading-6",
               inverse ? "text-white/72" : "text-muted-foreground",
             )}
           >
@@ -400,9 +409,9 @@ function ProductGrid({
 }) {
   if (products.length === 0) {
     return (
-      <div className="rounded-[24px] bg-muted/25 px-4 py-10 text-center">
+      <div className="rounded-2xl bg-muted/25 px-4 py-8 text-center sm:rounded-[24px] sm:py-10">
         <p className="text-sm text-muted-foreground">
-          No products found for this section filter.
+          No products found for this section.
         </p>
       </div>
     );
@@ -484,14 +493,13 @@ function renderProductCollectionSection(
     products.length > 0
       ? "Open any product card to see details, price, and add-to-cart options."
       : "Use the main button to open the full collection.";
-  const sectionFlag =
-    section.productFlag ? PRODUCT_FLAG_LABELS[section.productFlag] : null;
+  const sectionFlag = section.productFlag
+    ? PRODUCT_FLAG_LABELS[section.productFlag]
+    : null;
   const itemText = products.length > 0 ? `${products.length} items` : null;
   const metaText = [sectionFlag, itemText].filter(Boolean).join(" - ");
   const ctaLabel = section.buttonLabel || "View all products";
-  const cta = (
-    <SectionCta href={section.buttonUrl} label={ctaLabel} />
-  );
+  const cta = <SectionCta href={section.buttonUrl} label={ctaLabel} />;
 
   if (variant === "minimal_shelf") {
     return (
@@ -515,7 +523,7 @@ function renderProductCollectionSection(
     return (
       <section
         key={sectionKey}
-        className="rounded-[32px] border border-border/70 bg-background p-4 shadow-[0_22px_60px_-50px_rgba(15,23,42,0.22)] sm:p-6"
+        className="rounded-2xl border border-border/70 bg-background p-3 shadow-[0_22px_60px_-50px_rgba(15,23,42,0.22)] sm:rounded-[32px] sm:p-6"
       >
         <div className="flex flex-col gap-4 border-b border-border/70 pb-4 sm:flex-row sm:items-end sm:justify-between">
           <div className="max-w-2xl space-y-3">
@@ -545,7 +553,7 @@ function renderProductCollectionSection(
     return (
       <section
         key={sectionKey}
-        className="rounded-[32px] border border-border/70 bg-background p-4 shadow-[0_22px_60px_-50px_rgba(15,23,42,0.18)] sm:p-6"
+        className="rounded-2xl border border-border/70 bg-background p-3 shadow-[0_22px_60px_-50px_rgba(15,23,42,0.18)] sm:rounded-[32px] sm:p-6"
       >
         <div className="grid gap-4 lg:grid-cols-[300px_minmax(0,1fr)] lg:items-start">
           <aside className="rounded-[26px] bg-muted/20 px-5 py-6 sm:px-6">
@@ -571,7 +579,7 @@ function renderProductCollectionSection(
     return (
       <section
         key={sectionKey}
-        className="rounded-[32px] border border-border/70 bg-background p-4 shadow-[0_22px_60px_-50px_rgba(15,23,42,0.18)] sm:p-6"
+        className="rounded-2xl border border-border/70 bg-background p-3 shadow-[0_22px_60px_-50px_rgba(15,23,42,0.18)] sm:rounded-[32px] sm:p-6"
       >
         <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_280px]">
           <div className="order-2 rounded-[26px] bg-muted/18 p-3 sm:p-4 lg:order-1">
@@ -607,15 +615,16 @@ function renderProductCollectionSection(
         <div className="border-b border-border/70 bg-muted/18 px-5 py-6 sm:px-6">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-2xl space-y-3">
-              <SectionEyebrow label="Featured collection" secondary={metaText} />
+              <SectionEyebrow
+                label="Featured collection"
+                secondary={metaText}
+              />
               <SectionHeading title={title} copy={introCopy} />
             </div>
             {cta}
           </div>
           <div className="mt-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-            <SectionTagRow
-              items={["Featured layout", sectionFlag, itemText]}
-            />
+            <SectionTagRow items={["Featured layout", sectionFlag, itemText]} />
             <p className="text-sm leading-6 text-muted-foreground">
               {guidanceText}
             </p>
@@ -628,8 +637,129 @@ function renderProductCollectionSection(
     );
   }
 
+  /* ── banner_top ── */
+  if (variant === "banner_top") {
+    return (
+      <section key={sectionKey}>
+        <div className="rounded-2xl bg-primary px-4 py-5 text-primary-foreground sm:rounded-t-[32px] sm:rounded-b-none sm:px-6 sm:py-6">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="space-y-1">
+              <SectionEyebrow label="Collection" secondary={metaText} inverse />
+              <SectionHeading title={title} copy={introCopy} inverse compact />
+            </div>
+            <SectionCta href={section.buttonUrl} label={ctaLabel} inverse />
+          </div>
+        </div>
+        <div className="rounded-b-2xl border border-t-0 border-border/70 bg-background p-3 sm:rounded-b-[32px] sm:p-5">
+          <ProductGrid products={products} className="gap-3" />
+        </div>
+      </section>
+    );
+  }
+
+  /* ── floating_header ── */
+  if (variant === "floating_header") {
+    return (
+      <section key={sectionKey} className="relative pt-8 sm:pt-10">
+        <div className="absolute inset-x-4 top-0 z-10 mx-auto max-w-lg rounded-2xl border border-border/60 bg-background px-4 py-4 shadow-lg sm:rounded-[24px] sm:px-6 sm:py-5">
+          <SectionHeading title={title} copy={introCopy} compact />
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            <SectionTagRow items={[sectionFlag, itemText]} />
+            {cta}
+          </div>
+        </div>
+        <div className="rounded-2xl border border-border/70 bg-muted/15 px-3 pb-3 pt-20 sm:rounded-[32px] sm:px-5 sm:pb-5 sm:pt-24">
+          <ProductGrid products={products} className="gap-3" />
+        </div>
+      </section>
+    );
+  }
+
+  /* ── split_intro ── */
+  if (variant === "split_intro") {
+    return (
+      <section key={sectionKey} className="space-y-4">
+        <div className="grid gap-3 sm:grid-cols-2">
+          <div className="rounded-2xl border border-border/70 bg-background px-4 py-4 sm:rounded-[24px] sm:px-5 sm:py-5">
+            <SectionEyebrow label="Collection" secondary={metaText} />
+            <h2 className="mt-2 text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
+              {title}
+            </h2>
+          </div>
+          <div className="flex items-center rounded-2xl border border-border/70 bg-muted/15 px-4 py-4 sm:rounded-[24px] sm:px-5 sm:py-5">
+            <div className="space-y-3">
+              {introCopy ? (
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                  {introCopy}
+                </p>
+              ) : null}
+              {cta}
+            </div>
+          </div>
+        </div>
+        <ProductGrid products={products} className="gap-3" />
+      </section>
+    );
+  }
+
+  /* ── tab_shelf ── */
+  if (variant === "tab_shelf") {
+    return (
+      <section key={sectionKey} className="space-y-4">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div className="space-y-2">
+            <SectionHeading title={title} compact />
+            <div className="flex flex-wrap gap-1.5">
+              {[sectionFlag, itemText].filter(Boolean).map((tag, i) => (
+                <span
+                  key={i}
+                  className="rounded-full bg-primary/10 px-3 py-1.5 text-xs font-medium text-primary"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+          {cta}
+        </div>
+        <div className="rounded-2xl border border-border/70 bg-background p-3 sm:rounded-[28px] sm:p-4">
+          <ProductGrid products={products} className="gap-3" />
+        </div>
+      </section>
+    );
+  }
+
+  /* ── numbered_list ── */
+  if (variant === "numbered_list") {
+    return (
+      <section
+        key={sectionKey}
+        className="rounded-2xl border border-border/70 bg-background p-3 sm:rounded-[32px] sm:p-5"
+      >
+        <div className="flex items-start gap-3 border-b border-border/70 pb-4 sm:gap-4">
+          <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-xl font-bold text-primary sm:size-14">
+            {products.length}
+          </div>
+          <div className="min-w-0 flex-1">
+            <SectionHeading title={title} copy={introCopy} compact />
+            <div className="mt-2 flex flex-wrap items-center gap-2">
+              <SectionTagRow items={[sectionFlag]} />
+              {cta}
+            </div>
+          </div>
+        </div>
+        <div className="pt-4">
+          <ProductGrid products={products} className="gap-3" />
+        </div>
+      </section>
+    );
+  }
+
   return (
-    <section key={sectionKey} className="rounded-[34px] bg-muted/20 p-4 sm:p-6">
+    <section
+      key={sectionKey}
+      className="rounded-2xl bg-muted/20 p-3 sm:rounded-[34px] sm:p-6"
+    >
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div className="max-w-2xl space-y-2">
           <SectionEyebrow label="Collection" secondary={metaText} />
@@ -645,7 +775,10 @@ function renderProductCollectionSection(
 }
 
 function renderDiscountBannerSection(section: HomeSection, sectionKey: string) {
-  const variant = normalizeHomeSectionVariant("discount_banner", section.variant);
+  const variant = normalizeHomeSectionVariant(
+    "discount_banner",
+    section.variant,
+  );
   const title = section.title?.trim() || "Special Discount";
   const sectionCopy = resolveSectionCopy(section);
   const imageUrl = section.imageUrl?.trim() || "";
@@ -695,7 +828,9 @@ function renderDiscountBannerSection(section: HomeSection, sectionKey: string) {
         key={sectionKey}
         className="relative overflow-hidden rounded-[40px] border border-border/70 bg-[#0f172a] px-5 py-12 text-white sm:px-8"
         style={{
-          backgroundImage: backgroundImageUrl ? `url('${backgroundImageUrl}')` : undefined,
+          backgroundImage: backgroundImageUrl
+            ? `url('${backgroundImageUrl}')`
+            : undefined,
           backgroundSize: backgroundImageUrl ? "cover" : undefined,
           backgroundPosition: backgroundImageUrl ? "center" : undefined,
         }}
@@ -703,7 +838,11 @@ function renderDiscountBannerSection(section: HomeSection, sectionKey: string) {
         <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(15,23,42,0.88),rgba(30,41,59,0.72),rgba(79,70,229,0.58))]" />
         <div className="relative z-10 mx-auto max-w-4xl">
           <div className="rounded-[32px] border border-white/12 bg-white/10 px-6 py-8 text-center backdrop-blur-md">
-            <SectionEyebrow label="Campaign poster" secondary={subtitle} inverse />
+            <SectionEyebrow
+              label="Campaign poster"
+              secondary={subtitle}
+              inverse
+            />
             <div className="mt-5 space-y-5">
               <SectionHeading title={title} copy={sectionCopy} inverse />
               <SectionTagRow
@@ -739,7 +878,7 @@ function renderDiscountBannerSection(section: HomeSection, sectionKey: string) {
     return (
       <section
         key={sectionKey}
-        className="rounded-[38px] border border-border/70 bg-background p-4 shadow-[0_30px_90px_-65px_rgba(15,23,42,0.3)] sm:p-6"
+        className="rounded-2xl border border-border/70 bg-background p-3 shadow-[0_30px_90px_-65px_rgba(15,23,42,0.3)] sm:rounded-[38px] sm:p-6"
       >
         <div className="grid gap-4 lg:grid-cols-[1.06fr_0.94fr] lg:items-stretch">
           <div className="rounded-[32px] bg-[linear-gradient(135deg,rgba(79,70,229,0.08),rgba(15,23,42,0.04),rgba(255,255,255,1))] px-5 py-6 sm:px-6">
@@ -749,14 +888,14 @@ function renderDiscountBannerSection(section: HomeSection, sectionKey: string) {
               <div className="grid gap-3 sm:grid-cols-2">
                 <DetailTile
                   icon={BadgePercent}
-                  title="Offer first"
-                  text="Built for a strong promotion headline and a clean CTA."
+                  title="Special offer"
+                  text="Take advantage of this limited-time deal before it ends."
                   className="bg-background/80"
                 />
                 <DetailTile
                   icon={PanelsTopLeft}
-                  title="Readable split"
-                  text="Message and image stay separate but visually balanced."
+                  title="Easy savings"
+                  text="Browse the selection and save on your favorite products."
                   className="bg-background/80"
                 />
               </div>
@@ -788,7 +927,9 @@ function renderDiscountBannerSection(section: HomeSection, sectionKey: string) {
         key={sectionKey}
         className="relative overflow-hidden rounded-[40px] border border-border/70 bg-[#0f172a] text-white"
         style={{
-          backgroundImage: backgroundImageUrl ? `url('${backgroundImageUrl}')` : undefined,
+          backgroundImage: backgroundImageUrl
+            ? `url('${backgroundImageUrl}')`
+            : undefined,
           backgroundSize: backgroundImageUrl ? "cover" : undefined,
           backgroundPosition: backgroundImageUrl ? "center" : undefined,
         }}
@@ -819,8 +960,8 @@ function renderDiscountBannerSection(section: HomeSection, sectionKey: string) {
             ) : null}
             <DetailTile
               icon={Sparkles}
-              title="Premium overlay"
-              text="Works best for seasonal drops and higher-impact campaign moments."
+              title="Exclusive deal"
+              text="Premium savings on select products — limited availability."
               inverse
             />
           </div>
@@ -843,18 +984,14 @@ function renderDiscountBannerSection(section: HomeSection, sectionKey: string) {
               <div className="grid gap-3 sm:grid-cols-2">
                 <DetailTile
                   icon={BadgePercent}
-                  title="Offer-led layout"
-                  text="The message stays prominent while the visual holds the edge."
+                  title="Limited time"
+                  text="Don't miss out — grab these savings while they last."
                   className="bg-background/80"
                 />
                 <DetailTile
                   icon={GalleryVerticalEnd}
-                  title="Campaign balance"
-                  text={
-                    imageUrl
-                      ? "Image and CTA are kept in separate focal zones."
-                      : "Use with or without a supporting image."
-                  }
+                  title="Curated picks"
+                  text="Handpicked products at special prices just for you."
                   className="bg-background/80"
                 />
               </div>
@@ -889,6 +1026,186 @@ function renderDiscountBannerSection(section: HomeSection, sectionKey: string) {
     );
   }
 
+  /* ── ribbon_banner ── */
+  if (variant === "ribbon_banner") {
+    return (
+      <section
+        key={sectionKey}
+        className="relative overflow-hidden rounded-2xl bg-primary sm:rounded-[32px]"
+      >
+        <div className="absolute -right-10 -top-10 size-40 rotate-12 rounded-[40px] bg-white/10 sm:size-60" />
+        <div className="relative z-10 flex flex-col gap-4 p-4 text-primary-foreground sm:flex-row sm:items-center sm:justify-between sm:p-6">
+          <div className="space-y-1.5">
+            <SectionEyebrow
+              label="Sale"
+              secondary={section.subtitle?.trim()}
+              inverse
+            />
+            <SectionHeading title={title} copy={sectionCopy} inverse compact />
+          </div>
+          <div className="flex shrink-0 flex-wrap items-center gap-3">
+            {imageUrl ? (
+              <MediaFrame
+                src={imageUrl}
+                alt={title}
+                className="size-16 rounded-xl sm:size-20 sm:rounded-2xl"
+                frameClassName="rounded-xl sm:rounded-2xl"
+              />
+            ) : null}
+            <SectionCta href={section.buttonUrl} label={ctaLabel} inverse />
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  /* ── glassmorphic ── */
+  if (variant === "glassmorphic") {
+    return (
+      <section
+        key={sectionKey}
+        className="relative overflow-hidden rounded-2xl bg-cover bg-center sm:rounded-[34px]"
+        style={{
+          backgroundImage: backgroundImageUrl
+            ? `url('${backgroundImageUrl}')`
+            : `linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary) / 0.7))`,
+        }}
+      >
+        <div className="flex min-h-48 items-center justify-center p-4 sm:min-h-64 sm:p-6">
+          <div className="w-full max-w-xl rounded-2xl border border-white/20 bg-white/15 px-5 py-5 text-center text-white backdrop-blur-xl sm:rounded-[28px] sm:px-8 sm:py-8">
+            {section.subtitle?.trim() ? (
+              <p className="text-[11px] font-semibold uppercase tracking-widest text-white/75">
+                {section.subtitle}
+              </p>
+            ) : null}
+            {title ? (
+              <h2 className="mt-2 text-xl font-bold tracking-tight sm:text-2xl lg:text-3xl">
+                {title}
+              </h2>
+            ) : null}
+            {sectionCopy ? (
+              <p className="mt-2 text-sm leading-relaxed text-white/80 sm:text-base">
+                {sectionCopy}
+              </p>
+            ) : null}
+            <div className="mt-4">
+              <SectionCta href={section.buttonUrl} label={ctaLabel} inverse />
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  /* ── countdown_style ── */
+  if (variant === "countdown_style") {
+    return (
+      <section
+        key={sectionKey}
+        className="rounded-2xl border-2 border-primary/30 bg-primary/5 p-4 sm:rounded-[32px] sm:p-6"
+      >
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="space-y-2">
+            {section.subtitle?.trim() ? (
+              <span className="inline-block rounded-full bg-primary px-3 py-1 text-xs font-bold text-primary-foreground">
+                {section.subtitle}
+              </span>
+            ) : null}
+            {title ? (
+              <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl lg:text-3xl">
+                {title}
+              </h2>
+            ) : null}
+            {sectionCopy ? (
+              <p className="text-sm leading-relaxed text-muted-foreground sm:text-base">
+                {sectionCopy}
+              </p>
+            ) : null}
+          </div>
+          <div className="flex shrink-0 items-center gap-3">
+            {imageUrl ? (
+              <MediaFrame
+                src={imageUrl}
+                alt={title}
+                className="h-24 w-32 rounded-xl object-cover sm:h-28 sm:w-36"
+                frameClassName="rounded-xl"
+              />
+            ) : null}
+            <SectionCta href={section.buttonUrl} label={ctaLabel} />
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  /* ── minimal_bar ── */
+  if (variant === "minimal_bar") {
+    return (
+      <section
+        key={sectionKey}
+        className="rounded-full border border-border/70 bg-background px-4 py-2.5 shadow-sm sm:px-6 sm:py-3"
+      >
+        <div className="flex flex-col items-center gap-2 text-center sm:flex-row sm:gap-4 sm:text-left">
+          {section.subtitle?.trim() ? (
+            <span className="shrink-0 rounded-full bg-primary px-3 py-1 text-[11px] font-bold text-primary-foreground">
+              {section.subtitle}
+            </span>
+          ) : null}
+          <p className="min-w-0 flex-1 truncate text-sm font-medium text-foreground sm:text-base">
+            {title}
+          </p>
+          <SectionCta href={section.buttonUrl} label={ctaLabel} />
+        </div>
+      </section>
+    );
+  }
+
+  /* ── hero_discount ── */
+  if (variant === "hero_discount") {
+    return (
+      <section
+        key={sectionKey}
+        className="relative overflow-hidden rounded-2xl sm:rounded-[36px]"
+        style={{
+          backgroundImage: backgroundImageUrl
+            ? `linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url('${backgroundImageUrl}')`
+            : `linear-gradient(135deg, #15171b 0%, #2d3748 100%)`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        <div className="flex min-h-52 flex-col items-center justify-center p-4 text-center text-white sm:min-h-72 sm:p-8">
+          {section.subtitle?.trim() ? (
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-white/70">
+              {section.subtitle}
+            </p>
+          ) : null}
+          {title ? (
+            <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+              {title}
+            </h2>
+          ) : null}
+          {sectionCopy ? (
+            <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/80 sm:text-base">
+              {sectionCopy}
+            </p>
+          ) : null}
+          <div className="mt-5 flex flex-wrap justify-center gap-3">
+            <SectionCta href={section.buttonUrl} label={ctaLabel} inverse />
+            {imageUrl ? (
+              <MediaFrame
+                src={imageUrl}
+                alt={title}
+                className="h-16 w-24 rounded-xl object-cover sm:h-20 sm:w-28"
+                frameClassName="rounded-xl"
+              />
+            ) : null}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section
       key={sectionKey}
@@ -909,11 +1226,7 @@ function renderDiscountBannerSection(section: HomeSection, sectionKey: string) {
             inverse
           />
           <SectionHeading title={title} copy={sectionCopy} inverse />
-          <SectionCta
-            href={section.buttonUrl}
-            label={ctaLabel}
-            inverse
-          />
+          <SectionCta href={section.buttonUrl} label={ctaLabel} inverse />
         </div>
         {imageUrl ? (
           <MediaFrame
@@ -977,7 +1290,9 @@ function renderCustomBannerSection(section: HomeSection, sectionKey: string) {
         key={sectionKey}
         className="relative overflow-hidden rounded-[42px] border border-border/70 bg-[linear-gradient(135deg,rgba(15,23,42,0.06),rgba(79,70,229,0.12),rgba(255,255,255,0.95))] px-5 py-12 sm:px-8"
         style={{
-          backgroundImage: backgroundImageUrl ? `url('${backgroundImageUrl}')` : undefined,
+          backgroundImage: backgroundImageUrl
+            ? `url('${backgroundImageUrl}')`
+            : undefined,
           backgroundSize: backgroundImageUrl ? "cover" : undefined,
           backgroundPosition: backgroundImageUrl ? "center" : undefined,
         }}
@@ -1046,8 +1361,8 @@ function renderCustomBannerSection(section: HomeSection, sectionKey: string) {
               <SectionHeading title={title} copy={sectionCopy} />
               <DetailTile
                 icon={GalleryVerticalEnd}
-                title="Image-led story"
-                text="Best when the visual deserves more presence and the copy can stay focused."
+                title="Featured highlight"
+                text="Explore this curated selection of our finest products and deals."
                 className="bg-background/82"
               />
               <SectionCta href={section.buttonUrl} label={ctaLabel} />
@@ -1072,14 +1387,14 @@ function renderCustomBannerSection(section: HomeSection, sectionKey: string) {
               <div className="grid gap-3 sm:grid-cols-2">
                 <DetailTile
                   icon={PanelsTopLeft}
-                  title="Structured copy"
-                  text="Adds more hierarchy without making the section feel heavy."
+                  title="Quality guaranteed"
+                  text="Every item is carefully selected and quality-checked for you."
                   className="bg-muted/18"
                 />
                 <DetailTile
                   icon={Sparkles}
-                  title="Professional framing"
-                  text="Useful for category messaging, trust callouts, and value-led sections."
+                  title="Trusted selection"
+                  text="Shop with confidence from our curated catalog of top-rated products."
                   className="bg-muted/18"
                 />
               </div>
@@ -1131,8 +1446,8 @@ function renderCustomBannerSection(section: HomeSection, sectionKey: string) {
                 />
                 <DetailTile
                   icon={GalleryVerticalEnd}
-                  title="Second panel"
-                  text="Use the companion surface for a visual, testimonial, or supporting proof point."
+                  title="What our customers say"
+                  text="Thousands of happy customers trust us for quality and value."
                   className="bg-muted/18"
                 />
               </div>
@@ -1169,13 +1484,17 @@ function renderCustomBannerSection(section: HomeSection, sectionKey: string) {
             />
           )}
           <div className="rounded-[32px] bg-[#111827] px-6 py-6 text-white shadow-[0_32px_90px_-62px_rgba(15,23,42,0.5)]">
-            <SectionEyebrow label="Featured section" secondary={subtitle} inverse />
+            <SectionEyebrow
+              label="Featured section"
+              secondary={subtitle}
+              inverse
+            />
             <div className="mt-5 space-y-5">
               <SectionHeading title={title} copy={sectionCopy} inverse />
               <DetailTile
                 icon={PanelsTopLeft}
-                title="Framed emphasis"
-                text="Gives the media a stronger stage while keeping the copy neat and premium."
+                title="Premium collection"
+                text="Discover our most sought-after items, expertly curated for you."
                 inverse
               />
               <SectionCta href={section.buttonUrl} label={ctaLabel} inverse />
@@ -1198,8 +1517,8 @@ function renderCustomBannerSection(section: HomeSection, sectionKey: string) {
             <SectionHeading title={title} copy={sectionCopy} />
             <DetailTile
               icon={Sparkles}
-              title="Offset composition"
-              text="Creates a more directional layout while keeping the section clean and easy to scan."
+              title="Trending now"
+              text="Explore what's popular — fresh picks and bestsellers updated regularly."
               className="bg-muted/18"
             />
             <SectionCta href={section.buttonUrl} label={ctaLabel} />
@@ -1238,7 +1557,9 @@ function renderCustomBannerSection(section: HomeSection, sectionKey: string) {
         key={sectionKey}
         className="relative overflow-hidden rounded-[44px] border border-border/70 bg-[linear-gradient(135deg,rgba(248,250,252,1),rgba(255,255,255,1),rgba(254,249,195,0.24))] px-5 py-12 sm:px-8"
         style={{
-          backgroundImage: backgroundImageUrl ? `url('${backgroundImageUrl}')` : undefined,
+          backgroundImage: backgroundImageUrl
+            ? `url('${backgroundImageUrl}')`
+            : undefined,
           backgroundSize: backgroundImageUrl ? "cover" : undefined,
           backgroundPosition: backgroundImageUrl ? "center" : undefined,
         }}
@@ -1304,19 +1625,57 @@ function renderCustomBannerSection(section: HomeSection, sectionKey: string) {
     );
   }
 
+  /* ── info_strip ── */
+  if (variant === "info_strip") {
+    return (
+      <section
+        key={sectionKey}
+        className="rounded-2xl border border-border/70 bg-background p-3 sm:rounded-[28px] sm:p-5"
+      >
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+          {hasImage ? (
+            <MediaFrame
+              src={imageUrl}
+              alt={title}
+              className="h-16 w-24 shrink-0 rounded-xl object-cover sm:h-20 sm:w-28"
+              frameClassName="rounded-xl shrink-0"
+            />
+          ) : (
+            <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary sm:size-14">
+              <Sparkles className="size-5" />
+            </div>
+          )}
+          <div className="min-w-0 flex-1 space-y-1">
+            {subtitle ? (
+              <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+                {subtitle}
+              </p>
+            ) : null}
+            <h2 className="text-base font-semibold tracking-tight text-foreground sm:text-lg">
+              {title}
+            </h2>
+            {sectionCopy ? (
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                {sectionCopy}
+              </p>
+            ) : null}
+          </div>
+          <SectionCta href={section.buttonUrl} label={ctaLabel} />
+        </div>
+      </section>
+    );
+  }
+
   return (
-    <section key={sectionKey} className="rounded-[38px] bg-primary/[0.05] p-5 sm:p-8">
+    <section
+      key={sectionKey}
+      className="rounded-2xl bg-primary/5 p-3 sm:rounded-[38px] sm:p-8"
+    >
       <div className="grid gap-5 lg:grid-cols-[1fr_420px] lg:items-center">
         <div className="space-y-5">
-          <SectionEyebrow
-            label="Featured section"
-            secondary={subtitle}
-          />
+          <SectionEyebrow label="Featured section" secondary={subtitle} />
           <SectionHeading title={title} copy={sectionCopy} />
-          <SectionCta
-            href={section.buttonUrl}
-            label={ctaLabel}
-          />
+          <SectionCta href={section.buttonUrl} label={ctaLabel} />
         </div>
         {hasImage ? (
           <MediaFrame
@@ -1359,10 +1718,12 @@ export async function resolveNavTargetFromSlug(
     : [];
 
   const matchedMain =
-    mainNavList.find((item) => normalizePath(item.url) === normalizedMainSlug) ||
-    null;
+    mainNavList.find(
+      (item) => normalizePath(item.url) === normalizedMainSlug,
+    ) || null;
 
-  const resolvedMainNavUrl = matchedMain?.url?.trim() || `/${normalizedMainSlug}`;
+  const resolvedMainNavUrl =
+    matchedMain?.url?.trim() || `/${normalizedMainSlug}`;
 
   if (!subNavSlug) {
     return {
@@ -1403,13 +1764,18 @@ export async function DynamicSectionsPage({
   );
 
   const productSections = sections
-    .map((section, index) => ({ section, key: section.id || `section-${index}` }))
+    .map((section, index) => ({
+      section,
+      key: section.id || `section-${index}`,
+    }))
     .filter(({ section }) => section.type === "product_collection");
 
   const productsBySection = new Map<string, ProductListResponse["data"]>();
   if (productSections.length > 0) {
     const results = await Promise.all(
-      productSections.map(({ section, key }) => getProductsForSection(section, key)),
+      productSections.map(({ section, key }) =>
+        getProductsForSection(section, key),
+      ),
     );
     productSections.forEach(({ key }, index) => {
       productsBySection.set(key, results[index]);
@@ -1421,7 +1787,9 @@ export async function DynamicSectionsPage({
       <main className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
         <div className="rounded-[32px] bg-muted/35 px-6 py-14 text-center">
           <h1 className="text-2xl font-bold tracking-tight">{emptyTitle}</h1>
-          <p className="mt-2 text-sm text-muted-foreground">{emptyDescription}</p>
+          <p className="mt-2 text-sm text-muted-foreground">
+            {emptyDescription}
+          </p>
         </div>
       </main>
     );
@@ -1452,7 +1820,10 @@ export async function DynamicSectionsPage({
             <HeroSlider
               key={sectionKey}
               slides={slides}
-              variant={normalizeHomeSectionVariant("hero_slider", section.variant)}
+              variant={normalizeHomeSectionVariant(
+                "hero_slider",
+                section.variant,
+              )}
             />
           );
         }

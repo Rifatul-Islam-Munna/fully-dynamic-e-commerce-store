@@ -5,13 +5,6 @@ import { Loader2, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
 import { changePasswordAction } from "@/actions/profile";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
@@ -55,32 +48,36 @@ export function ChangePasswordForm() {
   }
 
   return (
-    <Card className="border-border/70 bg-background/95 shadow-[0_20px_60px_-48px_rgba(15,23,42,0.22)]">
-      <CardHeader className="border-b border-border/70">
-        <CardTitle className="text-xl">Change password</CardTitle>
-        <CardDescription>
-          Update your sign-in password and keep your account secure.
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="pt-6">
-        <div className="mb-6 flex items-start gap-4 rounded-[24px] bg-muted/18 p-4">
-          <div className="flex size-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-            <ShieldCheck className="size-5" />
+    <div className="rounded-xl border border-border/60 bg-background sm:rounded-2xl">
+      <div className="border-b border-border/60 px-4 py-3 sm:px-5 sm:py-4">
+        <h2 className="text-base font-semibold text-foreground sm:text-lg">
+          Change password
+        </h2>
+        <p className="mt-0.5 text-xs text-muted-foreground sm:text-sm">
+          Update your sign-in password.
+        </p>
+      </div>
+
+      <div className="p-4 sm:p-5">
+        {/* ── Security tip ── */}
+        <div className="flex items-start gap-3 rounded-xl bg-primary/6 p-3 sm:p-4">
+          <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+            <ShieldCheck className="size-4" />
           </div>
           <div>
-            <p className="text-sm font-semibold text-foreground">
-              Password tips
-            </p>
-            <p className="mt-1 text-sm leading-6 text-muted-foreground">
+            <p className="text-sm font-medium text-foreground">Password tips</p>
+            <p className="mt-0.5 text-xs text-muted-foreground sm:text-sm">
               Use at least 8 characters and choose something different from your
               current password.
             </p>
           </div>
         </div>
 
-        <form className="space-y-5" onSubmit={handleSubmit}>
-          <div className="space-y-2">
-            <Label htmlFor="current-password">Current password</Label>
+        <form className="mt-4 space-y-4" onSubmit={handleSubmit}>
+          <div className="space-y-1.5">
+            <Label htmlFor="current-password" className="text-xs sm:text-sm">
+              Current password
+            </Label>
             <Input
               id="current-password"
               type="password"
@@ -94,12 +91,15 @@ export function ChangePasswordForm() {
               required
               minLength={8}
               maxLength={100}
+              className="h-10"
             />
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="space-y-2">
-              <Label htmlFor="new-password">New password</Label>
+          <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
+            <div className="space-y-1.5">
+              <Label htmlFor="new-password" className="text-xs sm:text-sm">
+                New password
+              </Label>
               <Input
                 id="new-password"
                 type="password"
@@ -113,10 +113,13 @@ export function ChangePasswordForm() {
                 required
                 minLength={8}
                 maxLength={100}
+                className="h-10"
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="confirm-password">Confirm new password</Label>
+            <div className="space-y-1.5">
+              <Label htmlFor="confirm-password" className="text-xs sm:text-sm">
+                Confirm new password
+              </Label>
               <Input
                 id="confirm-password"
                 type="password"
@@ -130,16 +133,17 @@ export function ChangePasswordForm() {
                 required
                 minLength={8}
                 maxLength={100}
+                className="h-10"
               />
             </div>
           </div>
 
-          <div className="flex justify-end border-t border-border/70 pt-6">
-            <Button type="submit" disabled={isPending}>
+          <div className="flex justify-end border-t border-border/60 pt-4">
+            <Button type="submit" size="sm" disabled={isPending}>
               {isPending ? (
                 <>
-                  <Loader2 className="size-4 animate-spin" />
-                  Updating password...
+                  <Loader2 className="size-3.5 animate-spin" />
+                  Updating...
                 </>
               ) : (
                 "Save new password"
@@ -147,8 +151,7 @@ export function ChangePasswordForm() {
             </Button>
           </div>
         </form>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }
-

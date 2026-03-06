@@ -40,6 +40,36 @@ export const HOME_SECTION_VARIANT_OPTIONS: Record<
       label: "Framed Panel",
       description: "Refined framed copy panel with a calmer editorial storefront presentation.",
     },
+    {
+      value: "minimal_overlay",
+      label: "Minimal Overlay",
+      description: "Subtle bottom-left text overlay with minimal visual interference on the hero image.",
+    },
+    {
+      value: "gradient_banner",
+      label: "Gradient Banner",
+      description: "Bold gradient strip across the bottom with crisp typography and strong CTA presence.",
+    },
+    {
+      value: "side_reveal",
+      label: "Side Reveal",
+      description: "Right-aligned content panel that slides in, keeping the image as the primary element.",
+    },
+    {
+      value: "top_bar",
+      label: "Top Bar",
+      description: "Clean top-aligned announcement bar style with title, subtitle, and action button.",
+    },
+    {
+      value: "pill_float",
+      label: "Floating Pill",
+      description: "Floating rounded pill card positioned centrally with compact, attention-grabbing content.",
+    },
+    {
+      value: "corner_card",
+      label: "Corner Card",
+      description: "Compact card anchored to the bottom-right corner for an understated but clear message.",
+    },
   ],
   product_collection: [
     {
@@ -72,6 +102,31 @@ export const HOME_SECTION_VARIANT_OPTIONS: Record<
       label: "Wide Shelf",
       description: "Featured header above the grid for highlighted collections without extra clutter.",
     },
+    {
+      value: "banner_top",
+      label: "Banner Top",
+      description: "Bold colored banner header above the product grid for high-impact collection launches.",
+    },
+    {
+      value: "floating_header",
+      label: "Floating Header",
+      description: "Floating header card overlapping the grid for a modern layered editorial feel.",
+    },
+    {
+      value: "split_intro",
+      label: "Split Intro",
+      description: "Two-column intro with title on one side and description on the other above the grid.",
+    },
+    {
+      value: "tab_shelf",
+      label: "Tab Shelf",
+      description: "Clean shelf with tab-like filter indicators highlighting the collection type.",
+    },
+    {
+      value: "numbered_list",
+      label: "Numbered List",
+      description: "Numbered collection header with a clear visual counter and streamlined product grid.",
+    },
   ],
   discount_banner: [
     {
@@ -103,6 +158,31 @@ export const HOME_SECTION_VARIANT_OPTIONS: Record<
       value: "image_edge",
       label: "Visual Edge",
       description: "Offer-first layout with the campaign visual pushed to the edge for cleaner emphasis.",
+    },
+    {
+      value: "ribbon_banner",
+      label: "Ribbon Banner",
+      description: "Eye-catching ribbon-style banner with angled accent for flash sales and time-limited offers.",
+    },
+    {
+      value: "glassmorphic",
+      label: "Glass Card",
+      description: "Frosted glass card overlay on the background image for a premium modern aesthetic.",
+    },
+    {
+      value: "countdown_style",
+      label: "Urgency Style",
+      description: "Bold urgency-focused layout with prominent title and strong call-to-action placement.",
+    },
+    {
+      value: "minimal_bar",
+      label: "Minimal Bar",
+      description: "Single-line minimal announcement bar style for subtle discount notifications.",
+    },
+    {
+      value: "hero_discount",
+      label: "Hero Discount",
+      description: "Full-width hero-style discount banner with large typography and dramatic visual presence.",
     },
   ],
   custom_banner: [
@@ -155,6 +235,11 @@ export const HOME_SECTION_VARIANT_OPTIONS: Record<
       value: "soft_poster",
       label: "Soft Campaign",
       description: "Soft, elevated campaign poster with calmer surfaces and stronger hero emphasis.",
+    },
+    {
+      value: "info_strip",
+      label: "Info Strip",
+      description: "Clean horizontal info strip with icon accent for announcements and quick-read messages.",
     },
   ],
 } as const;

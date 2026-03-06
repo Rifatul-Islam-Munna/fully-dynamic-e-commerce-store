@@ -6,13 +6,6 @@ import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { updateProfileAction } from "@/actions/profile";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
@@ -80,133 +73,161 @@ export function ProfileEditForm({ profile }: ProfileEditFormProps) {
   }
 
   return (
-    <Card className="border-border/70 bg-background/95 shadow-[0_20px_60px_-48px_rgba(15,23,42,0.22)]">
-      <CardHeader className="border-b border-border/70">
-        <CardTitle className="text-xl">Edit profile</CardTitle>
-        <CardDescription>
-          Keep your personal details up to date so account and checkout details
-          stay accurate.
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="pt-6">
-        <form className="space-y-6" onSubmit={handleSubmit}>
-          <div className="flex flex-col gap-4 rounded-[24px] bg-muted/18 p-4 sm:flex-row sm:items-center">
-            {form.avatarUrl.trim() ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={form.avatarUrl}
-                alt="Profile preview"
-                className="size-16 rounded-3xl object-cover"
-              />
-            ) : (
-              <div className="flex size-16 items-center justify-center rounded-3xl bg-primary text-lg font-semibold text-primary-foreground">
-                {initials}
-              </div>
-            )}
-            <div>
-              <p className="text-sm font-semibold text-foreground">
-                Profile preview
-              </p>
-              <p className="mt-1 text-sm leading-6 text-muted-foreground">
-                Add an avatar URL if you want your account menu and profile area to
-                show a personal image.
-              </p>
-            </div>
-          </div>
+    <div className="rounded-xl border border-border/60 bg-background sm:rounded-2xl">
+      <div className="border-b border-border/60 px-4 py-3 sm:px-5 sm:py-4">
+        <h2 className="text-base font-semibold text-foreground sm:text-lg">
+          Edit profile
+        </h2>
+        <p className="mt-0.5 text-xs text-muted-foreground sm:text-sm">
+          Keep your personal details up to date.
+        </p>
+      </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="space-y-2">
-              <Label htmlFor="profile-first-name">First name</Label>
-              <Input
-                id="profile-first-name"
-                value={form.firstName}
-                onChange={(event) =>
-                  setForm((prev) => ({ ...prev, firstName: event.target.value }))
-                }
-                required
-                minLength={2}
-                maxLength={80}
-              />
+      <form className="p-4 sm:p-5" onSubmit={handleSubmit}>
+        {/* ── Avatar preview ── */}
+        <div className="flex items-center gap-3 rounded-xl bg-muted/30 p-3 sm:p-4">
+          {form.avatarUrl.trim() ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={form.avatarUrl}
+              alt="Profile preview"
+              className="size-12 rounded-xl object-cover sm:size-14"
+            />
+          ) : (
+            <div className="flex size-12 items-center justify-center rounded-xl bg-primary text-base font-semibold text-primary-foreground sm:size-14">
+              {initials}
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="profile-last-name">Last name</Label>
-              <Input
-                id="profile-last-name"
-                value={form.lastName}
-                onChange={(event) =>
-                  setForm((prev) => ({ ...prev, lastName: event.target.value }))
-                }
-                required
-                minLength={2}
-                maxLength={80}
-              />
-            </div>
+          )}
+          <div>
+            <p className="text-sm font-medium text-foreground">
+              Profile preview
+            </p>
+            <p className="mt-0.5 text-xs text-muted-foreground">
+              Add an avatar URL for a personal image.
+            </p>
           </div>
+        </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="space-y-2">
-              <Label htmlFor="profile-email">Email</Label>
-              <Input
-                id="profile-email"
-                type="email"
-                value={form.email}
-                onChange={(event) =>
-                  setForm((prev) => ({ ...prev, email: event.target.value }))
-                }
-                required
-                maxLength={160}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="profile-phone">Phone</Label>
-              <Input
-                id="profile-phone"
-                value={form.phoneNumber}
-                onChange={(event) =>
-                  setForm((prev) => ({ ...prev, phoneNumber: event.target.value }))
-                }
-                maxLength={30}
-                placeholder="+8801700000000"
-              />
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="profile-avatar-url">Avatar URL</Label>
+        {/* ── Name fields ── */}
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 sm:gap-4">
+          <div className="space-y-1.5">
+            <Label htmlFor="profile-first-name" className="text-xs sm:text-sm">
+              First name
+            </Label>
             <Input
-              id="profile-avatar-url"
-              value={form.avatarUrl}
+              id="profile-first-name"
+              value={form.firstName}
               onChange={(event) =>
-                setForm((prev) => ({ ...prev, avatarUrl: event.target.value }))
+                setForm((prev) => ({ ...prev, firstName: event.target.value }))
               }
-              maxLength={500}
-              placeholder="https://example.com/avatar.jpg"
+              required
+              minLength={2}
+              maxLength={80}
+              className="h-10"
             />
           </div>
-
-          <div className="flex flex-col gap-3 border-t border-border/70 pt-6 sm:flex-row sm:justify-end">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => router.push("/profile")}
-              disabled={isPending}
-            >
-              Cancel
-            </Button>
-            <Button type="submit" disabled={isPending}>
-              {isPending ? (
-                <>
-                  <Loader2 className="size-4 animate-spin" />
-                  Saving changes...
-                </>
-              ) : (
-                "Save profile"
-              )}
-            </Button>
+          <div className="space-y-1.5">
+            <Label htmlFor="profile-last-name" className="text-xs sm:text-sm">
+              Last name
+            </Label>
+            <Input
+              id="profile-last-name"
+              value={form.lastName}
+              onChange={(event) =>
+                setForm((prev) => ({ ...prev, lastName: event.target.value }))
+              }
+              required
+              minLength={2}
+              maxLength={80}
+              className="h-10"
+            />
           </div>
-        </form>
-      </CardContent>
-    </Card>
+        </div>
+
+        {/* ── Contact fields ── */}
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 sm:gap-4">
+          <div className="space-y-1.5">
+            <Label htmlFor="profile-email" className="text-xs sm:text-sm">
+              Email
+            </Label>
+            <Input
+              id="profile-email"
+              type="email"
+              value={form.email}
+              onChange={(event) =>
+                setForm((prev) => ({ ...prev, email: event.target.value }))
+              }
+              required
+              maxLength={160}
+              className="h-10"
+            />
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="profile-phone" className="text-xs sm:text-sm">
+              Phone
+            </Label>
+            <Input
+              id="profile-phone"
+              value={form.phoneNumber}
+              onChange={(event) =>
+                setForm((prev) => ({
+                  ...prev,
+                  phoneNumber: event.target.value,
+                }))
+              }
+              maxLength={30}
+              placeholder="+8801700000000"
+              className="h-10"
+            />
+          </div>
+        </div>
+
+        {/* ── Avatar URL ── */}
+        <div className="mt-4 space-y-1.5">
+          <Label htmlFor="profile-avatar-url" className="text-xs sm:text-sm">
+            Avatar URL
+          </Label>
+          <Input
+            id="profile-avatar-url"
+            value={form.avatarUrl}
+            onChange={(event) =>
+              setForm((prev) => ({ ...prev, avatarUrl: event.target.value }))
+            }
+            maxLength={500}
+            placeholder="https://example.com/avatar.jpg"
+            className="h-10"
+          />
+        </div>
+
+        {/* ── Actions ── */}
+        <div className="mt-5 flex flex-col gap-2 border-t border-border/60 pt-4 sm:flex-row sm:justify-end sm:gap-3">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => router.push("/profile")}
+            disabled={isPending}
+            className="order-2 sm:order-1"
+          >
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            size="sm"
+            disabled={isPending}
+            className="order-1 sm:order-2"
+          >
+            {isPending ? (
+              <>
+                <Loader2 className="size-3.5 animate-spin" />
+                Saving...
+              </>
+            ) : (
+              "Save profile"
+            )}
+          </Button>
+        </div>
+      </form>
+    </div>
   );
 }
-
