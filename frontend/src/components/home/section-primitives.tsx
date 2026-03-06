@@ -4,8 +4,6 @@ import { ProductCard } from "@/components/product/product-card";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-/* ───── Types ───── */
-
 export type HomeSectionType =
   | "hero_slider"
   | "product_collection"
@@ -18,6 +16,16 @@ export type ProductFlag =
   | "isSummerSell"
   | "isWinterSell"
   | "isBestSell";
+
+export type HomeSectionSlide = {
+  title?: string;
+  subtitle?: string;
+  imageUrl: string;
+  linkUrl?: string;
+  buttonLabel?: string;
+  sortOrder?: number;
+  isActive?: boolean;
+};
 
 export type HomeSection = {
   id?: string;
@@ -36,15 +44,7 @@ export type HomeSection = {
   productLimit?: number;
   sortOrder?: number;
   isActive?: boolean;
-  slides?: Array<{
-    title?: string;
-    subtitle?: string;
-    imageUrl: string;
-    linkUrl?: string;
-    buttonLabel?: string;
-    sortOrder?: number;
-    isActive?: boolean;
-  }>;
+  slides?: HomeSectionSlide[];
 };
 
 export type HomeSettingsResponse = {
@@ -89,13 +89,9 @@ export const PRODUCT_FLAG_LABELS: Record<ProductFlag, string> = {
   isBestSell: "Best sellers",
 };
 
-/* ───── Utility ───── */
-
 export function resolveSectionCopy(section: HomeSection) {
   return section.description?.trim() || section.subtitle?.trim() || "";
 }
-
-/* ───── Primitives ───── */
 
 export function SectionEyebrow({
   label,
@@ -110,13 +106,13 @@ export function SectionEyebrow({
     <div
       className={cn(
         "flex flex-wrap items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.16em]",
-        inverse ? "text-white/68" : "text-muted-foreground",
+        inverse ? "text-white/70" : "text-muted-foreground",
       )}
     >
       <span
         className={cn(
           "rounded-full px-3 py-1.5",
-          inverse ? "bg-white/10 text-white" : "bg-muted text-foreground",
+          inverse ? "bg-white/12 text-white" : "bg-background text-foreground",
         )}
       >
         {label}
@@ -185,7 +181,7 @@ export function SectionCta({
       )}
     >
       <Link href={href} className="inline-flex items-center gap-2">
-        <span>{label?.trim() || "Learn more"}</span>
+        <span>{label?.trim() || "Explore"}</span>
         <ArrowRight className="size-4" />
       </Link>
     </Button>
@@ -201,25 +197,27 @@ export function SectionTagRow({
   inverse?: boolean;
   className?: string;
 }) {
-  const visible = items.filter(Boolean) as string[];
+  const filtered = items
+    .map((item) => item?.trim())
+    .filter((item): item is string => Boolean(item));
 
-  if (visible.length === 0) {
+  if (filtered.length === 0) {
     return null;
   }
 
   return (
-    <div className={cn("flex flex-wrap gap-1.5", className)}>
-      {visible.map((tag) => (
+    <div className={cn("flex flex-wrap items-center gap-2", className)}>
+      {filtered.map((item, index) => (
         <span
-          key={tag}
+          key={`${item}-${index}`}
           className={cn(
-            "rounded-full px-3 py-1.5 text-[11px] font-medium",
+            "rounded-full px-3 py-1.5 text-[11px] font-medium tracking-[0.02em]",
             inverse
-              ? "border border-white/12 text-white/72"
-              : "border border-border/70 text-muted-foreground",
+              ? "border border-white/12 bg-white/8 text-white/80"
+              : "border border-border/70 bg-background/82 text-muted-foreground",
           )}
         >
-          {tag}
+          {item}
         </span>
       ))}
     </div>

@@ -1,0 +1,537 @@
+import type { FormEvent } from "react";
+import Link from "next/link";
+import {
+  ArrowLeft,
+  Loader2,
+  MapPinned,
+  ReceiptText,
+  TicketPercent,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  FIELD_SHELL_CLASS_NAME,
+  FLAT_FIELD_STYLE,
+  INPUT_CLASS_NAME,
+  SECTION_CLASS_NAME,
+  TEXTAREA_CLASS_NAME,
+} from "@/components/checkout/checkout-page-shell.constants";
+import {
+  type CheckoutFormState,
+  type CheckoutPageUser,
+  type CheckoutPricingResponse,
+} from "@/lib/checkout";
+import { formatCurrency } from "@/lib/currency";
+import { type LocalCartItem } from "@/store/cart-store";
+import { type CheckoutFieldErrors } from "@/store/checkout-store";
+
+export function CheckoutBackLink({
+  onResetNavigation,
+}: {
+  onResetNavigation: () => void;
+}) {
+  return (
+    <div className="mb-4 flex items-center gap-2 text-sm text-muted-foreground">
+      <Link
+        href="/search"
+        onClick={onResetNavigation}
+        className="inline-flex items-center gap-2 rounded-full bg-muted/35 px-3 py-2 transition-colors hover:bg-muted/50 hover:text-foreground"
+      >
+        <ArrowLeft className="size-4" />
+        Continue shopping
+      </Link>
+    </div>
+  );
+}
+
+function CheckoutHero({
+  displayTotal,
+  isPending,
+}: {
+  displayTotal: number;
+  isPending: boolean;
+}) {
+  return (
+    <div className="rounded-[28px] bg-background p-4 sm:p-5">
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <div>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+            Ready to place order
+          </p>
+          <p className="mt-2 text-sm text-foreground">
+            Review the total, then submit once the fields are complete.
+          </p>
+        </div>
+
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+          <div className="rounded-[22px] border border-border/70 bg-muted/30 px-4 py-3 sm:text-right">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+              Payable total
+            </p>
+            <p className="mt-1 text-xl font-semibold text-foreground">
+              {formatCurrency(displayTotal)}
+            </p>
+          </div>
+
+          <Button
+            type="submit"
+            className="h-12 w-full rounded-full px-6 sm:w-auto"
+            disabled={isPending}
+          >
+            {isPending ? <Loader2 className="size-4 animate-spin" /> : null}
+            Place order
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CheckoutContactSection({
+  form,
+  fieldErrors,
+  initialUser,
+  onUpdateField,
+}: {
+  form: CheckoutFormState;
+  fieldErrors: CheckoutFieldErrors;
+  initialUser: CheckoutPageUser | null;
+  onUpdateField: (field: keyof CheckoutFormState, value: string) => void;
+}) {
+  return (
+    <div className={SECTION_CLASS_NAME}>
+      <div className="mb-4 flex items-start gap-3">
+        <div className="mt-0.5 flex size-10 items-center justify-center rounded-full bg-muted/50 text-foreground">
+          <ReceiptText className="size-4" />
+        </div>
+        <div>
+          <p className="text-sm font-medium text-foreground">Contact details</p>
+          <p className="text-sm text-muted-foreground">
+            These are the main fields the customer needs to complete.
+          </p>
+        </div>
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="space-y-2">
+          <div className={FIELD_SHELL_CLASS_NAME}>
+            <Label
+              htmlFor="checkout-email"
+              className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground"
+            >
+              Email (optional)
+            </Label>
+            <Input
+              id="checkout-email"
+              type="email"
+              value={form.email}
+              onChange={(event) => onUpdateField("email", event.target.value)}
+              placeholder={initialUser?.email || "name@example.com"}
+              className={INPUT_CLASS_NAME}
+              style={FLAT_FIELD_STYLE}
+            />
+          </div>
+          {fieldErrors.email ? (
+            <p className="text-xs text-destructive">{fieldErrors.email}</p>
+          ) : (
+            <p className="text-xs text-muted-foreground">
+              Leave empty to checkout without email.
+            </p>
+          )}
+        </div>
+
+        <div className="space-y-2">
+          <div className={FIELD_SHELL_CLASS_NAME}>
+            <Label
+              htmlFor="checkout-phone"
+              className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground"
+            >
+              Phone number
+            </Label>
+            <Input
+              id="checkout-phone"
+              value={form.phoneNumber}
+              onChange={(event) =>
+                onUpdateField("phoneNumber", event.target.value)
+              }
+              placeholder="+8801700000000"
+              className={INPUT_CLASS_NAME}
+              style={FLAT_FIELD_STYLE}
+            />
+          </div>
+          {fieldErrors.phoneNumber ? (
+            <p className="text-xs text-destructive">{fieldErrors.phoneNumber}</p>
+          ) : (
+            <p className="text-xs text-muted-foreground">
+              Use the number the delivery team should call.
+            </p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CheckoutAddressSection({
+  form,
+  fieldErrors,
+  onUpdateField,
+}: {
+  form: CheckoutFormState;
+  fieldErrors: CheckoutFieldErrors;
+  onUpdateField: (field: keyof CheckoutFormState, value: string) => void;
+}) {
+  return (
+    <div className={SECTION_CLASS_NAME}>
+      <div className="mb-4 flex items-start gap-3">
+        <div className="mt-0.5 flex size-10 items-center justify-center rounded-full bg-muted/50 text-foreground">
+          <MapPinned className="size-4" />
+        </div>
+        <div>
+          <p className="text-sm font-medium text-foreground">Delivery address</p>
+          <p className="text-sm text-muted-foreground">
+            Add the exact district and full address for delivery.
+          </p>
+        </div>
+      </div>
+
+      <div className="space-y-4">
+        <div className="space-y-2">
+          <div className={FIELD_SHELL_CLASS_NAME}>
+            <Label
+              htmlFor="checkout-district"
+              className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground"
+            >
+              District
+            </Label>
+            <Input
+              id="checkout-district"
+              value={form.district}
+              onChange={(event) => onUpdateField("district", event.target.value)}
+              placeholder="Dhaka"
+              className={INPUT_CLASS_NAME}
+              style={FLAT_FIELD_STYLE}
+            />
+          </div>
+          {fieldErrors.district ? (
+            <p className="text-xs text-destructive">{fieldErrors.district}</p>
+          ) : (
+            <p className="text-xs text-muted-foreground">
+              Enter the district or delivery zone.
+            </p>
+          )}
+        </div>
+
+        <div className="space-y-2">
+          <div className={FIELD_SHELL_CLASS_NAME}>
+            <Label
+              htmlFor="checkout-address"
+              className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground"
+            >
+              Address
+            </Label>
+            <Textarea
+              id="checkout-address"
+              value={form.address}
+              onChange={(event) => onUpdateField("address", event.target.value)}
+              placeholder="House, road, area, landmark"
+              className={TEXTAREA_CLASS_NAME}
+              style={FLAT_FIELD_STYLE}
+            />
+          </div>
+          {fieldErrors.address ? (
+            <p className="text-xs text-destructive">{fieldErrors.address}</p>
+          ) : (
+            <p className="text-xs text-muted-foreground">
+              Include house, road, area, and any useful landmark.
+            </p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CheckoutCouponSection({
+  form,
+  pricing,
+  isCouponPending,
+  onUpdateField,
+  onApplyCoupon,
+}: {
+  form: CheckoutFormState;
+  pricing: CheckoutPricingResponse | null;
+  isCouponPending: boolean;
+  onUpdateField: (field: keyof CheckoutFormState, value: string) => void;
+  onApplyCoupon: () => void;
+}) {
+  return (
+    <div className={SECTION_CLASS_NAME}>
+      <div className="flex items-start gap-3">
+        <div className="mt-0.5 flex size-10 items-center justify-center rounded-full bg-muted/50 text-foreground">
+          <TicketPercent className="size-4" />
+        </div>
+        <div className="min-w-0 flex-1 space-y-3">
+          <div>
+            <p className="text-sm font-medium text-foreground">Coupon code</p>
+            <p className="text-sm text-muted-foreground">
+              Type a coupon here and apply it before submitting the order.
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <div className={`${FIELD_SHELL_CLASS_NAME} sm:flex-1`}>
+              <Label className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                Coupon
+              </Label>
+              <Input
+                value={form.couponCode}
+                onChange={(event) =>
+                  onUpdateField("couponCode", event.target.value)
+                }
+                placeholder="Enter coupon code"
+                className={INPUT_CLASS_NAME}
+                style={FLAT_FIELD_STYLE}
+              />
+            </div>
+            <Button
+              type="button"
+              variant="secondary"
+              className="h-12 rounded-full px-5 sm:self-end"
+              onClick={onApplyCoupon}
+              disabled={isCouponPending}
+            >
+              {isCouponPending ? (
+                <Loader2 className="size-4 animate-spin" />
+              ) : null}
+              Apply
+            </Button>
+          </div>
+
+          {pricing?.coupon ? (
+            <div className="flex flex-wrap items-center gap-2 text-sm">
+              <span className="rounded-full bg-muted px-3 py-1 text-foreground">
+                {pricing.coupon.code}
+              </span>
+              <span className="text-muted-foreground">
+                {pricing.coupon.type === "percentage"
+                  ? `${pricing.coupon.amount}% off`
+                  : `${formatCurrency(pricing.coupon.amount)} off`}
+              </span>
+            </div>
+          ) : null}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CheckoutFooterActions({
+  isPending,
+  onResetNavigation,
+}: {
+  isPending: boolean;
+  onResetNavigation: () => void;
+}) {
+  return (
+    <div className="rounded-[28px] bg-background p-4 sm:p-5">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+            Final action
+          </p>
+          <p className="mt-1 text-sm text-foreground">
+            Use the bottom button if you review the form from top to bottom.
+          </p>
+        </div>
+
+        <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
+          <Button
+            type="submit"
+            className="h-12 w-full rounded-full px-6 sm:w-auto"
+            disabled={isPending}
+          >
+            {isPending ? <Loader2 className="size-4 animate-spin" /> : null}
+            Place order
+          </Button>
+          <Button
+            asChild
+            variant="secondary"
+            className="h-12 w-full rounded-full px-6 sm:w-auto"
+          >
+            <Link href="/search" onClick={onResetNavigation}>
+              Back to catalog
+            </Link>
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function CheckoutFormPanel({
+  initialUser,
+  isDirectCheckout,
+  form,
+  fieldErrors,
+  pricing,
+  displayTotal,
+  isPending,
+  isCouponPending,
+  onUpdateField,
+  onApplyCoupon,
+  onSubmit,
+  onResetNavigation,
+}: {
+  initialUser: CheckoutPageUser | null;
+  isDirectCheckout: boolean;
+  form: CheckoutFormState;
+  fieldErrors: CheckoutFieldErrors;
+  pricing: CheckoutPricingResponse | null;
+  displayTotal: number;
+  isPending: boolean;
+  isCouponPending: boolean;
+  onUpdateField: (field: keyof CheckoutFormState, value: string) => void;
+  onApplyCoupon: () => void;
+  onSubmit: () => void;
+  onResetNavigation: () => void;
+}) {
+  return (
+    <section className="rounded-[32px] bg-muted/35 p-4 sm:p-6">
+      <div className="flex flex-wrap items-center gap-2 text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">
+        <span className="rounded-full bg-background px-3 py-1.5">
+          {initialUser ? "Member checkout" : "Guest checkout"}
+        </span>
+        <span>
+          {initialUser
+            ? "Your order will be linked to your account."
+            : "You can checkout without logging in."}
+        </span>
+        {isDirectCheckout ? <span>Direct checkout for selected item</span> : null}
+      </div>
+
+      <h1 className="mt-4 text-3xl font-semibold tracking-tight text-foreground">
+        Checkout
+      </h1>
+      <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
+        Fill in the visible fields below, apply a coupon if you have one, and
+        place the order.
+      </p>
+
+      <form
+        className="mt-5 space-y-3 sm:space-y-4"
+        onSubmit={(event: FormEvent<HTMLFormElement>) => {
+          event.preventDefault();
+          onSubmit();
+        }}
+      >
+        <CheckoutHero
+          displayTotal={displayTotal}
+          isPending={isPending}
+        />
+        <CheckoutContactSection
+          form={form}
+          fieldErrors={fieldErrors}
+          initialUser={initialUser}
+          onUpdateField={onUpdateField}
+        />
+        <CheckoutAddressSection
+          form={form}
+          fieldErrors={fieldErrors}
+          onUpdateField={onUpdateField}
+        />
+        <CheckoutCouponSection
+          form={form}
+          pricing={pricing}
+          isCouponPending={isCouponPending}
+          onUpdateField={onUpdateField}
+          onApplyCoupon={onApplyCoupon}
+        />
+        <CheckoutFooterActions
+          isPending={isPending}
+          onResetNavigation={onResetNavigation}
+        />
+      </form>
+    </section>
+  );
+}
+
+export function CheckoutSummaryAside({
+  items,
+  totals,
+  displaySubtotal,
+  displayDiscount,
+  displayTotal,
+}: {
+  items: LocalCartItem[];
+  totals: { quantity: number; total: number };
+  displaySubtotal: number;
+  displayDiscount: number;
+  displayTotal: number;
+}) {
+  return (
+    <aside className="lg:sticky lg:top-28 lg:self-start">
+      <div className="rounded-[32px] bg-muted/35 p-5">
+        <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+          <ReceiptText className="size-4" />
+          Order summary
+        </div>
+
+        <div className="mt-4 space-y-3">
+          {items.map((item) => {
+            const unit = item.unitDiscountPrice ?? item.unitPrice;
+
+            return (
+              <article key={item.key} className="rounded-[24px] bg-background p-3">
+                <div className="flex gap-3">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={item.thumbnailUrl}
+                    alt={item.title}
+                    className="size-16 rounded-2xl object-cover"
+                  />
+                  <div className="min-w-0 flex-1">
+                    <p className="line-clamp-2 text-sm font-medium text-foreground">
+                      {item.title}
+                    </p>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      Qty {item.quantity}
+                    </p>
+                    <p className="mt-2 text-sm font-semibold text-foreground">
+                      {formatCurrency(unit * item.quantity)}
+                    </p>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+
+        <div className="mt-4 rounded-[24px] bg-background p-4">
+          <div className="flex items-center justify-between text-sm text-muted-foreground">
+            <span>Items</span>
+            <span>{totals.quantity}</span>
+          </div>
+          <div className="mt-2 flex items-center justify-between text-sm text-muted-foreground">
+            <span>Subtotal</span>
+            <span>{formatCurrency(displaySubtotal)}</span>
+          </div>
+          <div className="mt-2 flex items-center justify-between text-sm text-muted-foreground">
+            <span>Discount</span>
+            <span className={displayDiscount > 0 ? "text-primary" : ""}>
+              {displayDiscount > 0
+                ? `-${formatCurrency(displayDiscount)}`
+                : formatCurrency(0)}
+            </span>
+          </div>
+          <div className="mt-2 flex items-center justify-between text-base font-semibold text-foreground">
+            <span>Total</span>
+            <span>{formatCurrency(displayTotal)}</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+  );
+}
