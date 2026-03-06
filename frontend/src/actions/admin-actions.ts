@@ -6,6 +6,11 @@ import {
   PatchRequestAxios,
   DeleteRequestAxios,
 } from "@/api-hooks/api-hooks";
+import type {
+  ProductCardVariant,
+  ProductDetailsVariant,
+  SiteThemeName,
+} from "@/lib/site-appearance";
 
 // ─── Users ──────────────────────────────────────────────────
 
@@ -336,6 +341,9 @@ type SiteSettingsResponse = {
   ogImageUrl: string | null;
   noticeEnabled: boolean;
   noticeText: string | null;
+  siteTheme: SiteThemeName;
+  productCardVariant: ProductCardVariant;
+  productDetailsVariant: ProductDetailsVariant;
   isActive: boolean;
 };
 
@@ -387,6 +395,7 @@ export type HomeHeroSlide = {
 export type HomeSection = {
   id: string;
   type: HomeSectionType;
+  variant?: string;
   title?: string;
   subtitle?: string;
   description?: string;

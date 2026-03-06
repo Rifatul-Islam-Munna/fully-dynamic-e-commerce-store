@@ -8,6 +8,66 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+export const SITE_THEME_VALUES = [
+  'light',
+  'cobalt',
+  'emerald',
+  'rose',
+  'amber',
+  'teal',
+  'slate',
+  'berry',
+  'coral',
+  'violet',
+  'navy',
+  'ruby',
+  'olive',
+  'sky',
+  'graphite',
+  'sand',
+  'ocean',
+  'orchid',
+  'forest',
+  'crimson',
+  'denim',
+  'sage',
+  'plum',
+  'espresso',
+  'sunset',
+] as const;
+
+export const PRODUCT_CARD_VARIANT_VALUES = [
+  'classic',
+  'compact',
+  'editorial',
+  'price_strip',
+  'badge_focus',
+  'spotlight',
+  'stacked',
+  'minimal',
+] as const;
+
+export const PRODUCT_DETAILS_VARIANT_VALUES = [
+  'original',
+  'classic',
+  'showcase',
+  'streamlined',
+  'gallery_first',
+  'buy_panel',
+  'storyline',
+  'immersive',
+  'catalog',
+  'commerce_stack',
+  'spec_sheet',
+  'media_rail',
+  'briefing',
+  'showroom',
+  'retail_suite',
+  'overview_split',
+  'gallery_stack',
+  'merchant_brief',
+] as const;
+
 @Entity('site_settings')
 @Index('idx_site_settings_key', ['key'], { unique: true })
 export class SiteSetting {
@@ -75,6 +135,33 @@ export class SiteSetting {
   })
   @Column({ type: 'varchar', length: 500, nullable: true })
   noticeText: string | null;
+
+  @ApiProperty({
+    description: 'Global storefront theme preset selected by admin',
+    enum: SITE_THEME_VALUES,
+    example: 'light',
+    default: 'light',
+  })
+  @Column({ type: 'varchar', length: 40, default: 'light' })
+  siteTheme: string;
+
+  @ApiProperty({
+    description: 'Global product card layout variant selected by admin',
+    enum: PRODUCT_CARD_VARIANT_VALUES,
+    example: 'classic',
+    default: 'classic',
+  })
+  @Column({ type: 'varchar', length: 40, default: 'classic' })
+  productCardVariant: string;
+
+  @ApiProperty({
+    description: 'Global product details layout variant selected by admin',
+    enum: PRODUCT_DETAILS_VARIANT_VALUES,
+    example: 'classic',
+    default: 'classic',
+  })
+  @Column({ type: 'varchar', length: 40, default: 'classic' })
+  productDetailsVariant: string;
 
   @ApiProperty({
     description: 'Whether this site config is active',

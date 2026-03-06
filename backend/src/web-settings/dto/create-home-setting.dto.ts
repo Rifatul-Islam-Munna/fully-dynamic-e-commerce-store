@@ -104,6 +104,15 @@ export class HomeSectionDto {
   type: (typeof HOME_SECTION_TYPES)[number];
 
   @ApiPropertyOptional({
+    description: 'Optional section layout variant token',
+    example: 'original',
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(80)
+  variant?: string;
+
+  @ApiPropertyOptional({
     description: 'Section title',
     example: 'Top Picks',
   })

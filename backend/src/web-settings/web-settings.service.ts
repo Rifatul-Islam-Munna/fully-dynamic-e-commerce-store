@@ -237,6 +237,10 @@ export class WebSettingsService {
       ogImageUrl: createDto.ogImageUrl ?? null,
       noticeEnabled: createDto.noticeEnabled ?? false,
       noticeText: createDto.noticeText ?? null,
+      siteTheme: createDto.siteTheme?.trim() || 'light',
+      productCardVariant: createDto.productCardVariant?.trim() || 'classic',
+      productDetailsVariant:
+        createDto.productDetailsVariant?.trim() || 'classic',
       isActive: createDto.isActive ?? true,
     });
 
@@ -308,6 +312,17 @@ export class WebSettingsService {
     }
     if (updateDto.noticeText !== undefined) {
       site.noticeText = updateDto.noticeText ?? null;
+    }
+    if (updateDto.siteTheme !== undefined) {
+      site.siteTheme = updateDto.siteTheme?.trim() || 'light';
+    }
+    if (updateDto.productCardVariant !== undefined) {
+      site.productCardVariant =
+        updateDto.productCardVariant?.trim() || 'classic';
+    }
+    if (updateDto.productDetailsVariant !== undefined) {
+      site.productDetailsVariant =
+        updateDto.productDetailsVariant?.trim() || 'classic';
     }
     if (updateDto.isActive !== undefined) {
       site.isActive = updateDto.isActive;
@@ -489,6 +504,7 @@ export class WebSettingsService {
       return {
         id: section.id?.trim() || randomUUID(),
         type: section.type,
+        variant: section.variant?.trim() || undefined,
         title: section.title?.trim() || undefined,
         subtitle: section.subtitle?.trim() || undefined,
         description: section.description?.trim() || undefined,

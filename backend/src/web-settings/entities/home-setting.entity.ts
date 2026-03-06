@@ -40,6 +40,7 @@ export type HeroSlide = {
 export type HomeSection = {
   id: string;
   type: HomeSectionType;
+  variant?: string;
   title?: string;
   subtitle?: string;
   description?: string;

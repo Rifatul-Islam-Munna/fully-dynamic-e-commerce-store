@@ -1,5 +1,17 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsBoolean, IsOptional, IsString, IsUUID, MaxLength } from 'class-validator';
+import {
+  IsBoolean,
+  IsIn,
+  IsOptional,
+  IsString,
+  IsUUID,
+  MaxLength,
+} from 'class-validator';
+import {
+  PRODUCT_CARD_VARIANT_VALUES,
+  PRODUCT_DETAILS_VARIANT_VALUES,
+  SITE_THEME_VALUES,
+} from '../entities/site-setting.entity';
 
 export class UpdateSiteSettingDto {
   @ApiPropertyOptional({
@@ -80,6 +92,36 @@ export class UpdateSiteSettingDto {
   @IsString()
   @MaxLength(500)
   noticeText?: string;
+
+  @ApiPropertyOptional({
+    description: 'Global storefront theme preset',
+    enum: SITE_THEME_VALUES,
+    example: 'light',
+  })
+  @IsOptional()
+  @IsString()
+  @IsIn([...SITE_THEME_VALUES])
+  siteTheme?: string;
+
+  @ApiPropertyOptional({
+    description: 'Global product card layout variant',
+    enum: PRODUCT_CARD_VARIANT_VALUES,
+    example: 'classic',
+  })
+  @IsOptional()
+  @IsString()
+  @IsIn([...PRODUCT_CARD_VARIANT_VALUES])
+  productCardVariant?: string;
+
+  @ApiPropertyOptional({
+    description: 'Global product details layout variant',
+    enum: PRODUCT_DETAILS_VARIANT_VALUES,
+    example: 'classic',
+  })
+  @IsOptional()
+  @IsString()
+  @IsIn([...PRODUCT_DETAILS_VARIANT_VALUES])
+  productDetailsVariant?: string;
 
   @ApiPropertyOptional({
     description: 'Whether this config is active',

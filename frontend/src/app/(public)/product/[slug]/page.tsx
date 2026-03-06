@@ -1,19 +1,9 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { cache } from "react";
-import {
-  ArrowRight,
-  BadgePercent,
-  PackageCheck,
-  ShieldCheck,
-  Truck,
-} from "lucide-react";
 import { notFound } from "next/navigation";
 import { GetRequestNormal } from "@/api-hooks/api-hooks";
-import { ProductCard } from "@/components/product/product-card";
-import { ProductDetailsActions } from "@/components/product/product-details-actions";
-import { ProductImageGallery } from "@/components/product/product-image-gallery";
-import { CURRENCY_CODE, formatCurrency } from "@/lib/currency";
+import { ProductDetailsView } from "@/components/product/product-details-view";
+import { CURRENCY_CODE } from "@/lib/currency";
 
 export const dynamic = "force-dynamic";
 
@@ -307,16 +297,6 @@ export default async function ProductDetailsPage({
     variantPrices.length > 0 ? Math.max(...variantPrices) : null;
 
   const baseCurrentPrice = product.discountPrice ?? product.price;
-  const hasBaseDiscount =
-    product.discountPrice !== null && product.discountPrice < product.price;
-  const showDiscountBadge = !hasVariants && hasBaseDiscount && product.price > 0;
-
-  const priceRangeText =
-    hasVariants && minVariantPrice !== null
-      ? maxVariantPrice !== null && minVariantPrice !== maxVariantPrice
-        ? `${formatCurrency(minVariantPrice)} - ${formatCurrency(maxVariantPrice)}`
-        : formatCurrency(minVariantPrice)
-      : formatCurrency(baseCurrentPrice);
 
   const relatedProducts = await getRelatedProducts(
     product.mainNavUrl,
@@ -327,7 +307,6 @@ export default async function ProductDetailsPage({
   const canonicalPath = buildCanonicalPath(product.slug);
   const canonicalUrl = buildAbsoluteUrl(canonicalPath) ?? canonicalPath;
   const description = toMetaDescription(product);
-
   const variantHasInStock = variants.some((variant) => (variant.stock ?? 0) > 0);
   const structuredData = {
     "@context": "https://schema.org",
@@ -373,126 +352,17 @@ export default async function ProductDetailsPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-
-      <section className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr] xl:gap-10">
-        <ProductImageGallery images={gallery} title={product.title} />
-
-        <div className="space-y-5 xl:sticky xl:top-24 xl:self-start">
-          <nav
-            aria-label="Breadcrumb"
-            className="flex flex-wrap items-center gap-1 text-xs text-muted-foreground"
-          >
-            <Link href="/" className="hover:text-foreground">
-              Home
-            </Link>
-            {mainNavUrl && mainLabel ? (
-              <>
-                <ArrowRight className="size-3" />
-                <Link href={mainNavUrl} className="hover:text-foreground">
-                  {mainLabel}
-                </Link>
-              </>
-            ) : null}
-            {subNavUrl && subLabel ? (
-              <>
-                <ArrowRight className="size-3" />
-                <Link href={subNavUrl} className="hover:text-foreground">
-                  {subLabel}
-                </Link>
-              </>
-            ) : null}
-          </nav>
-
-          <div className="space-y-2">
-            <h1 className="text-2xl font-bold leading-tight tracking-tight sm:text-3xl">
-              {product.title}
-            </h1>
-            <div className="flex items-center gap-2">
-              <span className="text-2xl font-semibold text-foreground">
-                {hasVariants ? `From ${priceRangeText}` : priceRangeText}
-              </span>
-              {!hasVariants && hasBaseDiscount ? (
-                <span className="text-sm text-muted-foreground line-through">
-                  {formatCurrency(product.price)}
-                </span>
-              ) : null}
-              {showDiscountBadge ? (
-                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2 py-0.5 text-xs font-medium text-emerald-600">
-                  <BadgePercent className="size-3.5" />
-                  Save{" "}
-                  {Math.round(
-                    ((product.price - baseCurrentPrice) / product.price) * 100,
-                  )}
-                  %
-                </span>
-              ) : null}
-            </div>
-          </div>
-
-          <ProductDetailsActions
-            product={{
-              id: product.id,
-              slug: product.slug,
-              title: product.title,
-              thumbnailUrl: product.thumbnailUrl,
-              price: product.price,
-              discountPrice: product.discountPrice,
-              hasVariants: product.hasVariants,
-              variants,
-            }}
-          />
-
-          <section className="rounded-2xl bg-card/60 p-4 sm:p-5">
-            <h2 className="text-base font-semibold tracking-tight">
-              Product Details
-            </h2>
-            {product.richText?.trim() ? (
-              <div className="mt-3 overflow-x-auto">
-                <article
-                  className="product-rich-content prose prose-sm max-w-none text-foreground"
-                  dangerouslySetInnerHTML={{ __html: product.richText }}
-                />
-              </div>
-            ) : (
-              <p className="mt-3 text-sm text-muted-foreground">
-                Detailed description will be added soon.
-              </p>
-            )}
-          </section>
-
-          <section className="space-y-3 rounded-2xl bg-card/60 p-4 sm:p-5">
-            <h2 className="text-base font-semibold tracking-tight">
-              {relatedTitle}
-            </h2>
-            {relatedProducts.length > 0 ? (
-              <div className="grid gap-3 sm:grid-cols-2">
-                {relatedProducts.map((related) => (
-                  <ProductCard key={related.id} product={related} />
-                ))}
-              </div>
-            ) : (
-              <p className="text-sm text-muted-foreground">
-                No related products available for this category yet.
-              </p>
-            )}
-          </section>
-
-          <div className="grid gap-2 rounded-xl bg-muted/30 p-3 text-sm">
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <Truck className="size-4" />
-              Fast delivery support
-            </div>
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <ShieldCheck className="size-4" />
-              Secure checkout and payment protection
-            </div>
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <PackageCheck className="size-4" />
-              Quality checked before dispatch
-            </div>
-          </div>
-        </div>
-      </section>
+      <ProductDetailsView
+        product={product}
+        gallery={gallery}
+        variants={variants}
+        relatedProducts={relatedProducts}
+        mainNavUrl={mainNavUrl}
+        subNavUrl={subNavUrl}
+        mainLabel={mainLabel}
+        subLabel={subLabel}
+        relatedTitle={relatedTitle}
+      />
 
     </main>
   );

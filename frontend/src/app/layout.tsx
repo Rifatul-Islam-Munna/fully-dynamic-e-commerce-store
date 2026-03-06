@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { GetRequestNormal } from "@/api-hooks/api-hooks";
+import { buildSiteAppearanceSettings } from "@/lib/site-appearance";
 import "./globals.css";
 import QueryClint from "@/hooks/QueryClint";
 import { Toaster } from "sonner";
@@ -11,6 +12,9 @@ type SiteSettingsPayload = {
   logoUrl?: string | null;
   faviconUrl?: string | null;
   ogImageUrl?: string | null;
+  siteTheme?: string | null;
+  productCardVariant?: string | null;
+  productDetailsVariant?: string | null;
 };
 
 const DEFAULT_METADATA = {
@@ -80,17 +84,24 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const settings = await getSiteSettingsMetadata("default");
+  const appearance = buildSiteAppearanceSettings(settings ?? undefined);
+
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html
+      lang="en"
+      className={appearance.siteTheme}
+      suppressHydrationWarning
+    >
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <QueryClint>
+        <QueryClint appearance={appearance}>
           {children}
           <Toaster />
         </QueryClint>

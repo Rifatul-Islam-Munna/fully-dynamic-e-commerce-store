@@ -28,6 +28,11 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { ImageUploadField } from "@/components/admin/image-upload-field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  getDefaultHomeSectionVariant,
+  getHomeSectionVariantMeta,
+  getHomeSectionVariantOptions,
+} from "@/lib/home-section-variants";
 import { Textarea } from "@/components/ui/textarea";
 
 type NavSubItem = {
@@ -54,6 +59,7 @@ type SlideForm = {
 type SectionForm = {
   id: string;
   type: HomeSectionType;
+  variant: string;
   title: string;
   subtitle: string;
   description: string;
@@ -109,6 +115,7 @@ const createEmptySlide = (): SlideForm => ({
 const createEmptySection = (type: HomeSectionType): SectionForm => ({
   id: makeId(),
   type,
+  variant: getDefaultHomeSectionVariant(type),
   title: "",
   subtitle: "",
   description: "",
@@ -127,6 +134,7 @@ function mapSection(section: HomeSection): SectionForm {
   return {
     id: section.id || makeId(),
     type: section.type,
+    variant: section.variant || getDefaultHomeSectionVariant(section.type),
     title: section.title || "",
     subtitle: section.subtitle || "",
     description: section.description || "",
@@ -158,6 +166,7 @@ function normalizeSectionPayload(section: SectionForm, sortOrder: number) {
   const base: Record<string, unknown> = {
     id: section.id,
     type: section.type,
+    variant: section.variant.trim() || getDefaultHomeSectionVariant(section.type),
     title: section.title.trim() || undefined,
     subtitle: section.subtitle.trim() || undefined,
     description: section.description.trim() || undefined,
@@ -579,6 +588,11 @@ export default function HomeSettingsPage() {
               SECTION_TYPES.find((item) => item.value === section.type)?.label ||
               section.type;
             const isCollapsed = collapsedSections[section.id] ?? false;
+            const variantOptions = getHomeSectionVariantOptions(section.type);
+            const variantMeta = getHomeSectionVariantMeta(
+              section.type,
+              section.variant,
+            );
 
             return (
               <div
@@ -641,6 +655,35 @@ export default function HomeSettingsPage() {
 
                 {!isCollapsed ? (
                   <div className="space-y-4">
+                    <div className="rounded-lg border border-border/60 bg-muted/20 p-4">
+                      <div className="grid gap-3 sm:grid-cols-[minmax(0,220px)_1fr] sm:items-start">
+                        <div className="space-y-1">
+                          <Label className="text-xs">Section Variant</Label>
+                          <select
+                            className="flex h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
+                            value={section.variant}
+                            onChange={(e) =>
+                              updateSection(sectionIndex, "variant", e.target.value)
+                            }
+                          >
+                            {variantOptions.map((option) => (
+                              <option key={option.value} value={option.value}>
+                                {option.label}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <div className="rounded-md bg-background px-3 py-2">
+                          <p className="text-xs font-semibold text-foreground">
+                            {variantMeta.label}
+                          </p>
+                          <p className="mt-1 text-xs leading-5 text-muted-foreground">
+                            {variantMeta.description}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
                     {section.type !== "hero_slider" ? (
                       <div className="grid gap-4 sm:grid-cols-2">
                         <div className="space-y-1">
