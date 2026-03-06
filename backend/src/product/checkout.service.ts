@@ -270,6 +270,120 @@ export class CheckoutService {
     };
   }
 
+  async findMyOrders(userId: string) {
+    const [rawSummary, recentOrders] = await Promise.all([
+      this.checkoutOrderRepository
+        .createQueryBuilder('order')
+        .select('COUNT(*)', 'totalOrders')
+        .addSelect(
+          `COUNT(*) FILTER (WHERE order.status IN (:...activeStatuses))`,
+          'activeOrders',
+        )
+        .addSelect(
+          `COUNT(*) FILTER (WHERE order.status = :pendingStatus)`,
+          'pendingOrders',
+        )
+        .addSelect(
+          `COUNT(*) FILTER (WHERE order.status = :confirmedStatus)`,
+          'confirmedOrders',
+        )
+        .addSelect(
+          `COUNT(*) FILTER (WHERE order.status = :cancelledStatus)`,
+          'cancelledOrders',
+        )
+        .addSelect('COALESCE(SUM(order.itemCount), 0)', 'totalItems')
+        .addSelect(
+          `COALESCE(SUM(CASE WHEN order.status IN (:...activeStatuses) THEN order.total ELSE 0 END), 0)`,
+          'activeValue',
+        )
+        .addSelect(
+          `COALESCE(SUM(CASE WHEN order.status = :confirmedStatus THEN order.total ELSE 0 END), 0)`,
+          'confirmedSpend',
+        )
+        .addSelect('MAX(order.createdAt)', 'lastOrderAt')
+        .where('order.userId = :userId', { userId })
+        .setParameters({
+          activeStatuses: [
+            CheckoutOrderStatus.PENDING,
+            CheckoutOrderStatus.CONFIRMED,
+          ],
+          pendingStatus: CheckoutOrderStatus.PENDING,
+          confirmedStatus: CheckoutOrderStatus.CONFIRMED,
+          cancelledStatus: CheckoutOrderStatus.CANCELLED,
+        })
+        .getRawOne<{
+          totalOrders: string;
+          activeOrders: string;
+          pendingOrders: string;
+          confirmedOrders: string;
+          cancelledOrders: string;
+          totalItems: string;
+          activeValue: string;
+          confirmedSpend: string;
+          lastOrderAt: string | null;
+        }>(),
+      this.checkoutOrderRepository.find({
+        where: {
+          userId,
+        },
+        relations: {
+          items: true,
+        },
+        order: {
+          createdAt: 'DESC',
+          items: {
+            id: 'ASC',
+          },
+        },
+        take: 6,
+      }),
+    ]);
+
+    const recentOrderCards = recentOrders.map((order) => {
+      const firstItem = order.items[0] ?? null;
+
+      return {
+        id: order.id,
+        orderNumber: order.orderNumber,
+        status: order.status,
+        itemCount: order.itemCount,
+        total: order.total,
+        customerDistrict: order.customerDistrict,
+        createdAt: order.createdAt.toISOString(),
+        updatedAt: order.updatedAt.toISOString(),
+        firstItem: firstItem
+          ? {
+              productTitle: firstItem.productTitle,
+              productSlug: firstItem.productSlug,
+              productThumbnailUrl: firstItem.productThumbnailUrl,
+              variantTitle: firstItem.variantTitle,
+              quantity: firstItem.quantity,
+            }
+          : null,
+      };
+    });
+
+    return {
+      summary: {
+        totalOrders: this.toNumber(rawSummary?.totalOrders),
+        activeOrders: this.toNumber(rawSummary?.activeOrders),
+        pendingOrders: this.toNumber(rawSummary?.pendingOrders),
+        confirmedOrders: this.toNumber(rawSummary?.confirmedOrders),
+        cancelledOrders: this.toNumber(rawSummary?.cancelledOrders),
+        totalItems: this.toNumber(rawSummary?.totalItems),
+        activeValue: this.roundCurrency(this.toNumber(rawSummary?.activeValue)),
+        confirmedSpend: this.roundCurrency(
+          this.toNumber(rawSummary?.confirmedSpend),
+        ),
+        lastOrderAt: rawSummary?.lastOrderAt ?? null,
+      },
+      activeOrders: recentOrderCards.filter(
+        (order) => order.status !== CheckoutOrderStatus.CANCELLED,
+      ),
+      recentOrders: recentOrderCards,
+    };
+  }
+
   async updateStatus(updateCheckoutOrderStatusDto: UpdateCheckoutOrderStatusDto) {
     const updatedOrderId = await this.dataSource.transaction(async (manager) => {
       const checkoutOrderRepository = manager.getRepository(CheckoutOrder);

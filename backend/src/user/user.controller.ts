@@ -20,6 +20,7 @@ import {
 } from '@nestjs/swagger';
 import { AuthGuard, type ExpressRequest } from '../../lib/auth.guard';
 import { AdminUserQueryDto } from './dto/admin-user-query.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
 import { DeleteUserQueryDto } from './dto/delete-user-query.dto';
 import { LoginDto } from './dto/login.dto';
 import { SignupDto } from './dto/signup.dto';
@@ -81,6 +82,32 @@ export class UserController {
     }
 
     return this.userService.getMyProfile(req.user.id);
+  }
+
+  @Patch('password')
+  @UseGuards(AuthGuard)
+  @ApiHeader({
+    name: 'access_token',
+    description: 'JWT access token from login',
+    required: true,
+  })
+  @ApiOperation({
+    summary: 'Change current user password',
+    description:
+      'Lets the authenticated user change their account password by sending the current password and a new password.',
+  })
+  @ApiOkResponse({
+    description: 'Password updated successfully',
+  })
+  changeMyPassword(
+    @Req() req: ExpressRequest,
+    @Body() changePasswordDto: ChangePasswordDto,
+  ) {
+    if (!req.user?.id) {
+      throw new UnauthorizedException('Invalid token payload');
+    }
+
+    return this.userService.changePassword(req.user.id, changePasswordDto);
   }
 
   @Get('admin')

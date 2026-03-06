@@ -13,6 +13,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import bcrypt from 'bcrypt';
 import { Brackets, Not, Repository } from 'typeorm';
 import { AdminUserQueryDto } from './dto/admin-user-query.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
 import { DeleteUserQueryDto } from './dto/delete-user-query.dto';
 import { LoginDto } from './dto/login.dto';
 import { SignupDto } from './dto/signup.dto';
@@ -131,6 +132,41 @@ export class UserService {
     }
 
     return user;
+  }
+
+  async changePassword(userId: string, changePasswordDto: ChangePasswordDto) {
+    const user = await this.userRepository
+      .createQueryBuilder('user')
+      .addSelect('user.passwordHash')
+      .where('user.id = :userId', { userId })
+      .getOne();
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const currentPasswordMatches = await bcrypt.compare(
+      changePasswordDto.currentPassword,
+      user.passwordHash,
+    );
+
+    if (!currentPasswordMatches) {
+      throw new BadRequestException('Current password is incorrect');
+    }
+
+    if (changePasswordDto.currentPassword === changePasswordDto.newPassword) {
+      throw new BadRequestException(
+        'New password must be different from current password',
+      );
+    }
+
+    user.passwordHash = await bcrypt.hash(changePasswordDto.newPassword, 12);
+    await this.userRepository.save(user);
+
+    return {
+      updated: true,
+      message: 'Password updated successfully',
+    };
   }
 
   async adminGetUsers(currentUser: jwts, query: AdminUserQueryDto) {

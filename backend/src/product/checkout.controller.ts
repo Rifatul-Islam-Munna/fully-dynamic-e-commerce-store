@@ -7,7 +7,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import type { Request } from 'express';
-import { AuthGuard } from '../../lib/auth.guard';
+import { AuthGuard, type ExpressRequest } from '../../lib/auth.guard';
 import { Roles } from '../../lib/roles.decorator';
 import { RolesGuard } from '../../lib/roles.guard';
 import { UserRole } from '../user/entities/user.entity';
@@ -45,6 +45,25 @@ export class CheckoutController {
       : accessTokenHeader;
 
     return this.checkoutService.create(createCheckoutDto, accessToken);
+  }
+
+  @Get('me')
+  @UseGuards(AuthGuard)
+  @ApiHeader({
+    name: 'access_token',
+    description: 'JWT access token for the current user',
+    required: true,
+  })
+  @ApiOperation({
+    summary: 'Get current user checkout dashboard',
+    description:
+      'Returns account-level order summary, active orders, and recent orders for the authenticated customer dashboard.',
+  })
+  @ApiOkResponse({
+    description: 'Current user checkout dashboard payload',
+  })
+  findMyOrders(@Req() req: ExpressRequest) {
+    return this.checkoutService.findMyOrders(req.user.id);
   }
 
   @Get('admin')
