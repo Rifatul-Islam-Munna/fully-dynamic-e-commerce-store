@@ -1,4 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { AuthGuard } from '../../lib/auth.guard';
+import { RolesGuard } from '../../lib/roles.guard';
 import { CheckoutController } from './checkout.controller';
 import { CheckoutService } from './checkout.service';
 
@@ -14,7 +16,16 @@ describe('CheckoutController', () => {
           useValue: {},
         },
       ],
-    }).compile();
+    })
+      .overrideGuard(AuthGuard)
+      .useValue({
+        canActivate: jest.fn(() => true),
+      })
+      .overrideGuard(RolesGuard)
+      .useValue({
+        canActivate: jest.fn(() => true),
+      })
+      .compile();
 
     controller = module.get<CheckoutController>(CheckoutController);
   });

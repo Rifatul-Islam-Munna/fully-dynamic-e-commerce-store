@@ -3,6 +3,7 @@ import { Type } from 'class-transformer';
 import {
   IsArray,
   IsBoolean,
+  IsInt,
   IsNumber,
   IsOptional,
   IsString,
@@ -107,6 +108,17 @@ export class CreateProductDto {
   @Type(() => Boolean)
   @IsBoolean()
   hasVariants?: boolean;
+
+  @ApiPropertyOptional({
+    description:
+      'Simple product stock. Leave empty for existing untracked products, or set a value for managed inventory.',
+    example: 24,
+  })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(0)
+  stock?: number | null;
 
   @ApiPropertyOptional({
     description:

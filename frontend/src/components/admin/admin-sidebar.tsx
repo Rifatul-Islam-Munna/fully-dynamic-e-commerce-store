@@ -12,6 +12,8 @@ import {
   LayoutTemplate,
   LogOut,
   Menu,
+  Boxes,
+  ShoppingBag,
   TicketPercent,
   X,
 } from "lucide-react";
@@ -21,6 +23,8 @@ import { cn } from "@/lib/utils";
 const NAV_ITEMS = [
   { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
   { label: "Products", href: "/admin/products", icon: Package },
+  { label: "Orders", href: "/admin/orders", icon: ShoppingBag },
+  { label: "Stock", href: "/admin/stock-management", icon: Boxes },
   { label: "Coupons", href: "/admin/coupons", icon: TicketPercent },
   { label: "Users", href: "/admin/users", icon: Users },
   { label: "Site Settings", href: "/admin/site-settings", icon: Settings },

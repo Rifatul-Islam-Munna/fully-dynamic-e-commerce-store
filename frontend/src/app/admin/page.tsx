@@ -71,6 +71,16 @@ export default async function AdminDashboardPage() {
             href="/admin/products"
           />
           <QuickAction
+            title="Order Management"
+            description="Confirm, cancel, and review checkout orders"
+            href="/admin/orders"
+          />
+          <QuickAction
+            title="Stock Management"
+            description="Review inventory health and sales movement"
+            href="/admin/stock-management"
+          />
+          <QuickAction
             title="Manage Users"
             description="View and manage user accounts"
             href="/admin/users"

@@ -11,10 +11,28 @@ import { jwts } from '../../lib/auth.guard';
 import { CreateProductDto } from './dto/create-product.dto';
 import { DeleteProductQueryDto } from './dto/delete-product-query.dto';
 import { ProductQueryDto } from './dto/product-query.dto';
+import { StockReportQueryDto } from './dto/stock-report-query.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import {
+  CheckoutOrderStatus,
+} from './entities/checkout-order.entity';
+import { CheckoutOrderItem } from './entities/checkout-order-item.entity';
 import { CreateProductVariantDto } from './dto/create-product-variant.dto';
 import { Product, ProductKind } from './entities/product.entity';
 import { ProductVariant } from './entities/product-variant.entity';
+
+type ProductSalesAggregate = {
+  soldUnits: number;
+  revenue: number;
+  orderCount: number;
+  lastSoldAt: Date | null;
+};
+
+type VariantSalesAggregate = {
+  soldUnits: number;
+  revenue: number;
+  lastSoldAt: Date | null;
+};
 
 @Injectable()
 export class ProductService implements OnModuleInit {
@@ -25,6 +43,8 @@ export class ProductService implements OnModuleInit {
     private readonly productRepository: Repository<Product>,
     @InjectRepository(ProductVariant)
     private readonly variantRepository: Repository<ProductVariant>,
+    @InjectRepository(CheckoutOrderItem)
+    private readonly checkoutOrderItemRepository: Repository<CheckoutOrderItem>,
   ) {}
 
   async onModuleInit() {
@@ -62,39 +82,40 @@ export class ProductService implements OnModuleInit {
 
     const createdProductId = await this.productRepository.manager.transaction(
       async (manager) => {
-      const productRepo = manager.getRepository(Product);
-      const variantRepo = manager.getRepository(ProductVariant);
+        const productRepo = manager.getRepository(Product);
+        const variantRepo = manager.getRepository(ProductVariant);
 
-      const product = productRepo.create({
-        thumbnailUrl: createProductDto.thumbnailUrl.trim(),
-        imageUrls,
-        title: createProductDto.title.trim(),
-        slug,
-        price: createProductDto.price,
-        discountPrice: createProductDto.discountPrice ?? null,
-        richText: createProductDto.richText,
-        mainNavUrl,
-        subNavUrl,
-        hasVariants,
-        productKind: hasVariants ? ProductKind.VARIANT : ProductKind.SIMPLE,
-        isActive: createProductDto.isActive ?? true,
-        isHotSells: createProductDto.isHotSells ?? false,
-        isWeeklySell: createProductDto.isWeeklySell ?? false,
-        isSummerSell: createProductDto.isSummerSell ?? false,
-        isWinterSell: createProductDto.isWinterSell ?? false,
-        isBestSell: createProductDto.isBestSell ?? false,
-      });
+        const product = productRepo.create({
+          thumbnailUrl: createProductDto.thumbnailUrl.trim(),
+          imageUrls,
+          title: createProductDto.title.trim(),
+          slug,
+          price: createProductDto.price,
+          discountPrice: createProductDto.discountPrice ?? null,
+          richText: createProductDto.richText,
+          mainNavUrl,
+          subNavUrl,
+          hasVariants,
+          stock: this.normalizeSimpleStock(hasVariants, createProductDto.stock),
+          productKind: hasVariants ? ProductKind.VARIANT : ProductKind.SIMPLE,
+          isActive: createProductDto.isActive ?? true,
+          isHotSells: createProductDto.isHotSells ?? false,
+          isWeeklySell: createProductDto.isWeeklySell ?? false,
+          isSummerSell: createProductDto.isSummerSell ?? false,
+          isWinterSell: createProductDto.isWinterSell ?? false,
+          isBestSell: createProductDto.isBestSell ?? false,
+        });
 
-      const savedProduct = await productRepo.save(product);
+        const savedProduct = await productRepo.save(product);
 
-      if (hasVariants && variants.length > 0) {
-        const mappedVariants = variants.map((variantDto) =>
-          this.mapVariantInput(variantDto, savedProduct.id),
-        );
-        await variantRepo.save(mappedVariants);
-      }
+        if (hasVariants && variants.length > 0) {
+          const mappedVariants = variants.map((variantDto) =>
+            this.mapVariantInput(variantDto, savedProduct.id),
+          );
+          await variantRepo.save(mappedVariants);
+        }
 
-      return savedProduct.id;
+        return savedProduct.id;
       },
     );
 
@@ -139,6 +160,7 @@ export class ProductService implements OnModuleInit {
         'product.subNavUrl',
         'product.productKind',
         'product.hasVariants',
+        'product.stock',
         'product.isActive',
         'product.isHotSells',
         'product.isWeeklySell',
@@ -306,6 +328,11 @@ export class ProductService implements OnModuleInit {
     );
     product.slug = await this.makeUniqueSlug(nextSlugBase, product.id);
     product.hasVariants = nextHasVariants;
+    if (nextHasVariants) {
+      product.stock = null;
+    } else if (updateProductDto.stock !== undefined) {
+      product.stock = this.normalizeSimpleStock(false, updateProductDto.stock);
+    }
     product.productKind = nextHasVariants ? ProductKind.VARIANT : ProductKind.SIMPLE;
 
     await this.productRepository.manager.transaction(async (manager) => {
@@ -347,6 +374,259 @@ export class ProductService implements OnModuleInit {
     return {
       deleted: true,
       productId: query.productId,
+    };
+  }
+
+  async getStockReport(query: StockReportQueryDto) {
+    const staleAfterDays = query.staleAfterDays ?? 30;
+    const lowStockThreshold = query.lowStockThreshold ?? 5;
+    const topLimit = query.topLimit ?? 8;
+    const now = new Date();
+
+    const [products, productSalesRows, variantSalesRows] = await Promise.all([
+      this.productRepository.find({
+        relations: {
+          variants: true,
+        },
+        order: {
+          createdAt: 'DESC',
+          variants: {
+            sortOrder: 'ASC',
+          },
+        },
+      }),
+      this.checkoutOrderItemRepository
+        .createQueryBuilder('item')
+        .innerJoin('item.checkoutOrder', 'order')
+        .select('item.productId', 'productId')
+        .addSelect('COALESCE(SUM(item.quantity), 0)', 'soldUnits')
+        .addSelect('COALESCE(SUM(item.lineTotal), 0)', 'revenue')
+        .addSelect('COUNT(DISTINCT order.id)', 'orderCount')
+        .addSelect('MAX(order.createdAt)', 'lastSoldAt')
+        .where('item.productId IS NOT NULL')
+        .andWhere('order.status = :confirmedStatus', {
+          confirmedStatus: CheckoutOrderStatus.CONFIRMED,
+        })
+        .groupBy('item.productId')
+        .getRawMany<{
+          productId: string;
+          soldUnits: string;
+          revenue: string;
+          orderCount: string;
+          lastSoldAt: string | null;
+        }>(),
+      this.checkoutOrderItemRepository
+        .createQueryBuilder('item')
+        .innerJoin('item.checkoutOrder', 'order')
+        .select('item.productVariantId', 'productVariantId')
+        .addSelect('COALESCE(SUM(item.quantity), 0)', 'soldUnits')
+        .addSelect('COALESCE(SUM(item.lineTotal), 0)', 'revenue')
+        .addSelect('MAX(order.createdAt)', 'lastSoldAt')
+        .where('item.productVariantId IS NOT NULL')
+        .andWhere('order.status = :confirmedStatus', {
+          confirmedStatus: CheckoutOrderStatus.CONFIRMED,
+        })
+        .groupBy('item.productVariantId')
+        .getRawMany<{
+          productVariantId: string;
+          soldUnits: string;
+          revenue: string;
+          lastSoldAt: string | null;
+        }>(),
+    ]);
+
+    const productSales = new Map<string, ProductSalesAggregate>();
+    for (const row of productSalesRows) {
+      productSales.set(row.productId, {
+        soldUnits: this.toNumber(row.soldUnits),
+        revenue: this.roundCurrency(this.toNumber(row.revenue)),
+        orderCount: this.toNumber(row.orderCount),
+        lastSoldAt: this.toDateOrNull(row.lastSoldAt),
+      });
+    }
+
+    const variantSales = new Map<string, VariantSalesAggregate>();
+    for (const row of variantSalesRows) {
+      variantSales.set(row.productVariantId, {
+        soldUnits: this.toNumber(row.soldUnits),
+        revenue: this.roundCurrency(this.toNumber(row.revenue)),
+        lastSoldAt: this.toDateOrNull(row.lastSoldAt),
+      });
+    }
+
+    const inventory = products.map((product) => {
+      const productSalesEntry = productSales.get(product.id);
+      const baseEffectivePrice = product.discountPrice ?? product.price;
+      const totalStock = product.hasVariants
+        ? product.variants.reduce((sum, variant) => sum + variant.stock, 0)
+        : product.stock;
+      const stockStatus =
+        totalStock === null
+          ? 'untracked'
+          : totalStock <= 0
+            ? 'out-of-stock'
+            : totalStock <= lowStockThreshold
+              ? 'low-stock'
+              : 'healthy';
+      const lastSoldAt = productSalesEntry?.lastSoldAt ?? null;
+      const daysSinceLastSale = lastSoldAt
+        ? this.diffInDays(lastSoldAt, now)
+        : null;
+      const daysInCatalog = this.diffInDays(product.createdAt, now);
+      const isStale = lastSoldAt
+        ? daysSinceLastSale !== null && daysSinceLastSale >= staleAfterDays
+        : daysInCatalog >= staleAfterDays;
+      const pricePoints = product.hasVariants
+        ? product.variants.map(
+            (variant) => variant.discountPrice ?? variant.price,
+          )
+        : [baseEffectivePrice];
+      const minPrice = pricePoints.length > 0 ? Math.min(...pricePoints) : 0;
+      const maxPrice = pricePoints.length > 0 ? Math.max(...pricePoints) : 0;
+      const inventoryValue = product.hasVariants
+        ? this.roundCurrency(
+            product.variants.reduce(
+              (sum, variant) =>
+                sum + variant.stock * (variant.discountPrice ?? variant.price),
+              0,
+            ),
+          )
+        : totalStock === null
+          ? null
+          : this.roundCurrency(totalStock * baseEffectivePrice);
+
+      return {
+        productId: product.id,
+        title: product.title,
+        slug: product.slug,
+        thumbnailUrl: product.thumbnailUrl,
+        isActive: product.isActive,
+        mainNavUrl: product.mainNavUrl,
+        subNavUrl: product.subNavUrl,
+        hasVariants: product.hasVariants,
+        variantCount: product.variants.length,
+        activeVariantCount: product.variants.filter((variant) => variant.isActive)
+          .length,
+        totalStock,
+        stockStatus,
+        stockTracked: totalStock !== null,
+        soldUnits: productSalesEntry?.soldUnits ?? 0,
+        revenue: productSalesEntry?.revenue ?? 0,
+        orderCount: productSalesEntry?.orderCount ?? 0,
+        lastSoldAt: lastSoldAt?.toISOString() ?? null,
+        daysSinceLastSale,
+        daysInCatalog,
+        isStale,
+        neverSold: !lastSoldAt,
+        inventoryValue,
+        priceRange: {
+          min: minPrice,
+          max: maxPrice,
+        },
+        movementStatus: this.getMovementStatus(
+          productSalesEntry?.soldUnits ?? 0,
+          isStale,
+          daysInCatalog,
+          staleAfterDays,
+        ),
+        stockBreakdown: product.variants.map((variant) => ({
+          variantId: variant.id,
+          title: variant.title,
+          sku: variant.sku,
+          stock: variant.stock,
+          isActive: variant.isActive,
+          soldUnits: variantSales.get(variant.id)?.soldUnits ?? 0,
+          revenue: variantSales.get(variant.id)?.revenue ?? 0,
+          lastSoldAt:
+            variantSales.get(variant.id)?.lastSoldAt?.toISOString() ?? null,
+        })),
+        createdAt: product.createdAt.toISOString(),
+        updatedAt: product.updatedAt.toISOString(),
+      };
+    });
+
+    const topSelling = [...inventory]
+      .filter((item) => item.soldUnits > 0)
+      .sort((left, right) => {
+        if (right.soldUnits !== left.soldUnits) {
+          return right.soldUnits - left.soldUnits;
+        }
+        return right.revenue - left.revenue;
+      })
+      .slice(0, topLimit);
+
+    const staleProducts = [...inventory]
+      .filter((item) => item.isStale)
+      .sort((left, right) => {
+        if (left.neverSold !== right.neverSold) {
+          return left.neverSold ? -1 : 1;
+        }
+
+        const rightDays = right.daysSinceLastSale ?? right.daysInCatalog;
+        const leftDays = left.daysSinceLastSale ?? left.daysInCatalog;
+        return rightDays - leftDays;
+      })
+      .slice(0, topLimit);
+
+    const lowStockProducts = [...inventory]
+      .filter(
+        (item) =>
+          item.stockStatus === 'out-of-stock' || item.stockStatus === 'low-stock',
+      )
+      .sort((left, right) => {
+        if (left.stockStatus !== right.stockStatus) {
+          return left.stockStatus === 'out-of-stock' ? -1 : 1;
+        }
+
+        return (left.totalStock ?? Number.MAX_SAFE_INTEGER) -
+          (right.totalStock ?? Number.MAX_SAFE_INTEGER);
+      })
+      .slice(0, topLimit);
+
+    const summary = {
+      totalProducts: inventory.length,
+      activeProducts: inventory.filter((item) => item.isActive).length,
+      variantProducts: inventory.filter((item) => item.hasVariants).length,
+      simpleProducts: inventory.filter((item) => !item.hasVariants).length,
+      stockSetupPendingProducts: inventory.filter((item) => !item.stockTracked)
+        .length,
+      healthyStockProducts: inventory.filter(
+        (item) => item.stockStatus === 'healthy',
+      ).length,
+      lowStockProducts: inventory.filter((item) => item.stockStatus === 'low-stock')
+        .length,
+      outOfStockProducts: inventory.filter(
+        (item) => item.stockStatus === 'out-of-stock',
+      ).length,
+      staleProducts: inventory.filter((item) => item.isStale).length,
+      neverSoldProducts: inventory.filter((item) => item.neverSold).length,
+      totalUnitsInStock: inventory.reduce(
+        (sum, item) => sum + (item.totalStock ?? 0),
+        0,
+      ),
+      totalInventoryValue: this.roundCurrency(
+        inventory.reduce((sum, item) => sum + (item.inventoryValue ?? 0), 0),
+      ),
+      totalSoldUnits: inventory.reduce((sum, item) => sum + item.soldUnits, 0),
+      totalRevenue: this.roundCurrency(
+        inventory.reduce((sum, item) => sum + item.revenue, 0),
+      ),
+    };
+
+    return {
+      generatedAt: now.toISOString(),
+      thresholds: {
+        staleAfterDays,
+        lowStockThreshold,
+        topLimit,
+      },
+      summary,
+      highlights: {
+        topSelling,
+        staleProducts,
+        lowStockProducts,
+      },
+      inventory,
     };
   }
 
@@ -466,6 +746,73 @@ export class ProductService implements OnModuleInit {
     if (!mainNavUrl) {
       throw new BadRequestException('mainNavUrl is required for every product');
     }
+  }
+
+  private normalizeSimpleStock(
+    hasVariants: boolean,
+    stock?: number | null,
+  ): number | null {
+    if (hasVariants) {
+      return null;
+    }
+
+    if (stock === null || stock === undefined) {
+      return 0;
+    }
+
+    return Math.max(0, Math.trunc(stock));
+  }
+
+  private toNumber(value: string | number | null | undefined) {
+    if (typeof value === 'number') {
+      return value;
+    }
+
+    if (typeof value === 'string' && value.trim()) {
+      const parsed = Number(value);
+      return Number.isFinite(parsed) ? parsed : 0;
+    }
+
+    return 0;
+  }
+
+  private toDateOrNull(value: string | Date | null | undefined) {
+    if (!value) {
+      return null;
+    }
+
+    const nextDate = value instanceof Date ? value : new Date(value);
+    return Number.isNaN(nextDate.getTime()) ? null : nextDate;
+  }
+
+  private diffInDays(from: Date, to: Date) {
+    const milliseconds = to.getTime() - from.getTime();
+    return Math.max(0, Math.floor(milliseconds / 86_400_000));
+  }
+
+  private getMovementStatus(
+    soldUnits: number,
+    isStale: boolean,
+    daysInCatalog: number,
+    staleAfterDays: number,
+  ) {
+    if (soldUnits <= 0) {
+      return daysInCatalog >= staleAfterDays ? 'no-sales' : 'new';
+    }
+
+    if (soldUnits >= 25) {
+      return 'best-selling';
+    }
+
+    if (isStale) {
+      return 'slow';
+    }
+
+    return 'steady';
+  }
+
+  private roundCurrency(value: number) {
+    return Math.round(value * 100) / 100;
   }
 
   private normalizeStringArray(values?: string[] | null) {

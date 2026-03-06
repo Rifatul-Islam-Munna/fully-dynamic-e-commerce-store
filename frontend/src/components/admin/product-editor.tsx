@@ -54,6 +54,7 @@ type ProductForm = {
   slug: string;
   price: string;
   discountPrice: string;
+  stock: string;
   richText: string;
   mainNavUrl: string;
   subNavUrl: string;
@@ -96,6 +97,7 @@ const createEmptyForm = (): ProductForm => ({
   slug: "",
   price: "",
   discountPrice: "",
+  stock: "0",
   richText: "",
   mainNavUrl: "",
   subNavUrl: "",
@@ -181,6 +183,8 @@ const mapProductForm = (raw: Record<string, unknown>): ProductForm => {
       raw.discountPrice === null || raw.discountPrice === undefined
         ? ""
         : toNumberString(raw.discountPrice),
+    stock:
+      raw.stock === null || raw.stock === undefined ? "" : toNumberString(raw.stock),
     richText: toStringValue(raw.richText),
     mainNavUrl: toStringValue(raw.mainNavUrl),
     subNavUrl: toStringValue(raw.subNavUrl),
@@ -256,6 +260,10 @@ function buildPayload(form: ProductForm) {
     isWinterSell: form.isWinterSell,
     isBestSell: form.isBestSell,
   };
+
+  if (!form.hasVariants && form.stock.trim()) {
+    payload.stock = parseIntValue(form.stock, "Stock");
+  }
 
   const slug = form.slug.trim();
   if (slug) {
@@ -635,6 +643,24 @@ export function ProductEditor({
               onChange={(event) => updateField("discountPrice", event.target.value)}
             />
           </div>
+          {!form.hasVariants ? (
+            <div className="space-y-2 sm:col-span-2">
+              <Label htmlFor="product-stock">Stock</Label>
+              <Input
+                id="product-stock"
+                type="number"
+                min="0"
+                step="1"
+                placeholder="0"
+                value={form.stock}
+                onChange={(event) => updateField("stock", event.target.value)}
+              />
+              <p className="text-xs text-muted-foreground">
+                Set available units for this simple product. Variant products manage
+                stock per variant below.
+              </p>
+            </div>
+          ) : null}
         </div>
       </div>
 
@@ -929,7 +955,8 @@ export function ProductEditor({
           </div>
         ) : (
           <p className="text-sm text-muted-foreground">
-            Variants are disabled for this product.
+            Variants are disabled for this product. Stock is controlled from the
+            basic information section above.
           </p>
         )}
       </div>

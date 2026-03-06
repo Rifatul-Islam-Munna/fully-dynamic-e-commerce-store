@@ -106,6 +106,191 @@ export async function deleteProduct(productId: string) {
   return DeleteRequestAxios(`/product?productId=${productId}`);
 }
 
+export type AdminStockInventoryItem = {
+  productId: string;
+  title: string;
+  slug: string;
+  thumbnailUrl: string;
+  isActive: boolean;
+  mainNavUrl: string | null;
+  subNavUrl: string | null;
+  hasVariants: boolean;
+  variantCount: number;
+  activeVariantCount: number;
+  totalStock: number | null;
+  stockStatus: "healthy" | "low-stock" | "out-of-stock" | "untracked";
+  stockTracked: boolean;
+  soldUnits: number;
+  revenue: number;
+  orderCount: number;
+  lastSoldAt: string | null;
+  daysSinceLastSale: number | null;
+  daysInCatalog: number;
+  isStale: boolean;
+  neverSold: boolean;
+  inventoryValue: number | null;
+  priceRange: {
+    min: number;
+    max: number;
+  };
+  movementStatus: "best-selling" | "steady" | "slow" | "new" | "no-sales";
+  stockBreakdown: Array<{
+    variantId: string;
+    title: string;
+    sku: string | null;
+    stock: number;
+    isActive: boolean;
+    soldUnits: number;
+    revenue: number;
+    lastSoldAt: string | null;
+  }>;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type AdminStockReport = {
+  generatedAt: string;
+  thresholds: {
+    staleAfterDays: number;
+    lowStockThreshold: number;
+    topLimit: number;
+  };
+  summary: {
+    totalProducts: number;
+    activeProducts: number;
+    variantProducts: number;
+    simpleProducts: number;
+    stockSetupPendingProducts: number;
+    healthyStockProducts: number;
+    lowStockProducts: number;
+    outOfStockProducts: number;
+    staleProducts: number;
+    neverSoldProducts: number;
+    totalUnitsInStock: number;
+    totalInventoryValue: number;
+    totalSoldUnits: number;
+    totalRevenue: number;
+  };
+  highlights: {
+    topSelling: AdminStockInventoryItem[];
+    staleProducts: AdminStockInventoryItem[];
+    lowStockProducts: AdminStockInventoryItem[];
+  };
+  inventory: AdminStockInventoryItem[];
+};
+
+export async function getAdminStockReport(
+  staleAfterDays = 30,
+  lowStockThreshold = 5,
+  topLimit = 8,
+) {
+  const params = new URLSearchParams({
+    staleAfterDays: String(staleAfterDays),
+    lowStockThreshold: String(lowStockThreshold),
+    topLimit: String(topLimit),
+  });
+
+  return GetRequestNormal<AdminStockReport>(
+    `/product/admin/stock-report?${params.toString()}`,
+    0,
+    `admin-stock-report-${staleAfterDays}-${lowStockThreshold}-${topLimit}`
+  );
+}
+
+export type AdminOrderStatus = "pending" | "confirmed" | "cancelled";
+export type AdminOrderMode = "guest" | "member";
+
+export type AdminOrderItem = {
+  id: string;
+  productId: string | null;
+  productVariantId: string | null;
+  productTitle: string;
+  productSlug: string;
+  productThumbnailUrl: string;
+  variantTitle: string | null;
+  quantity: number;
+  unitPrice: number;
+  unitDiscountPrice: number | null;
+  lineTotal: number;
+};
+
+export type AdminOrder = {
+  id: string;
+  orderNumber: string;
+  userId: string | null;
+  checkoutMode: AdminOrderMode;
+  status: AdminOrderStatus;
+  customerEmail: string | null;
+  customerPhoneNumber: string;
+  customerDistrict: string;
+  customerAddress: string;
+  itemCount: number;
+  subtotal: number;
+  discountAmount: number;
+  couponId: string | null;
+  couponCode: string | null;
+  couponType: "percentage" | "value" | null;
+  couponAmount: number | null;
+  total: number;
+  items: AdminOrderItem[];
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type AdminOrdersResponse = {
+  mode: string;
+  data: AdminOrder[];
+  pagination?: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
+  summary?: {
+    totalOrders: number;
+    pendingOrders: number;
+    confirmedOrders: number;
+    cancelledOrders: number;
+    guestOrders: number;
+    memberOrders: number;
+    confirmedRevenue: number;
+    confirmedUnits: number;
+  };
+};
+
+type AdminOrderFilters = {
+  status?: AdminOrderStatus;
+  checkoutMode?: AdminOrderMode;
+};
+
+export async function getAdminOrders(
+  page = 1,
+  limit = 20,
+  search = "",
+  filters: AdminOrderFilters = {},
+) {
+  const params = new URLSearchParams({
+    page: String(page),
+    limit: String(limit),
+  });
+  if (search) params.set("search", search);
+  if (filters.status) params.set("status", filters.status);
+  if (filters.checkoutMode) params.set("checkoutMode", filters.checkoutMode);
+
+  return GetRequestNormal<AdminOrdersResponse>(
+    `/product/checkout/admin?${params.toString()}`,
+    0,
+    `admin-orders-${page}-${limit}-${search}-${filters.status ?? "all"}-${filters.checkoutMode ?? "all"}`
+  );
+}
+
+export async function updateAdminOrderStatus(payload: {
+  orderId: string;
+  status: AdminOrderStatus;
+}) {
+  return PatchRequestAxios("/product/checkout/admin/status", payload);
+}
+
 type AdminCouponsResponse = {
   mode: string;
   data: Record<string, unknown>[];

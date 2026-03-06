@@ -134,6 +134,14 @@ export class Product {
   @Column({ type: 'boolean', default: false })
   hasVariants: boolean;
 
+  @ApiPropertyOptional({
+    description:
+      'Stock for simple products. Null means stock has not been configured yet.',
+    example: 24,
+  })
+  @Column({ type: 'int', nullable: true })
+  stock: number | null;
+
   @ApiProperty({
     description: 'Active status',
     example: true,

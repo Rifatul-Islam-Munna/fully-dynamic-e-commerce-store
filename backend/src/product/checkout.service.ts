@@ -7,7 +7,14 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, Repository } from 'typeorm';
+import {
+  Brackets,
+  DataSource,
+  EntityManager,
+  In,
+  Repository,
+  SelectQueryBuilder,
+} from 'typeorm';
 import { jwts } from '../../lib/auth.guard';
 import { User, UserStatus } from '../user/entities/user.entity';
 import { CartItem } from './entities/cart-item.entity';
@@ -15,15 +22,18 @@ import { Coupon, CouponType } from './entities/coupon.entity';
 import { Product } from './entities/product.entity';
 import { ProductVariant } from './entities/product-variant.entity';
 import {
+  CheckoutOrderStatus,
   CheckoutMode,
   CheckoutOrder,
 } from './entities/checkout-order.entity';
 import { CheckoutOrderItem } from './entities/checkout-order-item.entity';
 import { CouponService } from './coupon.service';
+import { AdminCheckoutQueryDto } from './dto/admin-checkout-query.dto';
 import {
   CreateCheckoutDto,
   CreateCheckoutItemDto,
 } from './dto/create-checkout.dto';
+import { UpdateCheckoutOrderStatusDto } from './dto/update-checkout-order-status.dto';
 
 type ResolvedCheckoutItem = {
   productId: string;
@@ -50,6 +60,13 @@ type CheckoutPricingPreview = {
     amount: number;
     discountAmount: number;
   } | null;
+};
+
+type InventoryAdjustmentItem = {
+  productId: string | null;
+  productVariantId: string | null;
+  quantity: number;
+  productTitle: string;
 };
 
 @Injectable()
@@ -138,6 +155,16 @@ export class CheckoutService {
       );
 
       await checkoutOrderItemRepository.save(checkoutItems);
+      await this.adjustInventory(
+        resolvedItems.map((item) => ({
+          productId: item.productId,
+          productVariantId: item.productVariantId,
+          quantity: item.quantity,
+          productTitle: item.productTitle,
+        })),
+        'decrease',
+        manager,
+      );
 
       if (pricing.coupon?.id) {
         await couponRepository.increment(
@@ -178,6 +205,335 @@ export class CheckoutService {
   async preview(items: CreateCheckoutItemDto[], couponCode?: string) {
     const resolvedItems = await this.resolveCheckoutItems(items);
     return this.buildPricingSummary(resolvedItems, couponCode);
+  }
+
+  async findAllAdmin(query: AdminCheckoutQueryDto) {
+    if (query.orderId || query.orderNumber) {
+      const order = await this.findOrderOrThrow(query.orderId, query.orderNumber);
+      return {
+        mode: 'single',
+        data: order,
+      };
+    }
+
+    const page = query.page ?? 1;
+    const limit = query.limit ?? 20;
+
+    const baseQuery = this.checkoutOrderRepository.createQueryBuilder('order');
+    this.applyAdminOrderFilters(baseQuery, query);
+
+    const [total, idRows, summary] = await Promise.all([
+      baseQuery.clone().getCount(),
+      baseQuery
+        .clone()
+        .select('order.id', 'id')
+        .orderBy('order.createdAt', 'DESC')
+        .skip((page - 1) * limit)
+        .take(limit)
+        .getRawMany<{ id: string }>(),
+      this.buildAdminSummary(),
+    ]);
+
+    const orderIds = idRows.map((row) => row.id);
+    const orders =
+      orderIds.length > 0
+        ? await this.checkoutOrderRepository.find({
+            where: {
+              id: In(orderIds),
+            },
+            relations: {
+              items: true,
+            },
+            order: {
+              createdAt: 'DESC',
+              items: {
+                id: 'ASC',
+              },
+            },
+          })
+        : [];
+
+    const orderMap = new Map(orders.map((order) => [order.id, order]));
+
+    return {
+      mode: 'list',
+      data: orderIds
+        .map((orderId) => orderMap.get(orderId))
+        .filter((order): order is CheckoutOrder => Boolean(order)),
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
+      summary,
+    };
+  }
+
+  async updateStatus(updateCheckoutOrderStatusDto: UpdateCheckoutOrderStatusDto) {
+    const updatedOrderId = await this.dataSource.transaction(async (manager) => {
+      const checkoutOrderRepository = manager.getRepository(CheckoutOrder);
+      const couponRepository = manager.getRepository(Coupon);
+      const order = await checkoutOrderRepository.findOne({
+        where: {
+          id: updateCheckoutOrderStatusDto.orderId,
+        },
+        relations: {
+          items: true,
+        },
+        order: {
+          items: {
+            id: 'ASC',
+          },
+        },
+      });
+
+      if (!order) {
+        throw new NotFoundException('Checkout order not found');
+      }
+
+      if (order.status === updateCheckoutOrderStatusDto.status) {
+        return order.id;
+      }
+
+      if (
+        order.status === CheckoutOrderStatus.CANCELLED &&
+        updateCheckoutOrderStatusDto.status !== CheckoutOrderStatus.CANCELLED
+      ) {
+        throw new BadRequestException(
+          'Cancelled orders cannot be moved back to pending or confirmed',
+        );
+      }
+
+      if (updateCheckoutOrderStatusDto.status === CheckoutOrderStatus.CANCELLED) {
+        await this.adjustInventory(
+          order.items.map((item) => ({
+            productId: item.productId,
+            productVariantId: item.productVariantId,
+            quantity: item.quantity,
+            productTitle: item.productTitle,
+          })),
+          'increase',
+          manager,
+        );
+
+        if (order.couponId) {
+          await couponRepository.decrement({ id: order.couponId }, 'usedCount', 1);
+        }
+      }
+
+      order.status = updateCheckoutOrderStatusDto.status;
+      await checkoutOrderRepository.save(order);
+
+      return order.id;
+    });
+
+    return this.findOrderOrThrow(updatedOrderId);
+  }
+
+  private applyAdminOrderFilters(
+    qb: SelectQueryBuilder<CheckoutOrder>,
+    query: AdminCheckoutQueryDto,
+  ) {
+    if (query.status) {
+      qb.andWhere('order.status = :status', {
+        status: query.status,
+      });
+    }
+
+    if (query.checkoutMode) {
+      qb.andWhere('order.checkoutMode = :checkoutMode', {
+        checkoutMode: query.checkoutMode,
+      });
+    }
+
+    const search = query.search?.trim();
+    if (search) {
+      qb.andWhere(
+        new Brackets((subQb) => {
+          subQb
+            .where('order.orderNumber ILIKE :search', {
+              search: `%${search}%`,
+            })
+            .orWhere('order.customerPhoneNumber ILIKE :search', {
+              search: `%${search}%`,
+            })
+            .orWhere('order.customerEmail ILIKE :search', {
+              search: `%${search}%`,
+            })
+            .orWhere('order.customerDistrict ILIKE :search', {
+              search: `%${search}%`,
+            })
+            .orWhere('order.customerAddress ILIKE :search', {
+              search: `%${search}%`,
+            });
+        }),
+      );
+    }
+  }
+
+  private async buildAdminSummary() {
+    const rawSummary = await this.checkoutOrderRepository
+      .createQueryBuilder('order')
+      .select('COUNT(*)', 'totalOrders')
+      .addSelect(
+        `COUNT(*) FILTER (WHERE order.status = :pendingStatus)`,
+        'pendingOrders',
+      )
+      .addSelect(
+        `COUNT(*) FILTER (WHERE order.status = :confirmedStatus)`,
+        'confirmedOrders',
+      )
+      .addSelect(
+        `COUNT(*) FILTER (WHERE order.status = :cancelledStatus)`,
+        'cancelledOrders',
+      )
+      .addSelect(
+        `COUNT(*) FILTER (WHERE order.checkoutMode = :guestMode)`,
+        'guestOrders',
+      )
+      .addSelect(
+        `COUNT(*) FILTER (WHERE order.checkoutMode = :memberMode)`,
+        'memberOrders',
+      )
+      .addSelect(
+        `COALESCE(SUM(CASE WHEN order.status = :confirmedStatus THEN order.total ELSE 0 END), 0)`,
+        'confirmedRevenue',
+      )
+      .addSelect(
+        `COALESCE(SUM(CASE WHEN order.status = :confirmedStatus THEN order.itemCount ELSE 0 END), 0)`,
+        'confirmedUnits',
+      )
+      .setParameters({
+        pendingStatus: CheckoutOrderStatus.PENDING,
+        confirmedStatus: CheckoutOrderStatus.CONFIRMED,
+        cancelledStatus: CheckoutOrderStatus.CANCELLED,
+        guestMode: CheckoutMode.GUEST,
+        memberMode: CheckoutMode.MEMBER,
+      })
+      .getRawOne<{
+        totalOrders: string;
+        pendingOrders: string;
+        confirmedOrders: string;
+        cancelledOrders: string;
+        guestOrders: string;
+        memberOrders: string;
+        confirmedRevenue: string;
+        confirmedUnits: string;
+      }>();
+
+    return {
+      totalOrders: this.toNumber(rawSummary?.totalOrders),
+      pendingOrders: this.toNumber(rawSummary?.pendingOrders),
+      confirmedOrders: this.toNumber(rawSummary?.confirmedOrders),
+      cancelledOrders: this.toNumber(rawSummary?.cancelledOrders),
+      guestOrders: this.toNumber(rawSummary?.guestOrders),
+      memberOrders: this.toNumber(rawSummary?.memberOrders),
+      confirmedRevenue: this.roundCurrency(
+        this.toNumber(rawSummary?.confirmedRevenue),
+      ),
+      confirmedUnits: this.toNumber(rawSummary?.confirmedUnits),
+    };
+  }
+
+  private async findOrderOrThrow(orderId?: string, orderNumber?: string) {
+    const normalizedOrderNumber = orderNumber?.trim();
+
+    const order = await this.checkoutOrderRepository.findOne({
+      where: orderId
+        ? { id: orderId }
+        : { orderNumber: normalizedOrderNumber as string },
+      relations: {
+        items: true,
+      },
+      order: {
+        items: {
+          id: 'ASC',
+        },
+      },
+    });
+
+    if (!order) {
+      throw new NotFoundException('Checkout order not found');
+    }
+
+    return order;
+  }
+
+  private async adjustInventory(
+    items: InventoryAdjustmentItem[],
+    direction: 'decrease' | 'increase',
+    manager: EntityManager,
+  ) {
+    const productRepository = manager.getRepository(Product);
+    const variantRepository = manager.getRepository(ProductVariant);
+
+    for (const item of items) {
+      if (item.productVariantId) {
+        const variant = await variantRepository.findOne({
+          where: {
+            id: item.productVariantId,
+          },
+        });
+
+        if (!variant) {
+          if (direction === 'increase') {
+            continue;
+          }
+          throw new NotFoundException('Variant not found during checkout');
+        }
+
+        if (direction === 'decrease') {
+          if (variant.stock < item.quantity) {
+            throw new BadRequestException(
+              `Requested quantity exceeds stock for ${item.productTitle}`,
+            );
+          }
+
+          variant.stock -= item.quantity;
+        } else {
+          variant.stock += item.quantity;
+        }
+
+        await variantRepository.save(variant);
+        continue;
+      }
+
+      if (!item.productId) {
+        continue;
+      }
+
+      const product = await productRepository.findOne({
+        where: {
+          id: item.productId,
+        },
+      });
+
+      if (!product) {
+        if (direction === 'increase') {
+          continue;
+        }
+        throw new NotFoundException('Product not found during checkout');
+      }
+
+      if (product.stock === null) {
+        continue;
+      }
+
+      if (direction === 'decrease') {
+        if (product.stock < item.quantity) {
+          throw new BadRequestException(
+            `Requested quantity exceeds stock for ${item.productTitle}`,
+          );
+        }
+
+        product.stock -= item.quantity;
+      } else {
+        product.stock += item.quantity;
+      }
+
+      await productRepository.save(product);
+    }
   }
 
   private async resolveCheckoutItems(items: CreateCheckoutItemDto[]) {
@@ -248,6 +604,10 @@ export class CheckoutService {
       } else if (product.hasVariants) {
         throw new BadRequestException(
           'Variant product requires productVariantId in checkout request',
+        );
+      } else if (product.stock !== null && product.stock < item.quantity) {
+        throw new BadRequestException(
+          `Requested quantity exceeds stock for ${product.title}`,
         );
       }
 
@@ -354,6 +714,19 @@ export class CheckoutService {
     }
 
     return normalized;
+  }
+
+  private toNumber(value: string | number | null | undefined) {
+    if (typeof value === 'number') {
+      return value;
+    }
+
+    if (typeof value === 'string' && value.trim()) {
+      const parsed = Number(value);
+      return Number.isFinite(parsed) ? parsed : 0;
+    }
+
+    return 0;
   }
 
   private roundCurrency(value: number) {

@@ -24,6 +24,7 @@ import { UserRole } from '../user/entities/user.entity';
 import { CreateProductDto } from './dto/create-product.dto';
 import { DeleteProductQueryDto } from './dto/delete-product-query.dto';
 import { ProductQueryDto } from './dto/product-query.dto';
+import { StockReportQueryDto } from './dto/stock-report-query.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
 import { ProductService } from './product.service';
@@ -75,6 +76,26 @@ export class ProductController {
   })
   findPublic(@Query() query: ProductQueryDto) {
     return this.productService.findPublic(query);
+  }
+
+  @Get('admin/stock-report')
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
+  @ApiHeader({
+    name: 'access_token',
+    description: 'JWT access token for an admin user',
+    required: true,
+  })
+  @ApiOperation({
+    summary: 'Inventory and sales intelligence report (admin only)',
+    description:
+      'Returns stock health, best sellers, stale inventory, and per-product performance derived from checkout history.',
+  })
+  @ApiOkResponse({
+    description: 'Inventory and sales report for admin stock management',
+  })
+  getStockReport(@Query() query: StockReportQueryDto) {
+    return this.productService.getStockReport(query);
   }
 
   @Patch()

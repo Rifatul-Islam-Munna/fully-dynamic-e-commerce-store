@@ -1,13 +1,20 @@
-import { Body, Controller, Post, Req } from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
 import {
   ApiCreatedResponse,
   ApiHeader,
+  ApiOkResponse,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
 import type { Request } from 'express';
+import { AuthGuard } from '../../lib/auth.guard';
+import { Roles } from '../../lib/roles.decorator';
+import { RolesGuard } from '../../lib/roles.guard';
+import { UserRole } from '../user/entities/user.entity';
 import { CheckoutService } from './checkout.service';
+import { AdminCheckoutQueryDto } from './dto/admin-checkout-query.dto';
 import { CreateCheckoutDto } from './dto/create-checkout.dto';
+import { UpdateCheckoutOrderStatusDto } from './dto/update-checkout-order-status.dto';
 import { CheckoutOrder } from './entities/checkout-order.entity';
 
 @ApiTags('Checkout')
@@ -38,5 +45,46 @@ export class CheckoutController {
       : accessTokenHeader;
 
     return this.checkoutService.create(createCheckoutDto, accessToken);
+  }
+
+  @Get('admin')
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
+  @ApiHeader({
+    name: 'access_token',
+    description: 'JWT access token for an admin user',
+    required: true,
+  })
+  @ApiOperation({
+    summary: 'Get checkout orders for admin management',
+    description:
+      'Returns a single order or paginated order list with items, status, and summary counts for the admin dashboard.',
+  })
+  @ApiOkResponse({
+    description: 'Admin checkout order list or single order response',
+  })
+  findAllAdmin(@Query() query: AdminCheckoutQueryDto) {
+    return this.checkoutService.findAllAdmin(query);
+  }
+
+  @Patch('admin/status')
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
+  @ApiHeader({
+    name: 'access_token',
+    description: 'JWT access token for an admin user',
+    required: true,
+  })
+  @ApiOperation({
+    summary: 'Update checkout order status',
+    description:
+      'Lets admin confirm or cancel orders. Confirmed orders drive sales analytics. Cancelling restores reserved stock.',
+  })
+  @ApiOkResponse({
+    description: 'Updated checkout order',
+    type: CheckoutOrder,
+  })
+  updateStatus(@Body() updateCheckoutOrderStatusDto: UpdateCheckoutOrderStatusDto) {
+    return this.checkoutService.updateStatus(updateCheckoutOrderStatusDto);
   }
 }
