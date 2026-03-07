@@ -160,6 +160,7 @@ const getRelatedProducts = cache(
     const sub = normalizeText(subNavUrl);
     const main = normalizeText(mainNavUrl);
     const relatedProducts = new Map<string, RelatedProductListItem>();
+    const maxRelatedProducts = 8;
 
     const appendItems = (items: RelatedProductListItem[] = []) => {
       for (const item of items) {
@@ -167,71 +168,73 @@ const getRelatedProducts = cache(
           continue;
         }
         relatedProducts.set(item.id, item);
-        if (relatedProducts.size >= 8) {
+        if (relatedProducts.size >= maxRelatedProducts) {
           break;
         }
       }
     };
 
-    const fetchRelated = async (
-      params: URLSearchParams,
+    const collectRelated = async (
+      baseParams: URLSearchParams,
       tagSuffix: string,
+      maxPages = 3,
     ) => {
-      try {
-        const payload = await GetRequestNormal<ProductListResponse>(
-          `/product/public?${params.toString()}`,
-          0,
-          `product-related-${tagSuffix}`,
-        );
-        return payload?.data ?? [];
-      } catch {
-        return [];
+      for (let page = 1; page <= maxPages; page += 1) {
+        if (relatedProducts.size >= maxRelatedProducts) {
+          return;
+        }
+
+        const params = new URLSearchParams(baseParams);
+        params.set("page", String(page));
+
+        try {
+          const payload = await GetRequestNormal<ProductListResponse>(
+            `/product/public?${params.toString()}`,
+            0,
+            `product-related-${tagSuffix}-${page}`,
+          );
+          const items = payload?.data ?? [];
+          if (items.length === 0) {
+            return;
+          }
+          appendItems(items);
+        } catch {
+          return;
+        }
       }
     };
 
     if (sub) {
       const strictParams = new URLSearchParams({
-        page: "1",
-        limit: "12",
+        limit: "8",
         subNavUrl: sub,
       });
       if (main) {
         strictParams.set("mainNavUrl", main);
       }
 
-      appendItems(
-        await fetchRelated(
+      await collectRelated(
         strictParams,
         `${main ?? "none"}-${sub}`,
-        ),
       );
     }
 
-    if (main && relatedProducts.size < 8) {
+    if (main && relatedProducts.size < maxRelatedProducts) {
       const fallbackParams = new URLSearchParams({
-        page: "1",
-        limit: "12",
+        limit: "8",
         mainNavUrl: main,
       });
-      appendItems(
-        await fetchRelated(
-          fallbackParams,
-          `${main}-fallback`,
-        ),
-      );
+      await collectRelated(fallbackParams, `${main}-fallback`);
     }
 
-    if (relatedProducts.size < 8) {
+    if (relatedProducts.size < maxRelatedProducts) {
       const globalParams = new URLSearchParams({
-        page: "1",
-        limit: "16",
+        limit: "8",
       });
-      appendItems(
-        await fetchRelated(globalParams, `${main ?? "global"}-global`),
-      );
+      await collectRelated(globalParams, `${main ?? "global"}-global`, 4);
     }
 
-    return Array.from(relatedProducts.values()).slice(0, 8);
+    return Array.from(relatedProducts.values()).slice(0, maxRelatedProducts);
   },
 );
 

@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { sileo } from "sileo";
 import { ReactSortable } from "react-sortablejs";
 import {
   ChevronDown,
@@ -324,13 +324,13 @@ export default function HomeSettingsPage() {
     onSuccess: (result) => {
       const [data, error] = result as [unknown, { message?: string } | null];
       if (!data) {
-        toast.error(error?.message || "Failed to save homepage settings");
+        sileo.error({ title: "Something went wrong", description: error?.message || "Failed to save homepage settings" });
         return;
       }
-      toast.success("Homepage settings saved");
+      sileo.success({ title: "Success", description: "Homepage settings saved" });
       setExists(true);
     },
-    onError: () => toast.error("Failed to save homepage settings"),
+    onError: () => sileo.error({ title: "Something went wrong", description: "Failed to save homepage settings" }),
   });
 
   const updateSection = <K extends keyof SectionForm>(
@@ -1017,3 +1017,7 @@ export default function HomeSettingsPage() {
     </div>
   );
 }
+
+
+
+

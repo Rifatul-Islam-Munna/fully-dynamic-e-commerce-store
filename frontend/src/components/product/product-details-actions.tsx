@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { AlertTriangle, CheckCircle2, ShoppingBag } from "lucide-react";
-import { toast } from "sonner";
+import { sileo } from "sileo";
 import { AddToCartButton } from "@/components/product/add-to-cart-button";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/currency";
@@ -94,7 +94,7 @@ export function ProductDetailsActions({ product }: ProductDetailsActionsProps) {
 
     resetCheckout();
     startDirectCheckout(buildSelectedPayload());
-    toast.success("Taking you to checkout.");
+    sileo.success({ title: "Success", description: "Taking you to checkout." });
     router.push("/checkout");
   };
 
@@ -212,3 +212,6 @@ export function ProductDetailsActions({ product }: ProductDetailsActionsProps) {
     </div>
   );
 }
+
+
+

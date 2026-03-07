@@ -40,7 +40,7 @@ import {
   Unlink,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
+import { sileo } from "sileo";
 
 type RichTextEditorProps = {
   description: string;
@@ -190,9 +190,9 @@ export default function RichTextEditor({
       }
 
       editor?.chain().focus().setImage({ src: payload.url }).run();
-      toast.success("Image uploaded");
+      sileo.success({ title: "Success", description: "Image uploaded" });
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Upload failed");
+      sileo.error({ title: "Something went wrong", description: error instanceof Error ? error.message : "Upload failed" });
     } finally {
       setIsUploadingImage(false);
       if (fileInputRef.current) {
@@ -303,7 +303,7 @@ export default function RichTextEditor({
           onClick={() => {
             const didToggle = editor.chain().focus().toggleBlockquote().run();
             if (!didToggle) {
-              toast.error("Select text in editor first, then apply blockquote.");
+              sileo.error({ title: "Something went wrong", description: "Select text in editor first, then apply blockquote." });
             }
           }}
         >
@@ -370,7 +370,7 @@ export default function RichTextEditor({
               .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
               .run();
             if (!didInsert) {
-              toast.error("Place cursor in editor body, then insert table.");
+              sileo.error({ title: "Something went wrong", description: "Place cursor in editor body, then insert table." });
             }
           }}
         >
@@ -440,3 +440,6 @@ export default function RichTextEditor({
     </div>
   );
 }
+
+
+

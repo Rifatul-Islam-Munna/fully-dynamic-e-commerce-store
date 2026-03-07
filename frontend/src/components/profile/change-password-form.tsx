@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { Loader2, ShieldCheck } from "lucide-react";
-import { toast } from "sonner";
+import { sileo } from "sileo";
 import { changePasswordAction } from "@/actions/profile";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,12 +22,12 @@ export function ChangePasswordForm() {
     event.preventDefault();
 
     if (form.newPassword.length < 8) {
-      toast.error("New password must be at least 8 characters.");
+      sileo.error({ title: "Something went wrong", description: "New password must be at least 8 characters." });
       return;
     }
 
     if (form.newPassword !== form.confirmPassword) {
-      toast.error("New password and confirm password do not match.");
+      sileo.error({ title: "Something went wrong", description: "New password and confirm password do not match." });
       return;
     }
 
@@ -38,11 +38,11 @@ export function ChangePasswordForm() {
       });
 
       if (!result.success) {
-        toast.error(result.error || "Failed to change password.");
+        sileo.error({ title: "Something went wrong", description: result.error || "Failed to change password." });
         return;
       }
 
-      toast.success("Password updated successfully.");
+      sileo.success({ title: "Success", description: "Password updated successfully." });
       setForm(INITIAL_STATE);
     });
   }
@@ -155,3 +155,6 @@ export function ChangePasswordForm() {
     </div>
   );
 }
+
+
+

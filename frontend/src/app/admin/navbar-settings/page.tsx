@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { ReactSortable } from "react-sortablejs";
-import { toast } from "sonner";
+import { sileo } from "sileo";
 import {
   ChevronDown,
   ChevronRight,
@@ -204,13 +204,13 @@ export default function NavbarSettingsPage() {
     onSuccess: (result) => {
       const [data, error] = result as [unknown, { message?: string } | null];
       if (!data) {
-        toast.error(error?.message || "Failed to save navbar settings");
+        sileo.error({ title: "Something went wrong", description: error?.message || "Failed to save navbar settings" });
         return;
       }
-      toast.success("Navbar settings saved");
+      sileo.success({ title: "Success", description: "Navbar settings saved" });
       setExists(true);
     },
-    onError: () => toast.error("Failed to save navbar settings"),
+    onError: () => sileo.error({ title: "Something went wrong", description: "Failed to save navbar settings" }),
   });
 
   const updateMainItem = <K extends keyof MainNavItem>(
@@ -617,3 +617,7 @@ export default function NavbarSettingsPage() {
     </div>
   );
 }
+
+
+
+

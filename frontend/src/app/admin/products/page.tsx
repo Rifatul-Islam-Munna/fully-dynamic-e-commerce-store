@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { sileo } from "sileo";
 import { Loader2, Pencil, Plus, Search, Trash2 } from "lucide-react";
 import {
   deleteProduct,
@@ -97,7 +97,7 @@ export default function AdminProductsPage() {
             : [];
         setNavItems(nextItems);
       } catch {
-        toast.error("Failed to load navbar filters");
+        sileo.error({ title: "Something went wrong", description: "Failed to load navbar filters" });
       }
     })();
   }, []);
@@ -119,7 +119,7 @@ export default function AdminProductsPage() {
         setProducts(rows.map((item) => mapProductRow(item as Record<string, unknown>)));
         setPagination((response?.pagination as Pagination | undefined) ?? null);
       } catch {
-        toast.error("Failed to load products");
+        sileo.error({ title: "Something went wrong", description: "Failed to load products" });
       } finally {
         setLoading(false);
       }
@@ -136,13 +136,13 @@ export default function AdminProductsPage() {
     onSuccess: (result) => {
       const [data, error] = result as [unknown, { message?: string } | null];
       if (!data) {
-        toast.error(error?.message || "Failed to delete product");
+        sileo.error({ title: "Something went wrong", description: error?.message || "Failed to delete product" });
         return;
       }
-      toast.success("Product deleted");
+      sileo.success({ title: "Success", description: "Product deleted" });
       void loadProducts(page, search, mainNavFilter, subNavFilter);
     },
-    onError: () => toast.error("Failed to delete product"),
+    onError: () => sileo.error({ title: "Something went wrong", description: "Failed to delete product" }),
   });
 
   const toggleStatusMutation = useMutation({
@@ -151,13 +151,13 @@ export default function AdminProductsPage() {
     onSuccess: (result) => {
       const [data, error] = result as [unknown, { message?: string } | null];
       if (!data) {
-        toast.error(error?.message || "Failed to update status");
+        sileo.error({ title: "Something went wrong", description: error?.message || "Failed to update status" });
         return;
       }
-      toast.success("Product status updated");
+      sileo.success({ title: "Success", description: "Product status updated" });
       void loadProducts(page, search, mainNavFilter, subNavFilter);
     },
-    onError: () => toast.error("Failed to update status"),
+    onError: () => sileo.error({ title: "Something went wrong", description: "Failed to update status" }),
   });
 
   const onSearch = (event: React.FormEvent) => {
@@ -386,3 +386,7 @@ export default function AdminProductsPage() {
     </div>
   );
 }
+
+
+
+

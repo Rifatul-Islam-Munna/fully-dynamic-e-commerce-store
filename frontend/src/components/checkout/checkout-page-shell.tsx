@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useTransition } from "react";
-import { toast } from "sonner";
+import { sileo } from "sileo";
 import {
   CheckoutBackLink,
   CheckoutFormPanel,
@@ -113,13 +113,13 @@ export function CheckoutPageShell({
 
   const applyCoupon = () => {
     if (items.length === 0) {
-      toast.error("Your cart is empty.");
+      sileo.error({ title: "Something went wrong", description: "Your cart is empty." });
       return;
     }
 
     if (!form.couponCode.trim()) {
       resetPricing();
-      toast.error("Enter a coupon code first.");
+      sileo.error({ title: "Something went wrong", description: "Enter a coupon code first." });
       return;
     }
 
@@ -142,14 +142,14 @@ export function CheckoutPageShell({
 
         if (!response.ok) {
           resetPricing();
-          toast.error(payload?.message || "Coupon is not valid.");
+          sileo.error({ title: "Something went wrong", description: payload?.message || "Coupon is not valid." });
           return;
         }
 
         const nextPricing = payload as CheckoutPricingResponse;
         setPricing(nextPricing);
         setField("couponCode", nextPricing.coupon?.code ?? form.couponCode);
-        toast.success("Coupon applied.");
+        sileo.success({ title: "Success", description: "Coupon applied." });
       })();
     });
   };
@@ -159,12 +159,12 @@ export function CheckoutPageShell({
     setFieldErrors(nextErrors);
 
     if (Object.keys(nextErrors).length > 0) {
-      toast.error("Please fix the checkout form.");
+      sileo.error({ title: "Something went wrong", description: "Please fix the checkout form." });
       return;
     }
 
     if (items.length === 0) {
-      toast.error("Your cart is empty.");
+      sileo.error({ title: "Something went wrong", description: "Your cart is empty." });
       return;
     }
 
@@ -184,7 +184,7 @@ export function CheckoutPageShell({
           | null;
 
         if (!response.ok) {
-          toast.error(payload?.message || "Checkout failed.");
+          sileo.error({ title: "Something went wrong", description: payload?.message || "Checkout failed." });
           return;
         }
 
@@ -195,7 +195,7 @@ export function CheckoutPageShell({
         }
         closeCart();
         setOrder(payload as CheckoutOrderResponse);
-        toast.success("Checkout created successfully.");
+        sileo.success({ title: "Success", description: "Checkout created successfully." });
       })();
     });
   };
@@ -205,12 +205,12 @@ export function CheckoutPageShell({
     setFieldErrors(nextErrors);
 
     if (Object.keys(nextErrors).length > 0) {
-      toast.error("Please fix the checkout form.");
+      sileo.error({ title: "Something went wrong", description: "Please fix the checkout form." });
       return;
     }
 
     if (items.length === 0) {
-      toast.error("Your cart is empty.");
+      sileo.error({ title: "Something went wrong", description: "Your cart is empty." });
       return;
     }
 
@@ -230,7 +230,7 @@ export function CheckoutPageShell({
           | null;
 
         if (!response.ok) {
-          toast.error(payload?.message || "Failed to start bKash checkout.");
+          sileo.error({ title: "Something went wrong", description: payload?.message || "Failed to start bKash checkout." });
           return;
         }
 
@@ -238,7 +238,7 @@ export function CheckoutPageShell({
           payload && "paymentUrl" in payload ? payload.paymentUrl : null;
 
         if (!paymentUrl || typeof paymentUrl !== "string") {
-          toast.error("bKash did not return a payment URL.");
+          sileo.error({ title: "Something went wrong", description: "bKash did not return a payment URL." });
           return;
         }
 
@@ -312,3 +312,6 @@ export function CheckoutPageShell({
     </main>
   );
 }
+
+
+

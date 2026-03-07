@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { sileo } from "sileo";
 import {
   createProduct,
   getAdminProductById,
@@ -75,7 +75,7 @@ export function ProductEditor({
             : [];
         setNavItems(items);
       } catch {
-        toast.error("Failed to load navbar options");
+        sileo.error({ title: "Something went wrong", description: "Failed to load navbar options" });
       } finally {
         setLoadingNav(false);
       }
@@ -106,7 +106,7 @@ export function ProductEditor({
           Boolean(mapped.slug.trim()) && mapped.slug.trim() !== generatedSlug,
         );
       } catch {
-        toast.error("Failed to load product");
+        sileo.error({ title: "Something went wrong", description: "Failed to load product" });
         router.push("/admin/products");
       } finally {
         setLoading(false);
@@ -136,15 +136,15 @@ export function ProductEditor({
     onSuccess: (result) => {
       const [data, error] = result as [unknown, { message?: string } | null];
       if (!data) {
-        toast.error(error?.message || "Failed to save product");
+        sileo.error({ title: "Something went wrong", description: error?.message || "Failed to save product" });
         return;
       }
-      toast.success(mode === "edit" ? "Product updated" : "Product created");
+      sileo.success({ title: "Success", description: mode === "edit" ? "Product updated" : "Product created" });
       router.push("/admin/products");
       router.refresh();
     },
     onError: () => {
-      toast.error("Failed to save product");
+      sileo.error({ title: "Something went wrong", description: "Failed to save product" });
     },
   });
 
@@ -215,7 +215,7 @@ export function ProductEditor({
     }
 
     if (form.imageGallery.some((item) => item.url === url)) {
-      toast.error("Image already exists in gallery");
+      sileo.error({ title: "Something went wrong", description: "Image already exists in gallery" });
       return;
     }
 
@@ -262,9 +262,9 @@ export function ProductEditor({
           makeGalleryItem(payload.url as string, prev.imageGallery.length),
         ],
       }));
-      toast.success("Image added to gallery");
+      sileo.success({ title: "Success", description: "Image added to gallery" });
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Upload failed");
+      sileo.error({ title: "Something went wrong", description: error instanceof Error ? error.message : "Upload failed" });
     } finally {
       setIsGalleryUploading(false);
     }
@@ -291,7 +291,7 @@ export function ProductEditor({
       const payload = buildPayload(form);
       saveMutation.mutate(payload);
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Invalid form data");
+      sileo.error({ title: "Something went wrong", description: error instanceof Error ? error.message : "Invalid form data" });
     }
   };
 
@@ -349,3 +349,6 @@ export function ProductEditor({
     </div>
   );
 }
+
+
+

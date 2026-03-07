@@ -1,8 +1,5 @@
-import { QueryKey, useMutation, useQuery, UseQueryOptions,MutationKey } from "@tanstack/react-query";
+import { QueryKey, useQuery, UseQueryOptions } from "@tanstack/react-query";
 import { GetRequestNormal } from "./api-hooks";
-import {  UseMutationOptions } from "@tanstack/react-query";
-import { toast } from "sonner";
-
 
 export function useQueryWrapper<T>(
   key: QueryKey,
@@ -16,15 +13,7 @@ export function useQueryWrapper<T>(
   return useQuery<T, Error>({
     queryKey: key,
     queryFn: ()=>GetRequestNormal<T>(url,revalidate,tag),
-  
     ...options,
   });
 }
-
-
-
-
-
-
-
 

@@ -511,7 +511,9 @@ export function RelatedProductsSection({
         <div
           className={cn(
             "grid gap-3",
-            compact ? "grid-cols-1" : "grid-cols-1 sm:grid-cols-2 xl:grid-cols-4",
+            compact
+              ? "grid-cols-1 sm:grid-cols-2"
+              : "grid-cols-1 sm:grid-cols-2 xl:grid-cols-4",
           )}
         >
           {products.map((related) => (

@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Toaster } from "sileo";
 import { GetRequestNormal } from "@/api-hooks/api-hooks";
 import { SiteContactLauncher } from "@/components/site/site-contact-launcher";
 import { buildSiteAppearanceSettings } from "@/lib/site-appearance";
+import "sileo/styles.css";
 import "./globals.css";
 import QueryClint from "@/hooks/QueryClint";
-import { Toaster } from "sonner";
 
 type SiteSettingsPayload = {
   siteTitle?: string | null;
@@ -106,7 +107,7 @@ export default async function RootLayout({
       >
         <QueryClint appearance={appearance}>
           {children}
-          <Toaster />
+          <Toaster position="top-center" />
         </QueryClint>
         <SiteContactLauncher
           whatsappLink={normalizeText(settings?.whatsappLink)}
@@ -116,3 +117,4 @@ export default async function RootLayout({
     </html>
   );
 }
+

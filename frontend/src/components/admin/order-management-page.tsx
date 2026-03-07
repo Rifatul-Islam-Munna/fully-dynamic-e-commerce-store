@@ -18,7 +18,7 @@ import {
   ShoppingBag,
   UserCheck,
 } from "lucide-react";
-import { toast } from "sonner";
+import { sileo } from "sileo";
 import {
   getAdminOrders,
   type AdminOrder,
@@ -504,7 +504,7 @@ export function OrderManagementPage() {
         setPagination((response?.pagination as Pagination | undefined) ?? null);
         setSummary((response?.summary as OrderSummary | undefined) ?? null);
       } catch {
-        toast.error("Failed to load orders");
+        sileo.error({ title: "Something went wrong", description: "Failed to load orders" });
       } finally {
         setLoading(false);
       }
@@ -524,14 +524,14 @@ export function OrderManagementPage() {
     onSuccess: async (result) => {
       const [data, error] = result as [unknown, { message?: string } | null];
       if (!data) {
-        toast.error(error?.message || "Failed to update order");
+        sileo.error({ title: "Something went wrong", description: error?.message || "Failed to update order" });
         return;
       }
 
-      toast.success("Order updated");
+      sileo.success({ title: "Success", description: "Order updated" });
       await loadOrders(page, search, statusFilter, modeFilter, true);
     },
-    onError: () => toast.error("Failed to update order"),
+    onError: () => sileo.error({ title: "Something went wrong", description: "Failed to update order" }),
   });
 
   return (
@@ -978,3 +978,7 @@ export function OrderManagementPage() {
     </div>
   );
 }
+
+
+
+

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { sileo } from "sileo";
 import { Loader2, Save, Plus, Trash2 } from "lucide-react";
 import {
   getFooterSettings,
@@ -88,15 +88,16 @@ export default function FooterSettingsPage() {
     onSuccess: (result) => {
       const [data, error] = result as [unknown, unknown];
       if (data) {
-        toast.success("Footer settings saved");
+        sileo.success({ title: "Success", description: "Footer settings saved" });
         setExists(true);
       } else {
-        toast.error(
-          (error as { message?: string })?.message || "Failed to save",
-        );
+        sileo.error({
+          title: "Something went wrong",
+          description: (error as { message?: string })?.message || "Failed to save",
+        });
       }
     },
-    onError: () => toast.error("Failed to save"),
+    onError: () => sileo.error({ title: "Something went wrong", description: "Failed to save" }),
   });
 
   const updateField = (field: keyof FooterForm, value: string) => {
@@ -392,3 +393,7 @@ export default function FooterSettingsPage() {
     </div>
   );
 }
+
+
+
+

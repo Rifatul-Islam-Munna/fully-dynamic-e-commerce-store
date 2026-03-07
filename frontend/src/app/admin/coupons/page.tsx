@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { Loader2, Pencil, Search, TicketPercent } from "lucide-react";
-import { toast } from "sonner";
+import { sileo } from "sileo";
 import {
   createCoupon,
   getAdminCoupons,
@@ -186,7 +186,7 @@ export default function AdminCouponsPage() {
       setCoupons(rows.map((item) => mapCouponRow(item as Record<string, unknown>)));
       setPagination((response?.pagination as Pagination | undefined) ?? null);
     } catch {
-      toast.error("Failed to load coupons");
+      sileo.error({ title: "Something went wrong", description: "Failed to load coupons" });
     } finally {
       setLoading(false);
     }
@@ -204,16 +204,16 @@ export default function AdminCouponsPage() {
     onSuccess: async (result) => {
       const [data, error] = result as [unknown, { message?: string } | null];
       if (!data) {
-        toast.error(error?.message || "Failed to save coupon");
+        sileo.error({ title: "Something went wrong", description: error?.message || "Failed to save coupon" });
         return;
       }
 
-      toast.success(form.couponId ? "Coupon updated" : "Coupon created");
+      sileo.success({ title: "Success", description: form.couponId ? "Coupon updated" : "Coupon created" });
       setForm(EMPTY_FORM);
       await loadCoupons(page, search);
     },
     onError: (error) => {
-      toast.error(error instanceof Error ? error.message : "Failed to save coupon");
+      sileo.error({ title: "Something went wrong", description: error instanceof Error ? error.message : "Failed to save coupon" });
     },
   });
 
@@ -226,14 +226,14 @@ export default function AdminCouponsPage() {
     onSuccess: async (result) => {
       const [data, error] = result as [unknown, { message?: string } | null];
       if (!data) {
-        toast.error(error?.message || "Failed to update coupon");
+        sileo.error({ title: "Something went wrong", description: error?.message || "Failed to update coupon" });
         return;
       }
 
-      toast.success("Coupon status updated");
+      sileo.success({ title: "Success", description: "Coupon status updated" });
       await loadCoupons(page, search);
     },
-    onError: () => toast.error("Failed to update coupon"),
+    onError: () => sileo.error({ title: "Something went wrong", description: "Failed to update coupon" }),
   });
 
   const editingLabel = useMemo(
@@ -627,3 +627,7 @@ export default function AdminCouponsPage() {
     </div>
   );
 }
+
+
+
+

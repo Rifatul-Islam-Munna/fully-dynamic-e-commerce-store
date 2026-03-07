@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { sileo } from "sileo";
 import { Search, Trash2, Loader2, Shield, ShieldCheck } from "lucide-react";
 import { getAdminUsers, updateUser, deleteUser } from "@/actions/admin-actions";
 import { Input } from "@/components/ui/input";
@@ -31,7 +31,7 @@ export default function AdminUsersPage() {
       setUsers(data?.data ?? []);
       setPagination(data?.pagination ?? null);
     } catch {
-      toast.error("Failed to load users");
+      sileo.error({ title: "Something went wrong", description: "Failed to load users" });
     } finally {
       setLoading(false);
     }
@@ -46,13 +46,13 @@ export default function AdminUsersPage() {
     onSuccess: (result) => {
       const [data, error] = result as [unknown, { message?: string } | null];
       if (!data) {
-        toast.error(error?.message || "Failed to delete user");
+        sileo.error({ title: "Something went wrong", description: error?.message || "Failed to delete user" });
         return;
       }
-      toast.success("User deleted");
+      sileo.success({ title: "Success", description: "User deleted" });
       loadUsers(page, search);
     },
-    onError: () => toast.error("Failed to delete user"),
+    onError: () => sileo.error({ title: "Something went wrong", description: "Failed to delete user" }),
   });
 
   const toggleRoleMutation = useMutation({
@@ -64,13 +64,13 @@ export default function AdminUsersPage() {
     onSuccess: (result) => {
       const [data, error] = result as [unknown, { message?: string } | null];
       if (!data) {
-        toast.error(error?.message || "Failed to update role");
+        sileo.error({ title: "Something went wrong", description: error?.message || "Failed to update role" });
         return;
       }
-      toast.success("User role updated");
+      sileo.success({ title: "Success", description: "User role updated" });
       loadUsers(page, search);
     },
-    onError: () => toast.error("Failed to update role"),
+    onError: () => sileo.error({ title: "Something went wrong", description: "Failed to update role" }),
   });
 
   const toggleStatusMutation = useMutation({
@@ -82,13 +82,13 @@ export default function AdminUsersPage() {
     onSuccess: (result) => {
       const [data, error] = result as [unknown, { message?: string } | null];
       if (!data) {
-        toast.error(error?.message || "Failed to update status");
+        sileo.error({ title: "Something went wrong", description: error?.message || "Failed to update status" });
         return;
       }
-      toast.success("User status updated");
+      sileo.success({ title: "Success", description: "User status updated" });
       loadUsers(page, search);
     },
-    onError: () => toast.error("Failed to update status"),
+    onError: () => sileo.error({ title: "Something went wrong", description: "Failed to update status" }),
   });
 
   const handleSearch = (e: React.FormEvent) => {
@@ -268,3 +268,7 @@ export default function AdminUsersPage() {
     </div>
   );
 }
+
+
+
+

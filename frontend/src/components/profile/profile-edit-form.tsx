@@ -3,7 +3,7 @@
 import { useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
-import { toast } from "sonner";
+import { sileo } from "sileo";
 import { updateProfileAction } from "@/actions/profile";
 import { ImageUploadField } from "@/components/admin/image-upload-field";
 import { Button } from "@/components/ui/button";
@@ -63,11 +63,11 @@ export function ProfileEditForm({ profile }: ProfileEditFormProps) {
       });
 
       if (!result.success) {
-        toast.error(result.error || "Failed to update profile.");
+        sileo.error({ title: "Something went wrong", description: result.error || "Failed to update profile." });
         return;
       }
 
-      toast.success("Profile updated.");
+      sileo.success({ title: "Success", description: "Profile updated." });
       router.push("/profile");
       router.refresh();
     });
@@ -232,3 +232,6 @@ export function ProfileEditForm({ profile }: ProfileEditFormProps) {
     </div>
   );
 }
+
+
+

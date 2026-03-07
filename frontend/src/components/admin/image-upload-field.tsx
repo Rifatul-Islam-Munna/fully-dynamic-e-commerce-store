@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { Loader2, UploadCloud } from "lucide-react";
-import { toast } from "sonner";
+import { sileo } from "sileo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -60,9 +60,9 @@ export function ImageUploadField({
       }
 
       onChange(payload.url);
-      toast.success("Image uploaded");
+      sileo.success({ title: "Success", description: "Image uploaded" });
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Upload failed");
+      sileo.error({ title: "Something went wrong", description: error instanceof Error ? error.message : "Upload failed" });
     } finally {
       setIsUploading(false);
       if (fileInputRef.current) {
@@ -117,3 +117,6 @@ export function ImageUploadField({
     </div>
   );
 }
+
+
+

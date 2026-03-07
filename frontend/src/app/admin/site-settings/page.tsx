@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { sileo } from "sileo";
 import {
   Check,
   ChevronDown,
@@ -190,7 +190,7 @@ export default function SiteSettingsPage() {
     onSuccess: (result) => {
       const [data, error] = result as [unknown, unknown];
       if (data) {
-        toast.success("Site settings saved");
+        sileo.success({ title: "Success", description: "Site settings saved" });
         setExists(true);
         setForm((prev) => ({
           ...prev,
@@ -201,19 +201,20 @@ export default function SiteSettingsPage() {
         }));
         router.refresh();
       } else {
-        toast.error(
-          (error as { message?: string })?.message || "Failed to save",
-        );
+        sileo.error({
+          title: "Something went wrong",
+          description: (error as { message?: string })?.message || "Failed to save",
+        });
       }
     },
-    onError: () => toast.error("Failed to save site settings"),
+    onError: () => sileo.error({ title: "Something went wrong", description: "Failed to save site settings" }),
   });
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
     if (form.whatsappLink.trim() && form.tawkToLink.trim()) {
-      toast.error("Use either a WhatsApp link or a Tawk.to link, not both.");
+      sileo.error({ title: "Something went wrong", description: "Use either a WhatsApp link or a Tawk.to link, not both." });
       return;
     }
 
@@ -994,3 +995,7 @@ function CollapsibleSubsection({
     </section>
   );
 }
+
+
+
+

@@ -1,7 +1,7 @@
 "use client";
 
 import { ShoppingCart } from "lucide-react";
-import { toast } from "sonner";
+import { sileo } from "sileo";
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/store/cart-store";
 
@@ -52,7 +52,7 @@ export function AddToCartButton({
           unitDiscountPrice: product.discountPrice,
           orderPayableAmount: product.orderPayableAmount ?? null,
         });
-        toast.success("Added to cart", { position: "top-center" });
+        sileo.success({ title: "Success", description: "Added to cart" });
       }}
     >
       <ShoppingCart className="mr-2 size-4" />

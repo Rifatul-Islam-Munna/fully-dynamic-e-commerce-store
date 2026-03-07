@@ -1,7 +1,7 @@
 "use client";
 
 import { useDeferredValue, useEffect, useMemo, useState } from "react";
-import { toast } from "sonner";
+import { sileo } from "sileo";
 import {
   AlertTriangle,
   Archive,
@@ -319,7 +319,7 @@ export function StockManagementDashboard() {
       );
       setReport(nextReport);
     } catch {
-      toast.error("Failed to load stock intelligence");
+      sileo.error({ title: "Something went wrong", description: "Failed to load stock intelligence" });
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -926,3 +926,6 @@ export function StockManagementDashboard() {
     </TooltipProvider>
   );
 }
+
+
+
