@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, useTransition } from "react";
+import { useEffect, useMemo, useRef, useTransition } from "react";
 import { toast } from "sonner";
 import {
   CheckoutBackLink,
@@ -16,6 +16,8 @@ import { validateCheckoutForm } from "@/components/checkout/checkout-page-shell.
 import {
   buildCouponPreviewPayload,
   buildCheckoutPayload,
+  calculateBkashPayableSummary,
+  type CheckoutBkashInitResponse,
   type CheckoutFormState,
   type CheckoutOrderResponse,
   type CheckoutPageUser,
@@ -29,14 +31,20 @@ import { getCartTotals, useCartStore } from "@/store/cart-store";
 
 export function CheckoutPageShell({
   initialUser,
+  checkoutSettings,
 }: {
   initialUser: CheckoutPageUser | null;
+  checkoutSettings: {
+    showPlaceOrderButton: boolean;
+    showBkashCheckoutButton: boolean;
+  };
 }) {
   const cartItems = useCartStore((state) => state.items);
   const checkoutItems = useCartStore((state) => state.checkoutItems);
   const clearCart = useCartStore((state) => state.clearCart);
   const clearCheckoutItems = useCartStore((state) => state.clearCheckoutItems);
   const closeCart = useCartStore((state) => state.closeCart);
+  const isHydrated = useCartStore((state) => state.hasHydrated);
   const form = useCheckoutStore((state) => state.form);
   const fieldErrors = useCheckoutStore((state) => state.fieldErrors);
   const order = useCheckoutStore((state) => state.order);
@@ -49,22 +57,12 @@ export function CheckoutPageShell({
   const setPricing = useCheckoutStore((state) => state.setPricing);
   const resetPricing = useCheckoutStore((state) => state.resetPricing);
   const resetCheckout = useCheckoutStore((state) => state.resetCheckout);
-  const [isHydrated, setIsHydrated] = useState(() =>
-    useCartStore.persist.hasHydrated(),
-  );
   const [isPending, startTransition] = useTransition();
+  const [isBkashPending, startBkashTransition] = useTransition();
   const [isCouponPending, startCouponTransition] = useTransition();
   const previousCartSignatureRef = useRef<string | null>(null);
   const items = checkoutItems ?? cartItems;
   const isDirectCheckout = checkoutItems !== null;
-
-  useEffect(() => {
-    const unsubscribe = useCartStore.persist.onFinishHydration(() => {
-      setIsHydrated(true);
-    });
-
-    return unsubscribe;
-  }, []);
 
   useEffect(() => {
     hydrateFromUser(initialUser);
@@ -96,6 +94,14 @@ export function CheckoutPageShell({
   const displaySubtotal = pricing?.subtotal ?? totals.total;
   const displayDiscount = pricing?.discountAmount ?? 0;
   const displayTotal = pricing?.total ?? totals.total;
+  const showPlaceOrderButton = checkoutSettings.showPlaceOrderButton !== false;
+  const showBkashCheckoutButton = checkoutSettings.showBkashCheckoutButton === true;
+  const bkashSummary = pricing
+    ? {
+        payableAmount: pricing.bkashPayableAmount,
+        dueAmount: pricing.bkashDueAmount,
+      }
+    : calculateBkashPayableSummary(items, displayTotal);
 
   const updateField = (field: keyof CheckoutFormState, value: string) => {
     setField(field, value);
@@ -194,6 +200,54 @@ export function CheckoutPageShell({
     });
   };
 
+  const submitBkashCheckout = () => {
+    const nextErrors: CheckoutFieldErrors = validateCheckoutForm(form);
+    setFieldErrors(nextErrors);
+
+    if (Object.keys(nextErrors).length > 0) {
+      toast.error("Please fix the checkout form.");
+      return;
+    }
+
+    if (items.length === 0) {
+      toast.error("Your cart is empty.");
+      return;
+    }
+
+    startBkashTransition(() => {
+      void (async () => {
+        const response = await fetch("/api/checkout/bkash", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(buildCheckoutPayload(form, items)),
+        });
+
+        const payload = (await response.json().catch(() => null)) as
+          | (CheckoutBkashInitResponse & { message?: string })
+          | { message?: string }
+          | null;
+
+        if (!response.ok) {
+          toast.error(payload?.message || "Failed to start bKash checkout.");
+          return;
+        }
+
+        const paymentUrl =
+          payload && "paymentUrl" in payload ? payload.paymentUrl : null;
+
+        if (!paymentUrl || typeof paymentUrl !== "string") {
+          toast.error("bKash did not return a payment URL.");
+          return;
+        }
+
+        closeCart();
+        window.location.assign(paymentUrl);
+      })();
+    });
+  };
+
   const handleResetNavigation = () => {
     resetCheckout();
     clearCheckoutItems();
@@ -221,8 +275,6 @@ export function CheckoutPageShell({
     <main className="mx-auto max-w-6xl px-4 py-6 pb-12 sm:px-6 sm:py-8 lg:px-8">
       <CheckoutBackLink
         onResetNavigation={handleResetNavigation}
-        onSubmit={submitCheckout}
-        isPending={isPending}
       />
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
@@ -234,10 +286,16 @@ export function CheckoutPageShell({
           pricing={pricing}
           displayTotal={displayTotal}
           isPending={isPending}
+          isBkashPending={isBkashPending}
           isCouponPending={isCouponPending}
+          showPlaceOrderButton={showPlaceOrderButton}
+          showBkashCheckoutButton={showBkashCheckoutButton}
+          bkashPayableAmount={bkashSummary.payableAmount}
+          bkashDueAmount={bkashSummary.dueAmount}
           onUpdateField={updateField}
           onApplyCoupon={applyCoupon}
           onSubmit={submitCheckout}
+          onSubmitBkash={submitBkashCheckout}
           onResetNavigation={handleResetNavigation}
         />
         <CheckoutSummaryAside
@@ -246,6 +304,9 @@ export function CheckoutPageShell({
           displaySubtotal={displaySubtotal}
           displayDiscount={displayDiscount}
           displayTotal={displayTotal}
+          showBkashCheckoutButton={showBkashCheckoutButton}
+          bkashPayableAmount={bkashSummary.payableAmount}
+          bkashDueAmount={bkashSummary.dueAmount}
         />
       </div>
     </main>

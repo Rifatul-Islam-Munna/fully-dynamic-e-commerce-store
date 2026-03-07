@@ -15,9 +15,14 @@ import { ProductVariant } from './entities/product-variant.entity';
 import { Product } from './entities/product.entity';
 import { ProductService } from './product.service';
 import { ProductController } from './product.controller';
+import { HttpModule } from '@nestjs/axios';
+import { BkashService } from './bkash.service';
+import { SiteSetting } from '../web-settings/entities/site-setting.entity';
+import { BkashCheckoutSession } from './entities/bkash-checkout-session.entity';
 
 @Module({
   imports: [
+    HttpModule,
     TypeOrmModule.forFeature([
       Product,
       ProductVariant,
@@ -26,6 +31,8 @@ import { ProductController } from './product.controller';
       CheckoutOrder,
       CheckoutOrderItem,
       Coupon,
+      SiteSetting,
+      BkashCheckoutSession,
     ]),
   ],
   controllers: [
@@ -34,6 +41,6 @@ import { ProductController } from './product.controller';
     CheckoutController,
     CouponController,
   ],
-  providers: [ProductService, CartService, CheckoutService, CouponService],
+  providers: [ProductService, CartService, CheckoutService, CouponService,BkashService],
 })
 export class ProductModule {}

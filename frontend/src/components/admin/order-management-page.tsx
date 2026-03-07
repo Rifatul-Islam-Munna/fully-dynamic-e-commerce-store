@@ -333,6 +333,22 @@ function OrderDetailsDialog({
                     <span>Coupon</span>
                     <span>{order.couponCode || "None"}</span>
                   </div>
+                  <div className="flex items-center justify-between text-muted-foreground">
+                    <span>Payment</span>
+                    <span>
+                      {order.paymentMethod === "bkash"
+                        ? "bKash"
+                        : "Place order"}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between text-muted-foreground">
+                    <span>Paid</span>
+                    <span>{formatCurrency(order.paidAmount)}</span>
+                  </div>
+                  <div className="flex items-center justify-between text-muted-foreground">
+                    <span>Due</span>
+                    <span>{formatCurrency(order.dueAmount)}</span>
+                  </div>
                   <div className="flex items-center justify-between border-t border-border/60 pt-2 text-base font-semibold text-foreground">
                     <span>Total</span>
                     <span>{formatCurrency(order.total)}</span>
@@ -711,6 +727,11 @@ export function OrderManagementPage() {
                     <p className="mt-1 text-xs text-muted-foreground">
                       Coupon: {order.couponCode || "None"}
                     </p>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      {order.paymentMethod === "bkash"
+                        ? `Paid ${formatCurrency(order.paidAmount)} · Due ${formatCurrency(order.dueAmount)}`
+                        : "No advance payment captured"}
+                    </p>
                   </div>
                 </div>
 
@@ -854,6 +875,11 @@ export function OrderManagementPage() {
                           </p>
                           <p className="text-xs text-muted-foreground">
                             Coupon: {order.couponCode || "None"}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            {order.paymentMethod === "bkash"
+                              ? `Paid ${formatCurrency(order.paidAmount)} · Due ${formatCurrency(order.dueAmount)}`
+                              : "No advance payment captured"}
                           </p>
                         </div>
                       </td>

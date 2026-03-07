@@ -130,6 +130,36 @@ export class SiteSetting {
   @Column({ type: 'varchar', length: 500, nullable: true })
   ogImageUrl: string | null;
 
+  @ApiPropertyOptional({
+    description: 'Optional WhatsApp support link shown as the floating contact button',
+    example: 'https://wa.me/8801900000000',
+  })
+  @Column({ type: 'varchar', length: 500, nullable: true })
+  whatsappLink: string | null;
+
+  @ApiPropertyOptional({
+    description: 'Optional Tawk.to support link shown as the floating contact button',
+    example: 'https://tawk.to/chat/example/default',
+  })
+  @Column({ type: 'varchar', length: 500, nullable: true })
+  tawkToLink: string | null;
+
+  @ApiProperty({
+    description: 'Whether the standard place-order checkout button is visible',
+    example: true,
+    default: true,
+  })
+  @Column({ type: 'boolean', default: true })
+  showPlaceOrderButton: boolean;
+
+  @ApiProperty({
+    description: 'Whether the bKash checkout button is visible',
+    example: false,
+    default: false,
+  })
+  @Column({ type: 'boolean', default: false })
+  showBkashCheckoutButton: boolean;
+
   @ApiProperty({
     description: 'Whether the top notice bar is enabled',
     example: false,
@@ -171,6 +201,38 @@ export class SiteSetting {
   })
   @Column({ type: 'varchar', length: 40, default: 'classic' })
   productDetailsVariant: string;
+
+  @Column({
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+    select: false,
+  })
+  bkashAppKey: string | null;
+
+  @Column({
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+    select: false,
+  })
+  bkashAppSecret: string | null;
+
+  @Column({
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+    select: false,
+  })
+  bkashUsername: string | null;
+
+  @Column({
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+    select: false,
+  })
+  bkashPassword: string | null;
 
   @ApiProperty({
     description: 'Whether this site config is active',

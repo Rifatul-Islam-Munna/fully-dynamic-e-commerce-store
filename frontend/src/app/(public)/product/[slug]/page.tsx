@@ -26,6 +26,7 @@ type ProductDetails = {
   imageUrls?: string[];
   price: number;
   discountPrice: number | null;
+  orderPayableAmount?: number | null;
   richText?: string | null;
   mainNavUrl?: string | null;
   subNavUrl?: string | null;
@@ -48,8 +49,11 @@ type ProductListResponse = {
     thumbnailUrl: string;
     price: number;
     discountPrice: number | null;
+    orderPayableAmount?: number | null;
   }>;
 };
+
+type RelatedProductListItem = NonNullable<ProductListResponse["data"]>[number];
 
 function normalizeText(value?: string | null) {
   const trimmed = value?.trim();
@@ -155,59 +159,79 @@ const getRelatedProducts = cache(
   async (mainNavUrl?: string | null, subNavUrl?: string | null, slug?: string) => {
     const sub = normalizeText(subNavUrl);
     const main = normalizeText(mainNavUrl);
+    const relatedProducts = new Map<string, RelatedProductListItem>();
 
-    if (!sub && !main) {
-      return [];
-    }
+    const appendItems = (items: RelatedProductListItem[] = []) => {
+      for (const item of items) {
+        if (!item || item.slug === slug || relatedProducts.has(item.id)) {
+          continue;
+        }
+        relatedProducts.set(item.id, item);
+        if (relatedProducts.size >= 8) {
+          break;
+        }
+      }
+    };
 
-    const fetchRelated = async (params: URLSearchParams, tagSuffix: string) => {
+    const fetchRelated = async (
+      params: URLSearchParams,
+      tagSuffix: string,
+    ) => {
       try {
         const payload = await GetRequestNormal<ProductListResponse>(
           `/product/public?${params.toString()}`,
           0,
           `product-related-${tagSuffix}`,
         );
-        return (payload?.data ?? []).filter((item) => item.slug !== slug);
+        return payload?.data ?? [];
       } catch {
         return [];
       }
     };
 
-    // 1) Try strict match on same sub-nav (and main-nav when available).
     if (sub) {
       const strictParams = new URLSearchParams({
         page: "1",
-        limit: "8",
+        limit: "12",
         subNavUrl: sub,
       });
       if (main) {
         strictParams.set("mainNavUrl", main);
       }
 
-      const strictItems = await fetchRelated(
+      appendItems(
+        await fetchRelated(
         strictParams,
         `${main ?? "none"}-${sub}`,
+        ),
       );
-      if (strictItems.length > 0) {
-        return strictItems.slice(0, 4);
-      }
     }
 
-    // 2) Fallback to same main-nav when sub-nav has no siblings.
-    if (main) {
+    if (main && relatedProducts.size < 8) {
       const fallbackParams = new URLSearchParams({
         page: "1",
-        limit: "8",
+        limit: "12",
         mainNavUrl: main,
       });
-      const fallbackItems = await fetchRelated(
-        fallbackParams,
-        `${main}-fallback`,
+      appendItems(
+        await fetchRelated(
+          fallbackParams,
+          `${main}-fallback`,
+        ),
       );
-      return fallbackItems.slice(0, 4);
     }
 
-    return [];
+    if (relatedProducts.size < 8) {
+      const globalParams = new URLSearchParams({
+        page: "1",
+        limit: "16",
+      });
+      appendItems(
+        await fetchRelated(globalParams, `${main ?? "global"}-global`),
+      );
+    }
+
+    return Array.from(relatedProducts.values()).slice(0, 8);
   },
 );
 

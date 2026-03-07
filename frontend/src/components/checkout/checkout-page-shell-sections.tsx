@@ -31,12 +31,8 @@ import { type CheckoutFieldErrors } from "@/store/checkout-store";
 
 export function CheckoutBackLink({
   onResetNavigation,
-  onSubmit,
-  isPending,
 }: {
   onResetNavigation: () => void;
-  onSubmit: () => void;
-  isPending: boolean;
 }) {
   return (
     <div className="mb-5 flex items-center gap-2 text-sm text-muted-foreground">
@@ -48,6 +44,62 @@ export function CheckoutBackLink({
         <ArrowLeft className="size-4" />
         Continue shopping
       </Link>
+    </div>
+  );
+}
+
+function CheckoutActionButtons({
+  showPlaceOrderButton,
+  showBkashCheckoutButton,
+  isPending,
+  isBkashPending,
+  bkashPayableAmount,
+  onSubmit,
+  onSubmitBkash,
+}: {
+  showPlaceOrderButton: boolean;
+  showBkashCheckoutButton: boolean;
+  isPending: boolean;
+  isBkashPending: boolean;
+  bkashPayableAmount: number;
+  onSubmit: () => void;
+  onSubmitBkash: () => void;
+}) {
+  if (!showPlaceOrderButton && !showBkashCheckoutButton) {
+    return (
+      <div className="rounded-[20px] bg-muted/35 px-4 py-3 text-sm text-muted-foreground">
+        Checkout is temporarily unavailable because no checkout action is enabled
+        in site settings.
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
+      {showPlaceOrderButton ? (
+        <Button
+          type="button"
+          className="h-12 w-full rounded-full px-6 sm:w-auto"
+          disabled={isPending || isBkashPending}
+          onClick={onSubmit}
+        >
+          {isPending ? <Loader2 className="size-4 animate-spin" /> : null}
+          Place order
+        </Button>
+      ) : null}
+
+      {showBkashCheckoutButton ? (
+        <Button
+          type="button"
+          variant="secondary"
+          className="h-12 w-full rounded-full border border-[#E2136E]/15 bg-[#E2136E]/10 px-6 text-[#B10F57] hover:bg-[#E2136E]/15 sm:w-auto"
+          disabled={isPending || isBkashPending}
+          onClick={onSubmitBkash}
+        >
+          {isBkashPending ? <Loader2 className="size-4 animate-spin" /> : null}
+          Pay {formatCurrency(bkashPayableAmount)} with bKash
+        </Button>
+      ) : null}
     </div>
   );
 }
@@ -298,11 +350,23 @@ function CheckoutCouponSection({
 }
 
 function CheckoutFooterActions({
+  showPlaceOrderButton,
+  showBkashCheckoutButton,
   isPending,
+  isBkashPending,
+  bkashPayableAmount,
   onResetNavigation,
+  onSubmit,
+  onSubmitBkash,
 }: {
+  showPlaceOrderButton: boolean;
+  showBkashCheckoutButton: boolean;
   isPending: boolean;
+  isBkashPending: boolean;
+  bkashPayableAmount: number;
   onResetNavigation: () => void;
+  onSubmit: () => void;
+  onSubmitBkash: () => void;
 }) {
   return (
     <div className="rounded-[28px] border border-border bg-card p-4 sm:p-5">
@@ -316,25 +380,27 @@ function CheckoutFooterActions({
           </p>
         </div>
 
-        <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
-          <Button
-            type="submit"
-            className="h-12 w-full rounded-full px-6 sm:w-auto"
-            disabled={isPending}
-          >
-            {isPending ? <Loader2 className="size-4 animate-spin" /> : null}
-            Place order
-          </Button>
-          <Button
-            asChild
-            variant="secondary"
-            className="h-12 w-full rounded-full px-6 sm:w-auto"
-          >
-            <Link href="/search" onClick={onResetNavigation}>
-              Back to catalog
-            </Link>
-          </Button>
-        </div>
+        <CheckoutActionButtons
+          showPlaceOrderButton={showPlaceOrderButton}
+          showBkashCheckoutButton={showBkashCheckoutButton}
+          isPending={isPending}
+          isBkashPending={isBkashPending}
+          bkashPayableAmount={bkashPayableAmount}
+          onSubmit={onSubmit}
+          onSubmitBkash={onSubmitBkash}
+        />
+      </div>
+
+      <div className="mt-3">
+        <Button
+          asChild
+          variant="secondary"
+          className="h-12 w-full rounded-full px-6 sm:w-auto"
+        >
+          <Link href="/search" onClick={onResetNavigation}>
+            Back to catalog
+          </Link>
+        </Button>
       </div>
     </div>
   );
@@ -348,10 +414,16 @@ export function CheckoutFormPanel({
   pricing,
   displayTotal,
   isPending,
+  isBkashPending,
   isCouponPending,
+  showPlaceOrderButton,
+  showBkashCheckoutButton,
+  bkashPayableAmount,
+  bkashDueAmount,
   onUpdateField,
   onApplyCoupon,
   onSubmit,
+  onSubmitBkash,
   onResetNavigation,
 }: {
   initialUser: CheckoutPageUser | null;
@@ -361,10 +433,16 @@ export function CheckoutFormPanel({
   pricing: CheckoutPricingResponse | null;
   displayTotal: number;
   isPending: boolean;
+  isBkashPending: boolean;
   isCouponPending: boolean;
+  showPlaceOrderButton: boolean;
+  showBkashCheckoutButton: boolean;
+  bkashPayableAmount: number;
+  bkashDueAmount: number;
   onUpdateField: (field: keyof CheckoutFormState, value: string) => void;
   onApplyCoupon: () => void;
   onSubmit: () => void;
+  onSubmitBkash: () => void;
   onResetNavigation: () => void;
 }) {
   const accountLabel = initialUser ? "Account checkout" : "Guest checkout";
@@ -380,7 +458,9 @@ export function CheckoutFormPanel({
         className="space-y-3 sm:space-y-4"
         onSubmit={(event: FormEvent<HTMLFormElement>) => {
           event.preventDefault();
-          onSubmit();
+          if (showPlaceOrderButton) {
+            onSubmit();
+          }
         }}
       >
         <div className="rounded-[26px] border border-border bg-muted/20 p-4 sm:p-5">
@@ -406,7 +486,7 @@ export function CheckoutFormPanel({
               </p>
             </div>
 
-            <div className="grid gap-3 sm:grid-cols-[minmax(0,150px)_minmax(0,180px)] lg:min-w-[360px]">
+            <div className="grid gap-3 lg:min-w-[360px]">
               <div className="rounded-[22px] bg-background px-4 py-3">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
                   Total
@@ -416,17 +496,31 @@ export function CheckoutFormPanel({
                 </p>
               </div>
 
-              <Button
-                type="submit"
-                className="h-14 w-full rounded-[22px] px-6"
-                disabled={isPending}
-              >
-                {isPending ? <Loader2 className="size-4 animate-spin" /> : null}
-                Place order
-              </Button>
+              <CheckoutActionButtons
+                showPlaceOrderButton={showPlaceOrderButton}
+                showBkashCheckoutButton={showBkashCheckoutButton}
+                isPending={isPending}
+                isBkashPending={isBkashPending}
+                bkashPayableAmount={bkashPayableAmount}
+                onSubmit={onSubmit}
+                onSubmitBkash={onSubmitBkash}
+              />
             </div>
           </div>
         </div>
+
+        {showBkashCheckoutButton ? (
+          <div className="rounded-[24px] border border-[#E2136E]/18 bg-[#E2136E]/7 px-4 py-4">
+            <p className="text-sm font-semibold text-foreground">
+              bKash partial payment
+            </p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Pay {formatCurrency(bkashPayableAmount)} now with bKash and keep{" "}
+              {formatCurrency(bkashDueAmount)} due for the order confirmation
+              stage.
+            </p>
+          </div>
+        ) : null}
 
         <CheckoutContactSection
           form={form}
@@ -447,8 +541,14 @@ export function CheckoutFormPanel({
           onApplyCoupon={onApplyCoupon}
         />
         <CheckoutFooterActions
+          showPlaceOrderButton={showPlaceOrderButton}
+          showBkashCheckoutButton={showBkashCheckoutButton}
           isPending={isPending}
+          isBkashPending={isBkashPending}
+          bkashPayableAmount={bkashPayableAmount}
           onResetNavigation={onResetNavigation}
+          onSubmit={onSubmit}
+          onSubmitBkash={onSubmitBkash}
         />
       </form>
     </section>
@@ -461,12 +561,18 @@ export function CheckoutSummaryAside({
   displaySubtotal,
   displayDiscount,
   displayTotal,
+  showBkashCheckoutButton,
+  bkashPayableAmount,
+  bkashDueAmount,
 }: {
   items: LocalCartItem[];
   totals: { quantity: number; total: number };
   displaySubtotal: number;
   displayDiscount: number;
   displayTotal: number;
+  showBkashCheckoutButton: boolean;
+  bkashPayableAmount: number;
+  bkashDueAmount: number;
 }) {
   return (
     <aside className="lg:sticky lg:top-24 lg:self-start">
@@ -550,6 +656,18 @@ export function CheckoutSummaryAside({
             <span>Total</span>
             <span>{formatCurrency(displayTotal)}</span>
           </div>
+          {showBkashCheckoutButton ? (
+            <>
+              <div className="mt-2 flex items-center justify-between text-sm text-[#B10F57]">
+                <span>Pay now with bKash</span>
+                <span>{formatCurrency(bkashPayableAmount)}</span>
+              </div>
+              <div className="mt-2 flex items-center justify-between text-sm text-muted-foreground">
+                <span>Remaining due</span>
+                <span>{formatCurrency(bkashDueAmount)}</span>
+              </div>
+            </>
+          ) : null}
         </div>
 
         <div className="mt-4 flex items-start gap-3 rounded-[22px] bg-muted/20 px-4 py-3 text-sm text-muted-foreground">

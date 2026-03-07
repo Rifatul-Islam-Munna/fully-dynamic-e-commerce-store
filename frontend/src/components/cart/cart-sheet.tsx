@@ -62,9 +62,9 @@ export function CartSheet() {
           return;
         }
 
-        const payload = (await response.json().catch(() => null)) as
-          | { failedCount?: number }
-          | null;
+        const payload = (await response.json().catch(() => null)) as {
+          failedCount?: number;
+        } | null;
 
         if ((payload?.failedCount ?? 0) === 0) {
           markSynced();
@@ -99,7 +99,10 @@ export function CartSheet() {
         ) : null}
       </Button>
 
-      <Sheet open={isOpen} onOpenChange={(nextOpen) => (nextOpen ? openCart() : closeCart())}>
+      <Sheet
+        open={isOpen}
+        onOpenChange={(nextOpen) => (nextOpen ? openCart() : closeCart())}
+      >
         <SheetContent side="right" className="w-full sm:max-w-md">
           <SheetHeader className="border-b border-border/60 pb-3">
             <SheetTitle className="flex items-center gap-2">
@@ -144,7 +147,7 @@ export function CartSheet() {
                             {item.title}
                           </Link>
                           <p className="text-xs text-muted-foreground">
-                            {formatCurrency(unit)}
+                            {formatCurrency(Number(unit))}
                           </p>
                         </div>
                         <Button
@@ -166,7 +169,10 @@ export function CartSheet() {
                             size="icon"
                             className="size-7"
                             onClick={() =>
-                              updateQuantity(item.key, Math.max(1, item.quantity - 1))
+                              updateQuantity(
+                                item.key,
+                                Math.max(1, item.quantity - 1),
+                              )
                             }
                           >
                             <Minus className="size-3.5" />
@@ -179,7 +185,9 @@ export function CartSheet() {
                             variant="ghost"
                             size="icon"
                             className="size-7"
-                            onClick={() => updateQuantity(item.key, item.quantity + 1)}
+                            onClick={() =>
+                              updateQuantity(item.key, item.quantity + 1)
+                            }
                           >
                             <Plus className="size-3.5" />
                           </Button>

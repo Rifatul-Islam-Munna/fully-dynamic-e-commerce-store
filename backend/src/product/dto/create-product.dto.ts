@@ -74,6 +74,17 @@ export class CreateProductDto {
   @Min(0)
   discountPrice?: number | null;
 
+  @ApiPropertyOptional({
+    description:
+      'Optional per-unit minimum amount required up front for bKash checkout. Leave empty to charge the full item amount.',
+    example: 300,
+  })
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(0.01)
+  orderPayableAmount?: number | null;
+
   @ApiProperty({
     description: 'Rich text description',
     example: '<h2>Pure Organic Honey</h2><p>No chemical processing.</p>',

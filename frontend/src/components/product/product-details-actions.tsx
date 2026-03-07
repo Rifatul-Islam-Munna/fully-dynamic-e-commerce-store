@@ -28,6 +28,7 @@ type ProductDetailsActionsProps = {
     thumbnailUrl: string;
     price: number;
     discountPrice: number | null;
+    orderPayableAmount?: number | null;
     hasVariants?: boolean;
     variants?: ProductVariantSummary[];
   };
@@ -53,7 +54,9 @@ export function ProductDetailsActions({ product }: ProductDetailsActionsProps) {
     [product.variants],
   );
   const router = useRouter();
-  const startDirectCheckout = useCartStore((state) => state.startDirectCheckout);
+  const startDirectCheckout = useCartStore(
+    (state) => state.startDirectCheckout,
+  );
   const resetCheckout = useCheckoutStore((state) => state.resetCheckout);
 
   const hasVariants = Boolean(product.hasVariants && variants.length > 0);
@@ -78,6 +81,7 @@ export function ProductDetailsActions({ product }: ProductDetailsActionsProps) {
     thumbnailUrl: product.thumbnailUrl,
     unitPrice: selectedVariant?.price ?? product.price,
     unitDiscountPrice: selectedVariant?.discountPrice ?? product.discountPrice,
+    orderPayableAmount: product.orderPayableAmount ?? null,
   });
 
   const handleBuyNow = () => {
@@ -117,7 +121,7 @@ export function ProductDetailsActions({ product }: ProductDetailsActionsProps) {
   }
 
   const selectedCurrentPrice = selectedVariant
-    ? selectedVariant.discountPrice ?? selectedVariant.price
+    ? (selectedVariant.discountPrice ?? selectedVariant.price)
     : null;
   const selectedHasDiscount =
     Boolean(selectedVariant) &&
@@ -145,7 +149,7 @@ export function ProductDetailsActions({ product }: ProductDetailsActionsProps) {
             const variantPrice = variant.discountPrice ?? variant.price;
             return (
               <option key={variant.id} value={variant.id}>
-                {variant.title} - {formatCurrency(variantPrice)}
+                {variant.title} - {variantPrice}
               </option>
             );
           })}
@@ -157,12 +161,12 @@ export function ProductDetailsActions({ product }: ProductDetailsActionsProps) {
           <div className="flex items-center gap-2">
             <span className="text-lg font-semibold text-foreground">
               {selectedCurrentPrice !== null
-                ? formatCurrency(selectedCurrentPrice)
+                ? formatCurrency(Number(selectedCurrentPrice))
                 : "N/A"}
             </span>
             {selectedHasDiscount ? (
               <span className="text-xs text-muted-foreground line-through">
-                {formatCurrency(selectedVariant.price)}
+                {formatCurrency(Number(selectedVariant.price))}
               </span>
             ) : null}
           </div>
@@ -185,7 +189,9 @@ export function ProductDetailsActions({ product }: ProductDetailsActionsProps) {
             title: `${product.title} - ${selectedVariant?.title ?? "Variant"}`,
             thumbnailUrl: product.thumbnailUrl,
             price: selectedVariant?.price ?? product.price,
-            discountPrice: selectedVariant?.discountPrice ?? product.discountPrice,
+            discountPrice:
+              selectedVariant?.discountPrice ?? product.discountPrice,
+            orderPayableAmount: product.orderPayableAmount ?? null,
             productVariantId: selectedVariant?.id ?? null,
           }}
           disabled={isOutOfStock}

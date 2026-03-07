@@ -43,7 +43,13 @@ export class CartService {
     let unitDiscountPrice = product.discountPrice;
     let productVariantId: string | null = null;
 
-    if (createCartItemDto.productVariantId) {
+    if (product.hasVariants) {
+      if (!createCartItemDto.productVariantId) {
+        throw new BadRequestException(
+          'Variant product requires productVariantId in cart request',
+        );
+      }
+
       const variant = await this.variantRepository.findOne({
         where: {
           id: createCartItemDto.productVariantId,
@@ -59,10 +65,6 @@ export class CartService {
       productVariantId = variant.id;
       unitPrice = variant.price;
       unitDiscountPrice = variant.discountPrice;
-    } else if (product.hasVariants) {
-      throw new BadRequestException(
-        'Variant product requires productVariantId in cart request',
-      );
     }
 
     const existingItem = await this.cartRepository.findOne({

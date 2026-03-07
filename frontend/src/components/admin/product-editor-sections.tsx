@@ -17,7 +17,6 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import type {
   GalleryItem,
   NavMainItem,
@@ -140,6 +139,24 @@ export function ProductBasicInformationSection({
               onUpdateField("discountPrice", event.target.value)
             }
           />
+        </div>
+        <div className="space-y-2 sm:col-span-2">
+          <Label htmlFor="product-order-payable">Order Payable Amount</Label>
+          <Input
+            id="product-order-payable"
+            type="number"
+            min="0"
+            step="0.01"
+            placeholder="Leave empty to require full payment in bKash"
+            value={form.orderPayableAmount}
+            onChange={(event) =>
+              onUpdateField("orderPayableAmount", event.target.value)
+            }
+          />
+          <p className="text-xs text-muted-foreground">
+            Optional per-unit minimum amount the customer must pay up front in
+            bKash checkout. Leave empty to charge the full unit amount.
+          </p>
         </div>
         {!form.hasVariants ? (
           <div className="space-y-2 sm:col-span-2">
@@ -480,19 +497,6 @@ export function ProductVariantsSection({
                   }
                 />
               </div>
-
-              <div className="space-y-2">
-                <Label>Attributes (size, color, etc)</Label>
-                <Textarea
-                  className="min-h-16"
-                  placeholder="e.g. XL, Black, Cotton"
-                  value={variant.attributes}
-                  onChange={(event) =>
-                    onUpdateVariant(index, "attributes", event.target.value)
-                  }
-                />
-              </div>
-
               <label className="flex items-center gap-2 text-sm">
                 <Checkbox
                   checked={variant.isActive}

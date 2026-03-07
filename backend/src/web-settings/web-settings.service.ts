@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   NotFoundException,
@@ -235,16 +236,28 @@ export class WebSettingsService {
       logoUrl: createDto.logoUrl ?? null,
       faviconUrl: createDto.faviconUrl ?? null,
       ogImageUrl: createDto.ogImageUrl ?? null,
+      whatsappLink: this.normalizeOptionalText(createDto.whatsappLink) ?? null,
+      tawkToLink: this.normalizeOptionalText(createDto.tawkToLink) ?? null,
+      showPlaceOrderButton: createDto.showPlaceOrderButton ?? true,
+      showBkashCheckoutButton: createDto.showBkashCheckoutButton ?? false,
       noticeEnabled: createDto.noticeEnabled ?? false,
       noticeText: createDto.noticeText ?? null,
       siteTheme: createDto.siteTheme?.trim() || 'light',
       productCardVariant: createDto.productCardVariant?.trim() || 'classic',
       productDetailsVariant:
         createDto.productDetailsVariant?.trim() || 'classic',
+      bkashAppKey: this.normalizeSecret(createDto.bkashAppKey) ?? null,
+      bkashAppSecret: this.normalizeSecret(createDto.bkashAppSecret) ?? null,
+      bkashUsername: this.normalizeSecret(createDto.bkashUsername) ?? null,
+      bkashPassword: this.normalizeSecret(createDto.bkashPassword) ?? null,
       isActive: createDto.isActive ?? true,
     });
 
-    return this.siteRepository.save(site);
+    this.assertBkashCredentialState(site);
+    this.assertSupportLauncherState(site);
+
+    const savedSite = await this.siteRepository.save(site);
+    return this.sanitizeSiteSetting(savedSite);
   }
 
   async getSiteSetting(query: WebSettingQueryDto) {
@@ -259,19 +272,12 @@ export class WebSettingsService {
       throw new NotFoundException(`Active site settings with key "${key}" not found`);
     }
 
-    return site;
+    return this.sanitizeSiteSetting(site);
   }
 
   async updateSiteSetting(query: WebSettingQueryDto, updateDto: UpdateSiteSettingDto) {
     const lookupKey = this.resolveKey(query.key ?? updateDto.key);
-
-    const site = updateDto.siteSettingId
-      ? await this.siteRepository.findOne({
-          where: { id: updateDto.siteSettingId },
-        })
-      : await this.siteRepository.findOne({
-          where: { key: lookupKey },
-        });
+    const site = await this.findSiteSettingInternal(lookupKey, updateDto.siteSettingId);
 
     if (!site) {
       throw new NotFoundException(
@@ -307,6 +313,18 @@ export class WebSettingsService {
     if (updateDto.ogImageUrl !== undefined) {
       site.ogImageUrl = updateDto.ogImageUrl ?? null;
     }
+    if (updateDto.whatsappLink !== undefined) {
+      site.whatsappLink = this.normalizeOptionalText(updateDto.whatsappLink) ?? null;
+    }
+    if (updateDto.tawkToLink !== undefined) {
+      site.tawkToLink = this.normalizeOptionalText(updateDto.tawkToLink) ?? null;
+    }
+    if (updateDto.showPlaceOrderButton !== undefined) {
+      site.showPlaceOrderButton = updateDto.showPlaceOrderButton;
+    }
+    if (updateDto.showBkashCheckoutButton !== undefined) {
+      site.showBkashCheckoutButton = updateDto.showBkashCheckoutButton;
+    }
     if (updateDto.noticeEnabled !== undefined) {
       site.noticeEnabled = updateDto.noticeEnabled;
     }
@@ -324,11 +342,28 @@ export class WebSettingsService {
       site.productDetailsVariant =
         updateDto.productDetailsVariant?.trim() || 'classic';
     }
+    if (updateDto.bkashAppKey !== undefined) {
+      site.bkashAppKey = this.normalizeSecret(updateDto.bkashAppKey) ?? null;
+    }
+    if (updateDto.bkashAppSecret !== undefined) {
+      site.bkashAppSecret =
+        this.normalizeSecret(updateDto.bkashAppSecret) ?? null;
+    }
+    if (updateDto.bkashUsername !== undefined) {
+      site.bkashUsername = this.normalizeSecret(updateDto.bkashUsername) ?? null;
+    }
+    if (updateDto.bkashPassword !== undefined) {
+      site.bkashPassword = this.normalizeSecret(updateDto.bkashPassword) ?? null;
+    }
     if (updateDto.isActive !== undefined) {
       site.isActive = updateDto.isActive;
     }
 
-    return this.siteRepository.save(site);
+    this.assertBkashCredentialState(site);
+    this.assertSupportLauncherState(site);
+
+    const savedSite = await this.siteRepository.save(site);
+    return this.sanitizeSiteSetting(savedSite);
   }
 
   // ─── Helpers ──────────────────────────────────────────────
@@ -609,6 +644,97 @@ export class WebSettingsService {
       return undefined;
     }
     return this.normalizeNavUrl(value);
+  }
+
+  private async findSiteSettingInternal(key: string, siteSettingId?: string) {
+    const qb = this.siteRepository
+      .createQueryBuilder('site')
+      .addSelect([
+        'site.bkashAppKey',
+        'site.bkashAppSecret',
+        'site.bkashUsername',
+        'site.bkashPassword',
+      ]);
+
+    if (siteSettingId) {
+      qb.where('site.id = :siteSettingId', { siteSettingId });
+    } else {
+      qb.where('site.key = :key', { key });
+    }
+
+    return qb.getOne();
+  }
+
+  private sanitizeSiteSetting(site: SiteSetting) {
+    return {
+      id: site.id,
+      key: site.key,
+      siteTitle: site.siteTitle,
+      metaDescription: site.metaDescription,
+      logoUrl: site.logoUrl,
+      faviconUrl: site.faviconUrl,
+      ogImageUrl: site.ogImageUrl,
+      whatsappLink: site.whatsappLink,
+      tawkToLink: site.tawkToLink,
+      showPlaceOrderButton: site.showPlaceOrderButton,
+      showBkashCheckoutButton: site.showBkashCheckoutButton,
+      noticeEnabled: site.noticeEnabled,
+      noticeText: site.noticeText,
+      siteTheme: site.siteTheme,
+      productCardVariant: site.productCardVariant,
+      productDetailsVariant: site.productDetailsVariant,
+      isActive: site.isActive,
+      createdAt: site.createdAt,
+      updatedAt: site.updatedAt,
+    };
+  }
+
+  private normalizeSecret(value?: string | null) {
+    if (value === undefined) {
+      return undefined;
+    }
+
+    const normalized = value?.trim();
+    return normalized ? normalized : null;
+  }
+
+  private normalizeOptionalText(value?: string | null) {
+    if (value === undefined) {
+      return undefined;
+    }
+
+    const normalized = value?.trim();
+    return normalized ? normalized : null;
+  }
+
+  private assertBkashCredentialState(site: Pick<
+    SiteSetting,
+    'bkashAppKey' | 'bkashAppSecret' | 'bkashUsername' | 'bkashPassword'
+  >) {
+    const values = [
+      site.bkashAppKey,
+      site.bkashAppSecret,
+      site.bkashUsername,
+      site.bkashPassword,
+    ].map((value) => value?.trim() || null);
+    const configuredCount = values.filter(Boolean).length;
+
+    if (configuredCount > 0 && configuredCount < values.length) {
+      throw new BadRequestException(
+        'All bKash credentials must be provided together in site settings',
+      );
+    }
+  }
+
+  private assertSupportLauncherState(site: Pick<SiteSetting, 'whatsappLink' | 'tawkToLink'>) {
+    const whatsappLink = site.whatsappLink?.trim() || null;
+    const tawkToLink = site.tawkToLink?.trim() || null;
+
+    if (whatsappLink && tawkToLink) {
+      throw new BadRequestException(
+        'Provide either whatsappLink or tawkToLink in site settings, not both',
+      );
+    }
   }
 
   private extractMainNavFromSubNav(subNavUrl: string | null) {

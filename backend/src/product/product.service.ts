@@ -71,6 +71,9 @@ export class ProductService implements OnModuleInit {
     const imageUrls = this.normalizeStringArray(createProductDto.imageUrls);
     const mainNavUrl = createProductDto.mainNavUrl?.trim() ?? null;
     const subNavUrl = createProductDto.subNavUrl?.trim() || null;
+    const orderPayableAmount = this.normalizeOrderPayableAmount(
+      createProductDto.orderPayableAmount,
+    );
 
     this.validateDiscountPrice(
       createProductDto.price,
@@ -79,6 +82,14 @@ export class ProductService implements OnModuleInit {
     );
     this.validateVariantPayload(hasVariants, variants);
     this.validateNavPlacement(mainNavUrl, subNavUrl);
+    this.validateOrderPayableAmount(
+      orderPayableAmount,
+      createProductDto.price,
+      createProductDto.discountPrice ?? null,
+      variants,
+      hasVariants,
+      'Product',
+    );
 
     const createdProductId = await this.productRepository.manager.transaction(
       async (manager) => {
@@ -92,6 +103,7 @@ export class ProductService implements OnModuleInit {
           slug,
           price: createProductDto.price,
           discountPrice: createProductDto.discountPrice ?? null,
+          orderPayableAmount,
           richText: createProductDto.richText,
           mainNavUrl,
           subNavUrl,
@@ -156,6 +168,7 @@ export class ProductService implements OnModuleInit {
         'product.slug',
         'product.price',
         'product.discountPrice',
+        'product.orderPayableAmount',
         'product.mainNavUrl',
         'product.subNavUrl',
         'product.productKind',
@@ -281,6 +294,11 @@ export class ProductService implements OnModuleInit {
     if (updateProductDto.discountPrice !== undefined) {
       product.discountPrice = updateProductDto.discountPrice ?? null;
     }
+    if (updateProductDto.orderPayableAmount !== undefined) {
+      product.orderPayableAmount = this.normalizeOrderPayableAmount(
+        updateProductDto.orderPayableAmount,
+      );
+    }
     if (updateProductDto.richText !== undefined) {
       product.richText = updateProductDto.richText;
     }
@@ -322,6 +340,14 @@ export class ProductService implements OnModuleInit {
 
     this.validateDiscountPrice(product.price, product.discountPrice, 'Product');
     this.validateNavPlacement(product.mainNavUrl, product.subNavUrl);
+    this.validateOrderPayableAmount(
+      product.orderPayableAmount,
+      product.price,
+      product.discountPrice,
+      nextVariants ?? product.variants,
+      nextHasVariants,
+      'Product',
+    );
 
     const nextSlugBase = this.normalizeSlug(
       updateProductDto.slug ?? updateProductDto.title ?? product.slug,
@@ -748,6 +774,29 @@ export class ProductService implements OnModuleInit {
     }
   }
 
+  private validateOrderPayableAmount(
+    orderPayableAmount: number | null,
+    price: number,
+    discountPrice: number | null,
+    variants: CreateProductVariantDto[] | ProductVariant[],
+    hasVariants: boolean,
+    context: string,
+  ) {
+    if (orderPayableAmount === null) {
+      return;
+    }
+
+    const maxAllowed = hasVariants
+      ? this.getLowestVariantEffectivePrice(variants)
+      : discountPrice ?? price;
+
+    if (orderPayableAmount > maxAllowed) {
+      throw new BadRequestException(
+        `${context} orderPayableAmount cannot be greater than the current sell price`,
+      );
+    }
+  }
+
   private normalizeSimpleStock(
     hasVariants: boolean,
     stock?: number | null,
@@ -761,6 +810,21 @@ export class ProductService implements OnModuleInit {
     }
 
     return Math.max(0, Math.trunc(stock));
+  }
+
+  private normalizeOrderPayableAmount(value?: number | null) {
+    if (value === null || value === undefined) {
+      return null;
+    }
+
+    return value;
+  }
+
+  private getLowestVariantEffectivePrice(
+    variants: CreateProductVariantDto[] | ProductVariant[],
+  ) {
+    const prices = variants.map((variant) => variant.discountPrice ?? variant.price);
+    return prices.length > 0 ? Math.min(...prices) : 0;
   }
 
   private toNumber(value: string | number | null | undefined) {

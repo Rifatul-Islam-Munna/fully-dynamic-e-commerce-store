@@ -508,7 +508,12 @@ export function RelatedProductsSection({
         <h2 className="text-base font-semibold tracking-tight">{title}</h2>
       </div>
       {products.length > 0 ? (
-        <div className={cn("grid gap-3", compact ? "" : "sm:grid-cols-2")}>
+        <div
+          className={cn(
+            "grid gap-3",
+            compact ? "grid-cols-1" : "grid-cols-1 sm:grid-cols-2 xl:grid-cols-4",
+          )}
+        >
           {products.map((related) => (
             <ProductCard key={related.id} product={related} />
           ))}

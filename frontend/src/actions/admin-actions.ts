@@ -225,6 +225,8 @@ export type AdminOrder = {
   userId: string | null;
   checkoutMode: AdminOrderMode;
   status: AdminOrderStatus;
+  paymentMethod: "place_order" | "bkash";
+  paymentStatus: "unpaid" | "partial_paid" | "paid";
   customerEmail: string | null;
   customerPhoneNumber: string;
   customerDistrict: string;
@@ -237,6 +239,10 @@ export type AdminOrder = {
   couponType: "percentage" | "value" | null;
   couponAmount: number | null;
   total: number;
+  paidAmount: number;
+  dueAmount: number;
+  bkashPaymentId: string | null;
+  bkashTransactionId: string | null;
   items: AdminOrderItem[];
   createdAt: string;
   updatedAt: string;
@@ -339,6 +345,10 @@ type SiteSettingsResponse = {
   logoUrl: string | null;
   faviconUrl: string | null;
   ogImageUrl: string | null;
+  whatsappLink: string | null;
+  tawkToLink: string | null;
+  showPlaceOrderButton: boolean;
+  showBkashCheckoutButton: boolean;
   noticeEnabled: boolean;
   noticeText: string | null;
   siteTheme: SiteThemeName;

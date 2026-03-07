@@ -69,6 +69,7 @@ export function buildActionProduct(
     thumbnailUrl: props.product.thumbnailUrl,
     price: props.product.price,
     discountPrice: props.product.discountPrice,
+    orderPayableAmount: props.product.orderPayableAmount,
     hasVariants: props.product.hasVariants,
     variants: props.variants,
   };

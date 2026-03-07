@@ -15,6 +15,8 @@ import {
   CheckoutOrderStatus,
 } from './entities/checkout-order.entity';
 import { CheckoutOrderItem } from './entities/checkout-order-item.entity';
+import { BkashCheckoutSession } from './entities/bkash-checkout-session.entity';
+import { BkashService } from './bkash.service';
 
 describe('CheckoutService', () => {
   let service: CheckoutService;
@@ -39,8 +41,15 @@ describe('CheckoutService', () => {
   let cartRepository: {
     delete: jest.Mock;
   };
+  let bkashCheckoutSessionRepository: {
+    create: jest.Mock;
+    save: jest.Mock;
+    findOne: jest.Mock;
+    exist: jest.Mock;
+  };
   let couponRepository: {
     increment: jest.Mock;
+    decrement: jest.Mock;
   };
   let dataSource: {
     transaction: jest.Mock;
@@ -73,8 +82,16 @@ describe('CheckoutService', () => {
       delete: jest.fn(),
     };
 
+    bkashCheckoutSessionRepository = {
+      create: jest.fn((value) => value),
+      save: jest.fn(async (value) => value),
+      findOne: jest.fn(),
+      exist: jest.fn().mockResolvedValue(false),
+    };
+
     couponRepository = {
       increment: jest.fn(),
+      decrement: jest.fn(),
     };
 
     dataSource = {
@@ -100,6 +117,9 @@ describe('CheckoutService', () => {
             }
             if (entity === CartItem) {
               return cartRepository;
+            }
+            if (entity === BkashCheckoutSession) {
+              return bkashCheckoutSessionRepository;
             }
             if (entity === Coupon) {
               return couponRepository;
@@ -135,6 +155,10 @@ describe('CheckoutService', () => {
           useValue: cartRepository,
         },
         {
+          provide: getRepositoryToken(BkashCheckoutSession),
+          useValue: bkashCheckoutSessionRepository,
+        },
+        {
           provide: getRepositoryToken(Coupon),
           useValue: couponRepository,
         },
@@ -158,6 +182,13 @@ describe('CheckoutService', () => {
           provide: CouponService,
           useValue: {
             validateCoupon: jest.fn(),
+          },
+        },
+        {
+          provide: BkashService,
+          useValue: {
+            createPayment: jest.fn(),
+            executePayment: jest.fn(),
           },
         },
       ],
@@ -276,6 +307,71 @@ describe('CheckoutService', () => {
     expect(result).toMatchObject({
       id: 'order-1',
       orderNumber: 'CHK-TEST-1',
+    });
+  });
+
+  it('ignores stale variant ids for simple checkout items', async () => {
+    const simpleProduct = {
+      id: 'simple-1',
+      title: 'Simple Product',
+      slug: 'simple-product',
+      thumbnailUrl: 'https://cdn.example.com/simple.jpg',
+      price: 500,
+      discountPrice: null,
+      hasVariants: false,
+      stock: 4,
+      isActive: true,
+      orderPayableAmount: null,
+    };
+
+    productRepository.findOne.mockImplementation(
+      async ({ where }: { where: { id?: string } }) => {
+        if (where.id === 'simple-1') {
+          return simpleProduct;
+        }
+
+        return null;
+      },
+    );
+
+    checkoutOrderRepository.findOne.mockResolvedValue({
+      id: 'order-1',
+      orderNumber: 'CHK-TEST-2',
+      items: [],
+    });
+
+    const result = await service.create({
+      phoneNumber: '01700000000',
+      district: 'Dhaka',
+      address: 'Mirpur',
+      items: [
+        {
+          productId: 'simple-1',
+          productVariantId: 'stale-variant-id',
+          quantity: 1,
+        },
+      ],
+    });
+
+    expect(variantRepository.findOne).not.toHaveBeenCalled();
+    expect(checkoutOrderItemRepository.create).toHaveBeenCalledWith(
+      expect.arrayContaining([
+        expect.objectContaining({
+          productId: 'simple-1',
+          productVariantId: null,
+          quantity: 1,
+        }),
+      ]),
+    );
+    expect(productRepository.save).toHaveBeenCalledWith(
+      expect.objectContaining({
+        id: 'simple-1',
+        stock: 3,
+      }),
+    );
+    expect(result).toMatchObject({
+      id: 'order-1',
+      orderNumber: 'CHK-TEST-2',
     });
   });
 

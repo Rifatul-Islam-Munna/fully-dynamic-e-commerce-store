@@ -13,7 +13,6 @@ export type VariantForm = {
   stock: string;
   sortOrder: string;
   isActive: boolean;
-  attributes: string;
 };
 
 export type ProductForm = {
@@ -23,6 +22,7 @@ export type ProductForm = {
   slug: string;
   price: string;
   discountPrice: string;
+  orderPayableAmount: string;
   stock: string;
   richText: string;
   mainNavUrl: string;

@@ -35,6 +35,8 @@ export type CheckoutPricingResponse = {
   subtotal: number;
   discountAmount: number;
   total: number;
+  bkashPayableAmount: number;
+  bkashDueAmount: number;
   coupon: {
     id: string;
     code: string;
@@ -50,6 +52,8 @@ export type CheckoutOrderResponse = {
   userId: string | null;
   checkoutMode: "guest" | "member";
   status: "pending" | "confirmed" | "cancelled";
+  paymentMethod: "place_order" | "bkash";
+  paymentStatus: "unpaid" | "partial_paid" | "paid";
   customerEmail: string | null;
   customerPhoneNumber: string;
   customerDistrict: string;
@@ -62,6 +66,10 @@ export type CheckoutOrderResponse = {
   couponType: "percentage" | "value" | null;
   couponAmount: number | null;
   total: number;
+  paidAmount: number;
+  dueAmount: number;
+  bkashPaymentId: string | null;
+  bkashTransactionId: string | null;
   createdAt: string;
   items: Array<{
     id: string;
@@ -76,6 +84,14 @@ export type CheckoutOrderResponse = {
     unitDiscountPrice: number | null;
     lineTotal: number;
   }>;
+};
+
+export type CheckoutBkashInitResponse = {
+  paymentUrl: string;
+  paymentId: string;
+  checkoutSessionId: string;
+  payableAmount: number;
+  dueAmount: number;
 };
 
 function normalizeText(value: string) {
@@ -114,5 +130,34 @@ export function buildCheckoutPayload(
       ...(item.productVariantId ? { productVariantId: item.productVariantId } : {}),
       quantity: item.quantity,
     })),
+  };
+}
+
+function roundCurrency(value: number) {
+  return Math.round(value * 100) / 100;
+}
+
+export function calculateBkashPayableSummary(
+  items: LocalCartItem[],
+  total: number,
+) {
+  const requestedPayable = roundCurrency(
+    items.reduce((runningTotal, item) => {
+      const effectiveUnitPrice = item.unitDiscountPrice ?? item.unitPrice;
+      const payableUnitPrice =
+        item.orderPayableAmount !== null &&
+        item.orderPayableAmount !== undefined
+          ? Math.min(item.orderPayableAmount, effectiveUnitPrice)
+          : effectiveUnitPrice;
+
+      return runningTotal + payableUnitPrice * item.quantity;
+    }, 0),
+  );
+  const payableAmount = roundCurrency(Math.min(total, requestedPayable));
+  const dueAmount = roundCurrency(Math.max(0, total - payableAmount));
+
+  return {
+    payableAmount,
+    dueAmount,
   };
 }

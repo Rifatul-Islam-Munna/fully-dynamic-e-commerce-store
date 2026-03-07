@@ -13,6 +13,7 @@ type AddToCartButtonProps = {
     thumbnailUrl: string;
     price: number;
     discountPrice: number | null;
+    orderPayableAmount?: number | null;
     productVariantId?: string | null;
   };
   className?: string;
@@ -49,8 +50,9 @@ export function AddToCartButton({
           thumbnailUrl: product.thumbnailUrl,
           unitPrice: product.price,
           unitDiscountPrice: product.discountPrice,
+          orderPayableAmount: product.orderPayableAmount ?? null,
         });
-        toast.success("Added to cart");
+        toast.success("Added to cart", { position: "top-center" });
       }}
     >
       <ShoppingCart className="mr-2 size-4" />

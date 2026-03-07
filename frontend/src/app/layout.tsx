@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { GetRequestNormal } from "@/api-hooks/api-hooks";
+import { SiteContactLauncher } from "@/components/site/site-contact-launcher";
 import { buildSiteAppearanceSettings } from "@/lib/site-appearance";
 import "./globals.css";
 import QueryClint from "@/hooks/QueryClint";
@@ -12,6 +13,8 @@ type SiteSettingsPayload = {
   logoUrl?: string | null;
   faviconUrl?: string | null;
   ogImageUrl?: string | null;
+  whatsappLink?: string | null;
+  tawkToLink?: string | null;
   siteTheme?: string | null;
   productCardVariant?: string | null;
   productDetailsVariant?: string | null;
@@ -105,6 +108,10 @@ export default async function RootLayout({
           {children}
           <Toaster />
         </QueryClint>
+        <SiteContactLauncher
+          whatsappLink={normalizeText(settings?.whatsappLink)}
+          tawkToLink={normalizeText(settings?.tawkToLink)}
+        />
       </body>
     </html>
   );

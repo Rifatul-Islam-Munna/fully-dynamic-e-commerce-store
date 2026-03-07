@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  Logger,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -22,11 +23,17 @@ import { Coupon, CouponType } from './entities/coupon.entity';
 import { Product } from './entities/product.entity';
 import { ProductVariant } from './entities/product-variant.entity';
 import {
+  CheckoutPaymentMethod,
+  CheckoutPaymentStatus,
   CheckoutOrderStatus,
   CheckoutMode,
   CheckoutOrder,
 } from './entities/checkout-order.entity';
 import { CheckoutOrderItem } from './entities/checkout-order-item.entity';
+import {
+  BkashCheckoutSession,
+  BkashCheckoutSessionStatus,
+} from './entities/bkash-checkout-session.entity';
 import { CouponService } from './coupon.service';
 import { AdminCheckoutQueryDto } from './dto/admin-checkout-query.dto';
 import {
@@ -34,6 +41,7 @@ import {
   CreateCheckoutItemDto,
 } from './dto/create-checkout.dto';
 import { UpdateCheckoutOrderStatusDto } from './dto/update-checkout-order-status.dto';
+import { BkashService } from './bkash.service';
 
 type ResolvedCheckoutItem = {
   productId: string;
@@ -45,6 +53,7 @@ type ResolvedCheckoutItem = {
   quantity: number;
   unitPrice: number;
   unitDiscountPrice: number | null;
+  orderPayableAmount: number | null;
   lineTotal: number;
 };
 
@@ -53,6 +62,8 @@ type CheckoutPricingPreview = {
   subtotal: number;
   discountAmount: number;
   total: number;
+  bkashPayableAmount: number;
+  bkashDueAmount: number;
   coupon: {
     id: string;
     code: string;
@@ -69,8 +80,30 @@ type InventoryAdjustmentItem = {
   productTitle: string;
 };
 
+type PreparedCheckout = {
+  userId: string | null;
+  checkoutMode: CheckoutMode;
+  customerEmail: string | null;
+  customerPhoneNumber: string;
+  customerDistrict: string;
+  customerAddress: string;
+  resolvedItems: ResolvedCheckoutItem[];
+  pricing: CheckoutPricingPreview;
+};
+
+type PersistCheckoutOrderOptions = {
+  paymentMethod: CheckoutPaymentMethod;
+  paymentStatus: CheckoutPaymentStatus;
+  paidAmount: number;
+  dueAmount: number;
+  bkashPaymentId?: string | null;
+  bkashTransactionId?: string | null;
+  clearCartUserId?: string | null;
+};
+
 @Injectable()
 export class CheckoutService {
+  private logger = new Logger(CheckoutService.name);
   constructor(
     @InjectRepository(CheckoutOrder)
     private readonly checkoutOrderRepository: Repository<CheckoutOrder>,
@@ -82,129 +115,208 @@ export class CheckoutService {
     private readonly variantRepository: Repository<ProductVariant>,
     @InjectRepository(CartItem)
     private readonly cartRepository: Repository<CartItem>,
+    @InjectRepository(BkashCheckoutSession)
+    private readonly bkashCheckoutSessionRepository: Repository<BkashCheckoutSession>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     private readonly dataSource: DataSource,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
     private readonly couponService: CouponService,
+    private readonly bkashService: BkashService,
   ) {}
 
   async create(createCheckoutDto: CreateCheckoutDto, accessToken?: string) {
     const currentUser = await this.resolveCurrentUser(accessToken);
-    const phoneNumber = this.requireText(
-      createCheckoutDto.phoneNumber,
-      'phoneNumber',
+    const preparedCheckout = await this.prepareCheckout(
+      createCheckoutDto,
+      currentUser,
     );
-    const district = this.requireText(createCheckoutDto.district, 'district');
-    const address = this.requireText(createCheckoutDto.address, 'address');
-    const customerEmail =
-      this.normalizeEmail(createCheckoutDto.email) ??
-      currentUser?.email?.toLowerCase() ??
-      null;
 
-    const resolvedItems = await this.resolveCheckoutItems(createCheckoutDto.items);
-
-    const pricing = await this.buildPricingSummary(
-      resolvedItems,
-      createCheckoutDto.couponCode,
-    );
-    const orderNumber = await this.generateOrderNumber();
-
-    const savedOrder = await this.dataSource.transaction(async (manager) => {
-      const checkoutOrderRepository = manager.getRepository(CheckoutOrder);
-      const checkoutOrderItemRepository =
-        manager.getRepository(CheckoutOrderItem);
-      const cartRepository = manager.getRepository(CartItem);
-      const couponRepository = manager.getRepository(Coupon);
-
-      const checkoutOrder = checkoutOrderRepository.create({
-        orderNumber,
-        userId: currentUser?.id ?? null,
-        checkoutMode: currentUser ? CheckoutMode.MEMBER : CheckoutMode.GUEST,
-        customerEmail,
-        customerPhoneNumber: phoneNumber,
-        customerDistrict: district,
-        customerAddress: address,
-        itemCount: pricing.itemCount,
-        subtotal: pricing.subtotal,
-        discountAmount: pricing.discountAmount,
-        couponId: pricing.coupon?.id ?? null,
-        couponCode: pricing.coupon?.code ?? null,
-        couponType: pricing.coupon?.type ?? null,
-        couponAmount: pricing.coupon?.amount ?? null,
-        total: pricing.total,
-      });
-
-      const persistedOrder = await checkoutOrderRepository.save(checkoutOrder);
-
-      const checkoutItems = checkoutOrderItemRepository.create(
-        resolvedItems.map((item) => ({
-          checkoutOrderId: persistedOrder.id,
-          productId: item.productId,
-          productVariantId: item.productVariantId,
-          productTitle: item.productTitle,
-          productSlug: item.productSlug,
-          productThumbnailUrl: item.productThumbnailUrl,
-          variantTitle: item.variantTitle,
-          quantity: item.quantity,
-          unitPrice: item.unitPrice,
-          unitDiscountPrice: item.unitDiscountPrice,
-          lineTotal: item.lineTotal,
-        })),
-      );
-
-      await checkoutOrderItemRepository.save(checkoutItems);
-      await this.adjustInventory(
-        resolvedItems.map((item) => ({
-          productId: item.productId,
-          productVariantId: item.productVariantId,
-          quantity: item.quantity,
-          productTitle: item.productTitle,
-        })),
-        'decrease',
-        manager,
-      );
-
-      if (pricing.coupon?.id) {
-        await couponRepository.increment(
-          { id: pricing.coupon.id },
-          'usedCount',
-          1,
-        );
-      }
-
-      if (currentUser) {
-        await cartRepository.delete({
-          userId: currentUser.id,
-        });
-      }
-
-      return persistedOrder;
+    return this.persistCheckoutOrder(preparedCheckout, {
+      paymentMethod: CheckoutPaymentMethod.PLACE_ORDER,
+      paymentStatus: CheckoutPaymentStatus.UNPAID,
+      paidAmount: 0,
+      dueAmount: preparedCheckout.pricing.total,
+      clearCartUserId: currentUser?.id ?? null,
     });
-
-    const checkoutOrder = await this.checkoutOrderRepository.findOne({
-      where: { id: savedOrder.id },
-      relations: {
-        items: true,
-      },
-      order: {
-        items: {
-          id: 'ASC',
-        },
-      },
-    });
-
-    if (!checkoutOrder) {
-      throw new NotFoundException('Checkout order was created but not found');
-    }
-
-    return checkoutOrder;
   }
 
   async preview(items: CreateCheckoutItemDto[], couponCode?: string) {
     const resolvedItems = await this.resolveCheckoutItems(items);
     return this.buildPricingSummary(resolvedItems, couponCode);
+  }
+
+  async createPayment(
+    createCheckoutDto: CreateCheckoutDto,
+    accessToken?: string,
+  ) {
+    const currentUser = await this.resolveCurrentUser(accessToken);
+    const preparedCheckout = await this.prepareCheckout(
+      createCheckoutDto,
+      currentUser,
+    );
+
+    if (preparedCheckout.pricing.bkashPayableAmount <= 0) {
+      throw new BadRequestException(
+        'bKash payable amount must be greater than zero',
+      );
+    }
+
+    const merchantInvoiceNumber = await this.generateBkashInvoiceNumber();
+    const session = await this.bkashCheckoutSessionRepository.save(
+      this.bkashCheckoutSessionRepository.create({
+        userId: preparedCheckout.userId,
+        checkoutMode: preparedCheckout.checkoutMode,
+        customerEmail: preparedCheckout.customerEmail,
+        customerPhoneNumber: preparedCheckout.customerPhoneNumber,
+        customerDistrict: preparedCheckout.customerDistrict,
+        customerAddress: preparedCheckout.customerAddress,
+        itemCount: preparedCheckout.pricing.itemCount,
+        subtotal: preparedCheckout.pricing.subtotal,
+        discountAmount: preparedCheckout.pricing.discountAmount,
+        couponId: preparedCheckout.pricing.coupon?.id ?? null,
+        couponCode: preparedCheckout.pricing.coupon?.code ?? null,
+        couponType: preparedCheckout.pricing.coupon?.type ?? null,
+        couponAmount: preparedCheckout.pricing.coupon?.amount ?? null,
+        total: preparedCheckout.pricing.total,
+        bkashPayableAmount: preparedCheckout.pricing.bkashPayableAmount,
+        bkashDueAmount: preparedCheckout.pricing.bkashDueAmount,
+        itemsSnapshot: preparedCheckout.resolvedItems,
+        paymentId: null,
+        merchantInvoiceNumber,
+        status: BkashCheckoutSessionStatus.PENDING,
+        orderId: null,
+        transactionId: null,
+        failureReason: null,
+        finalizedAt: null,
+      }),
+    );
+
+    try {
+      const payment = await this.bkashService.createPayment({
+        amount: preparedCheckout.pricing.bkashPayableAmount,
+        payerReference:
+          currentUser?.id ??
+          preparedCheckout.customerPhoneNumber ??
+          merchantInvoiceNumber,
+        merchantInvoiceNumber,
+        callbackUrl: this.buildBkashCallbackUrl(session.id),
+      });
+
+      session.paymentId = payment.paymentId;
+      session.failureReason = null;
+      await this.bkashCheckoutSessionRepository.save(session);
+
+      return {
+        ...payment,
+        checkoutSessionId: session.id,
+        payableAmount: preparedCheckout.pricing.bkashPayableAmount,
+        dueAmount: preparedCheckout.pricing.bkashDueAmount,
+      };
+    } catch (error) {
+      session.status = BkashCheckoutSessionStatus.FAILED;
+      session.failureReason = this.getErrorMessage(error);
+      await this.bkashCheckoutSessionRepository.save(session);
+      throw error;
+    }
+  }
+
+  async executePayment(
+    checkoutSessionId: string,
+    paymentId?: string,
+    status?: string,
+  ) {
+    const session = await this.findBkashSessionOrThrow(checkoutSessionId);
+
+    if (session.status === BkashCheckoutSessionStatus.COMPLETED && session.orderId) {
+      const existingOrder = await this.findOrderOrThrow(session.orderId);
+      return {
+        success: true,
+        order: existingOrder,
+      };
+    }
+
+    if (status !== 'success') {
+      session.status =
+        status === 'cancel'
+          ? BkashCheckoutSessionStatus.CANCELLED
+          : BkashCheckoutSessionStatus.FAILED;
+      session.failureReason = `bKash callback status: ${status ?? 'unknown'}`;
+      await this.bkashCheckoutSessionRepository.save(session);
+
+      return {
+        success: false,
+        reason: session.failureReason,
+      };
+    }
+
+    if (!paymentId) {
+      session.status = BkashCheckoutSessionStatus.FAILED;
+      session.failureReason = 'Missing paymentID from bKash callback';
+      await this.bkashCheckoutSessionRepository.save(session);
+
+      return {
+        success: false,
+        reason: session.failureReason,
+      };
+    }
+
+    try {
+      const executePayment = await this.bkashService.executePayment(paymentId);
+      this.logger.log('Execute response:', executePayment);
+      const transactionStatus = this.toNullableText(
+        executePayment.transactionStatus,
+      );
+      const transactionId =
+        this.toNullableText(executePayment.trxID) ??
+        this.toNullableText(executePayment.transactionId);
+
+      const completedStatus =
+        this.configService.get<string>('BKASH_COMPLETE')?.trim() || 'Completed';
+      if (transactionStatus !== completedStatus) {
+        session.status = BkashCheckoutSessionStatus.FAILED;
+        session.failureReason =
+          this.toNullableText(executePayment.statusMessage) ||
+          transactionStatus ||
+          'bKash payment was not completed';
+        session.paymentId = paymentId;
+        await this.bkashCheckoutSessionRepository.save(session);
+
+        return {
+          success: false,
+          reason: session.failureReason,
+        };
+      }
+
+      const order = await this.persistCheckoutOrderFromBkashSession(session, {
+        paymentId,
+        transactionId,
+      });
+
+      session.status = BkashCheckoutSessionStatus.COMPLETED;
+      session.orderId = order.id;
+      session.paymentId = paymentId;
+      session.transactionId = transactionId;
+      session.failureReason = null;
+      session.finalizedAt = new Date();
+      await this.bkashCheckoutSessionRepository.save(session);
+
+      return {
+        success: true,
+        order,
+      };
+    } catch (error) {
+      session.status = BkashCheckoutSessionStatus.FAILED;
+      session.failureReason = this.getErrorMessage(error);
+      session.paymentId = paymentId ?? session.paymentId;
+      await this.bkashCheckoutSessionRepository.save(session);
+
+      return {
+        success: false,
+        reason: session.failureReason,
+      };
+    }
   }
 
   async findAllAdmin(query: AdminCheckoutQueryDto) {
@@ -443,6 +555,225 @@ export class CheckoutService {
     });
 
     return this.findOrderOrThrow(updatedOrderId);
+  }
+
+  private async prepareCheckout(
+    createCheckoutDto: CreateCheckoutDto,
+    currentUser: User | null,
+  ): Promise<PreparedCheckout> {
+    const customerPhoneNumber = this.requireText(
+      createCheckoutDto.phoneNumber,
+      'phoneNumber',
+    );
+    const customerDistrict = this.requireText(
+      createCheckoutDto.district,
+      'district',
+    );
+    const customerAddress = this.requireText(
+      createCheckoutDto.address,
+      'address',
+    );
+    const customerEmail =
+      this.normalizeEmail(createCheckoutDto.email) ??
+      currentUser?.email?.toLowerCase() ??
+      null;
+    const resolvedItems = await this.resolveCheckoutItems(createCheckoutDto.items);
+    const pricing = await this.buildPricingSummary(
+      resolvedItems,
+      createCheckoutDto.couponCode,
+    );
+
+    return {
+      userId: currentUser?.id ?? null,
+      checkoutMode: currentUser ? CheckoutMode.MEMBER : CheckoutMode.GUEST,
+      customerEmail,
+      customerPhoneNumber,
+      customerDistrict,
+      customerAddress,
+      resolvedItems,
+      pricing,
+    };
+  }
+
+  private async persistCheckoutOrderFromBkashSession(
+    session: BkashCheckoutSession,
+    paymentMeta: {
+      paymentId: string;
+      transactionId: string | null;
+    },
+  ) {
+    const coupon =
+      session.couponId &&
+      session.couponCode &&
+      session.couponType &&
+      session.couponAmount !== null
+        ? {
+            id: session.couponId,
+            code: session.couponCode,
+            type: session.couponType,
+            amount: session.couponAmount,
+            discountAmount: session.discountAmount,
+          }
+        : null;
+
+    return this.persistCheckoutOrder(
+      {
+        userId: session.userId,
+        checkoutMode: session.checkoutMode,
+        customerEmail: session.customerEmail,
+        customerPhoneNumber: session.customerPhoneNumber,
+        customerDistrict: session.customerDistrict,
+        customerAddress: session.customerAddress,
+        resolvedItems: session.itemsSnapshot as ResolvedCheckoutItem[],
+        pricing: {
+          itemCount: session.itemCount,
+          subtotal: session.subtotal,
+          discountAmount: session.discountAmount,
+          total: session.total,
+          bkashPayableAmount: session.bkashPayableAmount,
+          bkashDueAmount: session.bkashDueAmount,
+          coupon,
+        },
+      },
+      {
+        paymentMethod: CheckoutPaymentMethod.BKASH,
+        paymentStatus:
+          session.bkashDueAmount > 0
+            ? CheckoutPaymentStatus.PARTIAL_PAID
+            : CheckoutPaymentStatus.PAID,
+        paidAmount: session.bkashPayableAmount,
+        dueAmount: session.bkashDueAmount,
+        bkashPaymentId: paymentMeta.paymentId,
+        bkashTransactionId: paymentMeta.transactionId,
+        clearCartUserId: session.userId,
+      },
+    );
+  }
+
+  private async persistCheckoutOrder(
+    preparedCheckout: PreparedCheckout,
+    options: PersistCheckoutOrderOptions,
+  ) {
+    const orderNumber = await this.generateOrderNumber();
+
+    const savedOrder = await this.dataSource.transaction(async (manager) => {
+      const checkoutOrderRepository = manager.getRepository(CheckoutOrder);
+      const checkoutOrderItemRepository =
+        manager.getRepository(CheckoutOrderItem);
+      const cartRepository = manager.getRepository(CartItem);
+      const couponRepository = manager.getRepository(Coupon);
+
+      const checkoutOrder = checkoutOrderRepository.create({
+        orderNumber,
+        userId: preparedCheckout.userId,
+        checkoutMode: preparedCheckout.checkoutMode,
+        customerEmail: preparedCheckout.customerEmail,
+        customerPhoneNumber: preparedCheckout.customerPhoneNumber,
+        customerDistrict: preparedCheckout.customerDistrict,
+        customerAddress: preparedCheckout.customerAddress,
+        paymentMethod: options.paymentMethod,
+        paymentStatus: options.paymentStatus,
+        itemCount: preparedCheckout.pricing.itemCount,
+        subtotal: preparedCheckout.pricing.subtotal,
+        discountAmount: preparedCheckout.pricing.discountAmount,
+        couponId: preparedCheckout.pricing.coupon?.id ?? null,
+        couponCode: preparedCheckout.pricing.coupon?.code ?? null,
+        couponType: preparedCheckout.pricing.coupon?.type ?? null,
+        couponAmount: preparedCheckout.pricing.coupon?.amount ?? null,
+        total: preparedCheckout.pricing.total,
+        paidAmount: options.paidAmount,
+        dueAmount: options.dueAmount,
+        bkashPaymentId: options.bkashPaymentId ?? null,
+        bkashTransactionId: options.bkashTransactionId ?? null,
+      });
+
+      const persistedOrder = await checkoutOrderRepository.save(checkoutOrder);
+
+      const checkoutItems = checkoutOrderItemRepository.create(
+        preparedCheckout.resolvedItems.map((item) => ({
+          checkoutOrderId: persistedOrder.id,
+          productId: item.productId,
+          productVariantId: item.productVariantId,
+          productTitle: item.productTitle,
+          productSlug: item.productSlug,
+          productThumbnailUrl: item.productThumbnailUrl,
+          variantTitle: item.variantTitle,
+          quantity: item.quantity,
+          unitPrice: item.unitPrice,
+          unitDiscountPrice: item.unitDiscountPrice,
+          lineTotal: item.lineTotal,
+        })),
+      );
+
+      await checkoutOrderItemRepository.save(checkoutItems);
+      await this.adjustInventory(
+        preparedCheckout.resolvedItems.map((item) => ({
+          productId: item.productId,
+          productVariantId: item.productVariantId,
+          quantity: item.quantity,
+          productTitle: item.productTitle,
+        })),
+        'decrease',
+        manager,
+      );
+
+      if (preparedCheckout.pricing.coupon?.id) {
+        await couponRepository.increment(
+          { id: preparedCheckout.pricing.coupon.id },
+          'usedCount',
+          1,
+        );
+      }
+
+      if (options.clearCartUserId) {
+        await cartRepository.delete({
+          userId: options.clearCartUserId,
+        });
+      }
+
+      return persistedOrder;
+    });
+
+    return this.findOrderOrThrow(savedOrder.id);
+  }
+
+  private async findBkashSessionOrThrow(checkoutSessionId: string) {
+    const session = await this.bkashCheckoutSessionRepository.findOne({
+      where: {
+        id: checkoutSessionId,
+      },
+    });
+
+    if (!session) {
+      throw new NotFoundException('bKash checkout session not found');
+    }
+
+    return session;
+  }
+
+  private buildBkashCallbackUrl(checkoutSessionId: string) {
+    const backendUrl = this.requireConfigValue('BACKEND_URL');
+    const baseUrl = backendUrl.replace(/\/+$/, '');
+    return `${baseUrl}/product/checkout/execute-payment-callback?checkoutSessionId=${encodeURIComponent(
+      checkoutSessionId,
+    )}`;
+  }
+
+  private requireConfigValue(key: string) {
+    const value = this.configService.get<string>(key)?.trim();
+    if (!value) {
+      throw new BadRequestException(`${key} is not configured`);
+    }
+
+    return value;
+  }
+
+  private getErrorMessage(error: unknown) {
+    if (error instanceof Error && error.message.trim()) {
+      return error.message;
+    }
+
+    return 'Unknown payment error';
   }
 
   private applyAdminOrderFilters(
@@ -692,7 +1023,13 @@ export class CheckoutService {
       let unitPrice = product.price;
       let unitDiscountPrice = product.discountPrice;
 
-      if (item.productVariantId) {
+      if (product.hasVariants) {
+        if (!item.productVariantId) {
+          throw new BadRequestException(
+            'Variant product requires productVariantId in checkout request',
+          );
+        }
+
         const variant = await this.variantRepository.findOne({
           where: {
             id: item.productVariantId,
@@ -715,10 +1052,6 @@ export class CheckoutService {
         variantTitle = variant.title;
         unitPrice = variant.price;
         unitDiscountPrice = variant.discountPrice;
-      } else if (product.hasVariants) {
-        throw new BadRequestException(
-          'Variant product requires productVariantId in checkout request',
-        );
       } else if (product.stock !== null && product.stock < item.quantity) {
         throw new BadRequestException(
           `Requested quantity exceeds stock for ${product.title}`,
@@ -739,6 +1072,7 @@ export class CheckoutService {
         quantity: item.quantity,
         unitPrice,
         unitDiscountPrice,
+        orderPayableAmount: product.orderPayableAmount,
         lineTotal,
       });
     }
@@ -769,12 +1103,31 @@ export class CheckoutService {
       appliedCoupon?.discountAmount ?? 0,
     );
     const total = this.roundCurrency(Math.max(0, subtotal - discountAmount));
+    const bkashPayableAmount = this.roundCurrency(
+      Math.min(
+        total,
+        resolvedItems.reduce((runningTotal, item) => {
+          const effectiveUnitPrice = item.unitDiscountPrice ?? item.unitPrice;
+          const payableUnitPrice =
+            item.orderPayableAmount !== null
+              ? Math.min(item.orderPayableAmount, effectiveUnitPrice)
+              : effectiveUnitPrice;
+
+          return runningTotal + payableUnitPrice * item.quantity;
+        }, 0),
+      ),
+    );
+    const bkashDueAmount = this.roundCurrency(
+      Math.max(0, total - bkashPayableAmount),
+    );
 
     return {
       itemCount,
       subtotal,
       discountAmount,
       total,
+      bkashPayableAmount,
+      bkashDueAmount,
       coupon: appliedCoupon,
     };
   }
@@ -843,6 +1196,15 @@ export class CheckoutService {
     return 0;
   }
 
+  private toNullableText(value: unknown) {
+    if (typeof value !== 'string') {
+      return null;
+    }
+
+    const normalized = value.trim();
+    return normalized ? normalized : null;
+  }
+
   private roundCurrency(value: number) {
     return Math.round(value * 100) / 100;
   }
@@ -866,5 +1228,27 @@ export class CheckoutService {
     }
 
     throw new BadRequestException('Could not generate a unique order number');
+  }
+
+  private async generateBkashInvoiceNumber() {
+    for (let attempt = 0; attempt < 5; attempt += 1) {
+      const merchantInvoiceNumber = `BKS-${Date.now()
+        .toString(36)
+        .toUpperCase()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
+
+      const exists = await this.bkashCheckoutSessionRepository.exist({
+        where: {
+          merchantInvoiceNumber,
+        },
+      });
+
+      if (!exists) {
+        return merchantInvoiceNumber;
+      }
+    }
+
+    throw new BadRequestException(
+      'Could not generate a unique bKash invoice number',
+    );
   }
 }

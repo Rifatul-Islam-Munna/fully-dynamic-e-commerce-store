@@ -12,6 +12,7 @@ export type LocalCartItem = {
   thumbnailUrl: string;
   unitPrice: number;
   unitDiscountPrice: number | null;
+  orderPayableAmount?: number | null;
   quantity: number;
 };
 
@@ -20,6 +21,8 @@ type CartState = {
   checkoutItems: LocalCartItem[] | null;
   isOpen: boolean;
   needsSync: boolean;
+  hasHydrated: boolean;
+  markHydrated: () => void;
   addItem: (item: Omit<LocalCartItem, "key" | "quantity">) => void;
   startDirectCheckout: (item: Omit<LocalCartItem, "key" | "quantity">) => void;
   clearCheckoutItems: () => void;
@@ -43,6 +46,8 @@ export const useCartStore = create<CartState>()(
       checkoutItems: null,
       isOpen: false,
       needsSync: false,
+      hasHydrated: false,
+      markHydrated: () => set({ hasHydrated: true }),
       addItem: (item) =>
         set((state) => {
           const key = makeItemKey(item.productId, item.productVariantId);
@@ -114,6 +119,9 @@ export const useCartStore = create<CartState>()(
         checkoutItems: state.checkoutItems,
         needsSync: state.needsSync,
       }),
+      onRehydrateStorage: () => (state) => {
+        state?.markHydrated();
+      },
     },
   ),
 );

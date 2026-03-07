@@ -17,6 +17,7 @@ export type ProductDetails = {
   imageUrls?: string[];
   price: number;
   discountPrice: number | null;
+  orderPayableAmount?: number | null;
   richText?: string | null;
   mainNavUrl?: string | null;
   subNavUrl?: string | null;
@@ -31,6 +32,7 @@ export type RelatedProduct = {
   thumbnailUrl: string;
   price: number;
   discountPrice: number | null;
+  orderPayableAmount?: number | null;
 };
 
 export type ProductDetailsViewProps = {
@@ -62,6 +64,7 @@ export type ActionProduct = {
   thumbnailUrl: string;
   price: number;
   discountPrice: number | null;
+  orderPayableAmount?: number | null;
   hasVariants?: boolean;
   variants: ProductVariant[];
 };

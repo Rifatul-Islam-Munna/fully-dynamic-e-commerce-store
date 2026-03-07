@@ -93,6 +93,20 @@ export class Product {
   })
   discountPrice: number | null;
 
+  @ApiPropertyOptional({
+    description:
+      'Optional per-unit minimum amount that must be prepaid when checkout uses bKash. Leave null to require the full unit amount.',
+    example: 300,
+  })
+  @Column({
+    type: 'decimal',
+    precision: 12,
+    scale: 2,
+    nullable: true,
+    transformer: NumericTransformer,
+  })
+  orderPayableAmount: number | null;
+
   @ApiProperty({
     description: 'Product rich text description',
     example: '<h2>Pure Organic Honey</h2><p>No chemical processing.</p>',

@@ -42,11 +42,19 @@ type SiteSettingsForm = {
   logoUrl: string;
   faviconUrl: string;
   ogImageUrl: string;
+  whatsappLink: string;
+  tawkToLink: string;
+  showPlaceOrderButton: boolean;
+  showBkashCheckoutButton: boolean;
   noticeEnabled: boolean;
   noticeText: string;
   siteTheme: SiteThemeName;
   productCardVariant: ProductCardVariant;
   productDetailsVariant: ProductDetailsVariant;
+  bkashAppKey: string;
+  bkashAppSecret: string;
+  bkashUsername: string;
+  bkashPassword: string;
 };
 
 const INITIAL: SiteSettingsForm = {
@@ -55,17 +63,62 @@ const INITIAL: SiteSettingsForm = {
   logoUrl: "",
   faviconUrl: "",
   ogImageUrl: "",
+  whatsappLink: "",
+  tawkToLink: "",
+  showPlaceOrderButton: true,
+  showBkashCheckoutButton: false,
   noticeEnabled: false,
   noticeText: "",
   siteTheme: DEFAULT_SITE_THEME,
   productCardVariant: DEFAULT_PRODUCT_CARD_VARIANT,
   productDetailsVariant: DEFAULT_PRODUCT_DETAILS_VARIANT,
+  bkashAppKey: "",
+  bkashAppSecret: "",
+  bkashUsername: "",
+  bkashPassword: "",
 };
+
+function buildSiteSettingsPayload(form: SiteSettingsForm) {
+  const payload: Record<string, unknown> = {
+    siteTitle: form.siteTitle,
+    metaDescription: form.metaDescription,
+    logoUrl: form.logoUrl,
+    faviconUrl: form.faviconUrl,
+    ogImageUrl: form.ogImageUrl,
+    whatsappLink: form.whatsappLink.trim(),
+    tawkToLink: form.tawkToLink.trim(),
+    showPlaceOrderButton: form.showPlaceOrderButton,
+    showBkashCheckoutButton: form.showBkashCheckoutButton,
+    noticeEnabled: form.noticeEnabled,
+    noticeText: form.noticeText,
+    siteTheme: form.siteTheme,
+    productCardVariant: form.productCardVariant,
+    productDetailsVariant: form.productDetailsVariant,
+  };
+
+  const secretFields = {
+    bkashAppKey: form.bkashAppKey.trim(),
+    bkashAppSecret: form.bkashAppSecret.trim(),
+    bkashUsername: form.bkashUsername.trim(),
+    bkashPassword: form.bkashPassword.trim(),
+  };
+
+  for (const [key, value] of Object.entries(secretFields)) {
+    if (value) {
+      payload[key] = value;
+    }
+  }
+
+  return payload;
+}
 
 const FLAT_FIELD_STYLE = { boxShadow: "none" } as const;
 
 const COLLAPSIBLE_SECTION_IDS = [
   "brand-seo",
+  "checkout-controls",
+  "contact-launcher",
+  "bkash-gateway",
   "appearance",
   "appearance-theme",
   "appearance-card",
@@ -102,11 +155,19 @@ export default function SiteSettingsPage() {
             logoUrl: data.logoUrl || "",
             faviconUrl: data.faviconUrl || "",
             ogImageUrl: data.ogImageUrl || "",
+            whatsappLink: data.whatsappLink || "",
+            tawkToLink: data.tawkToLink || "",
+            showPlaceOrderButton: data.showPlaceOrderButton ?? true,
+            showBkashCheckoutButton: data.showBkashCheckoutButton ?? false,
             noticeEnabled: data.noticeEnabled ?? false,
             noticeText: data.noticeText || "",
             siteTheme: appearance.siteTheme,
             productCardVariant: appearance.productCardVariant,
             productDetailsVariant: appearance.productDetailsVariant,
+            bkashAppKey: "",
+            bkashAppSecret: "",
+            bkashUsername: "",
+            bkashPassword: "",
           });
           setExists(true);
         }
@@ -120,16 +181,24 @@ export default function SiteSettingsPage() {
 
   const saveMutation = useMutation({
     mutationFn: async () => {
+      const payload = buildSiteSettingsPayload(form);
       if (exists) {
-        return updateSiteSettings(form);
+        return updateSiteSettings(payload);
       }
-      return createSiteSettings(form);
+      return createSiteSettings(payload);
     },
     onSuccess: (result) => {
       const [data, error] = result as [unknown, unknown];
       if (data) {
         toast.success("Site settings saved");
         setExists(true);
+        setForm((prev) => ({
+          ...prev,
+          bkashAppKey: "",
+          bkashAppSecret: "",
+          bkashUsername: "",
+          bkashPassword: "",
+        }));
         router.refresh();
       } else {
         toast.error(
@@ -142,6 +211,12 @@ export default function SiteSettingsPage() {
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
+
+    if (form.whatsappLink.trim() && form.tawkToLink.trim()) {
+      toast.error("Use either a WhatsApp link or a Tawk.to link, not both.");
+      return;
+    }
+
     saveMutation.mutate();
   };
 
@@ -294,6 +369,236 @@ export default function SiteSettingsPage() {
             hint="Recommended: 1200x630 (1.91:1) for social sharing previews."
             previewClassName="h-36 w-full rounded-md object-cover"
           />
+        </CollapsibleBlock>
+
+        <CollapsibleBlock
+          title="Checkout Controls"
+          description="Control which checkout actions customers see and whether bKash is offered beside the regular place-order flow."
+          collapsed={collapsedSections["checkout-controls"]}
+          onToggle={() => toggleSection("checkout-controls")}
+        >
+          <div className="grid gap-4 lg:grid-cols-2">
+            <div className="rounded-2xl bg-background px-4 py-4">
+              <div className="flex items-center gap-3">
+                <Checkbox
+                  id="showPlaceOrderButton"
+                  checked={form.showPlaceOrderButton}
+                  onCheckedChange={(checked) =>
+                    updateField("showPlaceOrderButton", checked === true)
+                  }
+                />
+                <div className="space-y-1">
+                  <Label htmlFor="showPlaceOrderButton">
+                    Show place-order button
+                  </Label>
+                  <p className="text-xs text-muted-foreground">
+                    Keeps the standard pending-order flow visible in checkout.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-2xl bg-background px-4 py-4">
+              <div className="flex items-center gap-3">
+                <Checkbox
+                  id="showBkashCheckoutButton"
+                  checked={form.showBkashCheckoutButton}
+                  onCheckedChange={(checked) =>
+                    updateField("showBkashCheckoutButton", checked === true)
+                  }
+                />
+                <div className="space-y-1">
+                  <Label htmlFor="showBkashCheckoutButton">
+                    Show bKash checkout button
+                  </Label>
+                  <p className="text-xs text-muted-foreground">
+                    Lets customers pay the configured bKash amount now and keep
+                    the remaining balance due later.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="rounded-[24px] border border-dashed border-primary/30 bg-primary/5 px-4 py-4">
+            <p className="text-sm font-semibold text-foreground">
+              Checkout button preview
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Customers will only see the buttons enabled here. bKash still
+              requires saved credentials below before the payment session can be
+              created.
+            </p>
+            <div className="mt-4 flex flex-wrap gap-3">
+              {form.showPlaceOrderButton ? (
+                <div className="rounded-full bg-foreground px-4 py-2 text-xs font-semibold text-background">
+                  Place order
+                </div>
+              ) : null}
+              {form.showBkashCheckoutButton ? (
+                <div className="rounded-full border border-[#E2136E]/25 bg-[#E2136E]/10 px-4 py-2 text-xs font-semibold text-[#B10F57]">
+                  Checkout with bKash
+                </div>
+              ) : null}
+              {!form.showPlaceOrderButton && !form.showBkashCheckoutButton ? (
+                <div className="rounded-full bg-muted px-4 py-2 text-xs font-medium text-muted-foreground">
+                  No checkout button visible
+                </div>
+              ) : null}
+            </div>
+          </div>
+        </CollapsibleBlock>
+
+        <CollapsibleBlock
+          title="Support Contact Launcher"
+          description="Pick one floating support shortcut for the storefront. WhatsApp and Tawk.to are mutually exclusive."
+          collapsed={collapsedSections["contact-launcher"]}
+          onToggle={() => toggleSection("contact-launcher")}
+        >
+          <div className="grid gap-4 lg:grid-cols-2">
+            <div className="space-y-2">
+              <Label htmlFor="whatsappLink">WhatsApp Link</Label>
+              <Input
+                id="whatsappLink"
+                placeholder="https://wa.me/8801900000000"
+                value={form.whatsappLink}
+                onChange={(event) =>
+                  updateField("whatsappLink", event.target.value)
+                }
+                disabled={
+                  Boolean(form.tawkToLink.trim()) && !form.whatsappLink.trim()
+                }
+                className="h-11 rounded-2xl border-0 bg-background"
+                style={FLAT_FIELD_STYLE}
+              />
+              <p className="text-xs text-muted-foreground">
+                Best for direct mobile chat. Clear the Tawk.to field first if
+                you want to use this option.
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="tawkToLink">Tawk.to Link</Label>
+              <Input
+                id="tawkToLink"
+                placeholder="https://tawk.to/chat/..."
+                value={form.tawkToLink}
+                onChange={(event) => updateField("tawkToLink", event.target.value)}
+                disabled={
+                  Boolean(form.whatsappLink.trim()) && !form.tawkToLink.trim()
+                }
+                className="h-11 rounded-2xl border-0 bg-background"
+                style={FLAT_FIELD_STYLE}
+              />
+              <p className="text-xs text-muted-foreground">
+                Use this when you want a general live-chat entry point instead
+                of WhatsApp.
+              </p>
+            </div>
+          </div>
+
+          <div className="rounded-[24px] border border-dashed border-foreground/10 bg-background px-4 py-4">
+            <p className="text-sm font-semibold text-foreground">
+              Floating button preview
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              A single launcher appears fixed at the bottom-right of storefront
+              pages.
+            </p>
+            <div className="mt-4 flex flex-wrap gap-3">
+              {form.whatsappLink.trim() ? (
+                <div className="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-4 py-2 text-xs font-semibold text-emerald-700">
+                  WhatsApp chat button
+                </div>
+              ) : null}
+              {form.tawkToLink.trim() ? (
+                <div className="rounded-full border border-sky-500/20 bg-sky-500/10 px-4 py-2 text-xs font-semibold text-sky-700">
+                  Tawk.to chat button
+                </div>
+              ) : null}
+              {!form.whatsappLink.trim() && !form.tawkToLink.trim() ? (
+                <div className="rounded-full bg-muted px-4 py-2 text-xs font-medium text-muted-foreground">
+                  No support launcher visible
+                </div>
+              ) : null}
+            </div>
+          </div>
+        </CollapsibleBlock>
+
+        <CollapsibleBlock
+          title="bKash Gateway"
+          description="Store the internal bKash credentials used by the backend. These values are write-only and are never returned to the frontend after save."
+          collapsed={collapsedSections["bkash-gateway"]}
+          onToggle={() => toggleSection("bkash-gateway")}
+        >
+          <div className="rounded-[24px] border border-dashed border-[#E2136E]/30 bg-[linear-gradient(135deg,rgba(226,19,110,0.08),rgba(255,255,255,0.92))] px-4 py-4">
+            <p className="text-sm font-semibold text-foreground">
+              Write-only credential storage
+            </p>
+            <p className="mt-1 text-xs leading-5 text-muted-foreground">
+              Saved values stay hidden. Enter new values only for the fields you
+              want to set or replace. Leaving a field empty keeps the currently
+              stored secret unchanged.
+            </p>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="space-y-2">
+              <Label htmlFor="bkashAppKey">bKash App Key</Label>
+              <Input
+                id="bkashAppKey"
+                placeholder="Enter app key"
+                value={form.bkashAppKey}
+                onChange={(event) => updateField("bkashAppKey", event.target.value)}
+                className="h-11 rounded-2xl border-0 bg-background"
+                style={FLAT_FIELD_STYLE}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="bkashAppSecret">bKash App Secret</Label>
+              <Input
+                id="bkashAppSecret"
+                type="password"
+                placeholder="Enter app secret"
+                value={form.bkashAppSecret}
+                onChange={(event) =>
+                  updateField("bkashAppSecret", event.target.value)
+                }
+                className="h-11 rounded-2xl border-0 bg-background"
+                style={FLAT_FIELD_STYLE}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="bkashUsername">bKash Username</Label>
+              <Input
+                id="bkashUsername"
+                placeholder="Enter username"
+                value={form.bkashUsername}
+                onChange={(event) =>
+                  updateField("bkashUsername", event.target.value)
+                }
+                className="h-11 rounded-2xl border-0 bg-background"
+                style={FLAT_FIELD_STYLE}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="bkashPassword">bKash Password</Label>
+              <Input
+                id="bkashPassword"
+                type="password"
+                placeholder="Enter password"
+                value={form.bkashPassword}
+                onChange={(event) =>
+                  updateField("bkashPassword", event.target.value)
+                }
+                className="h-11 rounded-2xl border-0 bg-background"
+                style={FLAT_FIELD_STYLE}
+              />
+            </div>
+          </div>
         </CollapsibleBlock>
 
         <CollapsibleBlock

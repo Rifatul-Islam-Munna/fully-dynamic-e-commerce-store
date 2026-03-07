@@ -12,7 +12,6 @@ export const createEmptyVariant = (): VariantForm => ({
   stock: "0",
   sortOrder: "0",
   isActive: true,
-  attributes: "",
 });
 
 export const createEmptyForm = (): ProductForm => ({
@@ -22,6 +21,7 @@ export const createEmptyForm = (): ProductForm => ({
   slug: "",
   price: "",
   discountPrice: "",
+  orderPayableAmount: "",
   stock: "0",
   richText: "",
   mainNavUrl: "",
@@ -120,6 +120,10 @@ export const mapProductForm = (raw: Record<string, unknown>): ProductForm => {
       raw.discountPrice === null || raw.discountPrice === undefined
         ? ""
         : toNumberString(raw.discountPrice),
+    orderPayableAmount:
+      raw.orderPayableAmount === null || raw.orderPayableAmount === undefined
+        ? ""
+        : toNumberString(raw.orderPayableAmount),
     stock:
       raw.stock === null || raw.stock === undefined ? "" : toNumberString(raw.stock),
     richText: toStringValue(raw.richText),
@@ -128,30 +132,19 @@ export const mapProductForm = (raw: Record<string, unknown>): ProductForm => {
     hasVariants: toBool(raw.hasVariants, false),
     variants:
       variantsRaw.length > 0
-        ? variantsRaw.map((variant) => {
-            const attributesRaw = Array.isArray(variant.attributes)
-              ? variant.attributes
-              : variant.attributes && typeof variant.attributes === "object"
-                ? Object.values(variant.attributes as Record<string, unknown>)
-                : [];
-            return {
-              title: toStringValue(variant.title),
-              sku: toStringValue(variant.sku),
-              price: toNumberString(variant.price),
-              discountPrice:
-                variant.discountPrice === null ||
-                variant.discountPrice === undefined
-                  ? ""
-                  : toNumberString(variant.discountPrice),
-              stock: toNumberString(variant.stock),
-              sortOrder: toNumberString(variant.sortOrder),
-              isActive: toBool(variant.isActive, true),
-              attributes: attributesRaw
-                .map((item) => toStringValue(item).trim())
-                .filter(Boolean)
-                .join(", "),
-            };
-          })
+        ? variantsRaw.map((variant) => ({
+            title: toStringValue(variant.title),
+            sku: toStringValue(variant.sku),
+            price: toNumberString(variant.price),
+            discountPrice:
+              variant.discountPrice === null ||
+              variant.discountPrice === undefined
+                ? ""
+                : toNumberString(variant.discountPrice),
+            stock: toNumberString(variant.stock),
+            sortOrder: toNumberString(variant.sortOrder),
+            isActive: toBool(variant.isActive, true),
+          }))
         : [createEmptyVariant()],
     isActive: toBool(raw.isActive, true),
     isHotSells: toBool(raw.isHotSells, false),
@@ -169,12 +162,22 @@ export function buildPayload(form: ProductForm) {
   const subNavUrl = form.subNavUrl.trim();
   const price = parseNumber(form.price, "Price");
   const discountPrice = parseOptionalNumber(form.discountPrice, "Discount price");
+  const orderPayableAmount = parseOptionalNumber(
+    form.orderPayableAmount,
+    "Order payable amount",
+  );
+  const currentSellPrice = discountPrice ?? price;
 
   if (!thumbnailUrl) throw new Error("Thumbnail URL is required");
   if (!title) throw new Error("Title is required");
   if (!mainNavUrl) throw new Error("Main navbar assignment is required");
   if (discountPrice !== null && discountPrice > price) {
     throw new Error("Discount price cannot be greater than price");
+  }
+  if (orderPayableAmount !== null && orderPayableAmount > currentSellPrice) {
+    throw new Error(
+      "Order payable amount cannot be greater than the current sell price",
+    );
   }
 
   const imageUrls = form.imageGallery
@@ -187,6 +190,7 @@ export function buildPayload(form: ProductForm) {
     title,
     price,
     discountPrice,
+    orderPayableAmount,
     richText: form.richText || "<p></p>",
     mainNavUrl,
     subNavUrl: subNavUrl || undefined,
@@ -213,6 +217,8 @@ export function buildPayload(form: ProductForm) {
       throw new Error("At least one variant is required");
     }
 
+    let lowestVariantSellPrice = Number.POSITIVE_INFINITY;
+
     payload.variants = form.variants.map((variant, index) => {
       const variantTitle = variant.title.trim();
       if (!variantTitle) {
@@ -234,10 +240,10 @@ export function buildPayload(form: ProductForm) {
         );
       }
 
-      const attributes = variant.attributes
-        .split(",")
-        .map((item) => item.trim())
-        .filter(Boolean);
+      lowestVariantSellPrice = Math.min(
+        lowestVariantSellPrice,
+        variantDiscountPrice ?? variantPrice,
+      );
 
       return {
         title: variantTitle,
@@ -250,9 +256,18 @@ export function buildPayload(form: ProductForm) {
           `Variant #${index + 1} sort order`,
         ),
         isActive: variant.isActive,
-        attributes,
       };
     });
+
+    if (
+      orderPayableAmount !== null &&
+      Number.isFinite(lowestVariantSellPrice) &&
+      orderPayableAmount > lowestVariantSellPrice
+    ) {
+      throw new Error(
+        "Order payable amount cannot be greater than the lowest variant sell price",
+      );
+    }
   }
 
   return payload;

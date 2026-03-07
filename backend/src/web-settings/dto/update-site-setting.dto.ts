@@ -77,6 +77,40 @@ export class UpdateSiteSettingDto {
   ogImageUrl?: string;
 
   @ApiPropertyOptional({
+    description: 'Optional WhatsApp support link for the floating contact button',
+    example: 'https://wa.me/8801900000000',
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(500)
+  whatsappLink?: string;
+
+  @ApiPropertyOptional({
+    description: 'Optional Tawk.to support link for the floating contact button',
+    example: 'https://tawk.to/chat/example/default',
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(500)
+  tawkToLink?: string;
+
+  @ApiPropertyOptional({
+    description: 'Whether customers can use the regular place-order button',
+    example: true,
+  })
+  @IsOptional()
+  @IsBoolean()
+  showPlaceOrderButton?: boolean;
+
+  @ApiPropertyOptional({
+    description: 'Whether customers can use the bKash checkout button',
+    example: false,
+  })
+  @IsOptional()
+  @IsBoolean()
+  showBkashCheckoutButton?: boolean;
+
+  @ApiPropertyOptional({
     description: 'Enable top-site notice bar',
     example: true,
   })
@@ -122,6 +156,42 @@ export class UpdateSiteSettingDto {
   @IsString()
   @IsIn([...PRODUCT_DETAILS_VARIANT_VALUES])
   productDetailsVariant?: string;
+
+  @ApiPropertyOptional({
+    description: 'Write-only bKash app key stored for internal payment use',
+    example: 'sandbox_app_key',
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(255)
+  bkashAppKey?: string;
+
+  @ApiPropertyOptional({
+    description: 'Write-only bKash app secret stored for internal payment use',
+    example: 'sandbox_app_secret',
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(255)
+  bkashAppSecret?: string;
+
+  @ApiPropertyOptional({
+    description: 'Write-only bKash username stored for internal payment use',
+    example: 'sandbox_username',
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(255)
+  bkashUsername?: string;
+
+  @ApiPropertyOptional({
+    description: 'Write-only bKash password stored for internal payment use',
+    example: 'sandbox_password',
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(255)
+  bkashPassword?: string;
 
   @ApiPropertyOptional({
     description: 'Whether this config is active',

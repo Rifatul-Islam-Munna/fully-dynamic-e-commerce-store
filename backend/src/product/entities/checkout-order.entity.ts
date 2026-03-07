@@ -26,6 +26,17 @@ export enum CheckoutOrderStatus {
   CANCELLED = 'cancelled',
 }
 
+export enum CheckoutPaymentMethod {
+  PLACE_ORDER = 'place_order',
+  BKASH = 'bkash',
+}
+
+export enum CheckoutPaymentStatus {
+  UNPAID = 'unpaid',
+  PARTIAL_PAID = 'partial_paid',
+  PAID = 'paid',
+}
+
 @Entity('checkout_orders')
 @Index('idx_checkout_orders_order_number', ['orderNumber'], { unique: true })
 @Index('idx_checkout_orders_user_id', ['userId'])
@@ -103,6 +114,30 @@ export class CheckoutOrder {
   })
   @Column({ type: 'varchar', length: 500 })
   customerAddress: string;
+
+  @ApiProperty({
+    description: 'Checkout payment method',
+    enum: CheckoutPaymentMethod,
+    example: CheckoutPaymentMethod.PLACE_ORDER,
+  })
+  @Column({
+    type: 'enum',
+    enum: CheckoutPaymentMethod,
+    default: CheckoutPaymentMethod.PLACE_ORDER,
+  })
+  paymentMethod: CheckoutPaymentMethod;
+
+  @ApiProperty({
+    description: 'Payment settlement status snapshot',
+    enum: CheckoutPaymentStatus,
+    example: CheckoutPaymentStatus.UNPAID,
+  })
+  @Column({
+    type: 'enum',
+    enum: CheckoutPaymentStatus,
+    default: CheckoutPaymentStatus.UNPAID,
+  })
+  paymentStatus: CheckoutPaymentStatus;
 
   @ApiProperty({
     description: 'Total quantity across all order lines',
@@ -187,6 +222,47 @@ export class CheckoutOrder {
     transformer: NumericTransformer,
   })
   total: number;
+
+  @ApiProperty({
+    description: 'Amount already captured from the customer',
+    example: 300,
+    default: 0,
+  })
+  @Column({
+    type: 'decimal',
+    precision: 12,
+    scale: 2,
+    default: 0,
+    transformer: NumericTransformer,
+  })
+  paidAmount: number;
+
+  @ApiProperty({
+    description: 'Remaining amount still due after any captured payment',
+    example: 3280,
+  })
+  @Column({
+    type: 'decimal',
+    precision: 12,
+    scale: 2,
+    default: 0,
+    transformer: NumericTransformer,
+  })
+  dueAmount: number;
+
+  @ApiPropertyOptional({
+    description: 'Associated bKash payment id when the order used bKash',
+    example: 'TR0011ABCDEF',
+  })
+  @Column({ type: 'varchar', length: 120, nullable: true })
+  bkashPaymentId: string | null;
+
+  @ApiPropertyOptional({
+    description: 'Associated bKash transaction id when the order used bKash',
+    example: '9A12BC34DE',
+  })
+  @Column({ type: 'varchar', length: 120, nullable: true })
+  bkashTransactionId: string | null;
 
   @ManyToOne(() => User, {
     onDelete: 'SET NULL',

@@ -1,6 +1,12 @@
 import { cookies } from "next/headers";
+import { GetRequestNormal } from "@/api-hooks/api-hooks";
 import { CheckoutPageShell } from "@/components/checkout/checkout-page-shell";
 import type { CheckoutPageUser } from "@/lib/checkout";
+
+type CheckoutPageSettings = {
+  showPlaceOrderButton?: boolean;
+  showBkashCheckoutButton?: boolean;
+};
 
 function parseUserCookie(value?: string) {
   if (!value) {
@@ -28,9 +34,33 @@ function parseUserCookie(value?: string) {
   }
 }
 
+async function getCheckoutPageSettings() {
+  try {
+    return await GetRequestNormal<CheckoutPageSettings>(
+      "/web-settings/site?key=default",
+      0,
+      "checkout-page-settings",
+    );
+  } catch {
+    return null;
+  }
+}
+
 export default async function CheckoutPage() {
-  const cookieStore = await cookies();
+  const [cookieStore, checkoutSettings] = await Promise.all([
+    cookies(),
+    getCheckoutPageSettings(),
+  ]);
   const initialUser = parseUserCookie(cookieStore.get("user")?.value);
 
-  return <CheckoutPageShell initialUser={initialUser} />;
+  return (
+    <CheckoutPageShell
+      initialUser={initialUser}
+      checkoutSettings={{
+        showPlaceOrderButton: checkoutSettings?.showPlaceOrderButton ?? true,
+        showBkashCheckoutButton:
+          checkoutSettings?.showBkashCheckoutButton ?? false,
+      }}
+    />
+  );
 }
