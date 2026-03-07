@@ -192,6 +192,31 @@ export const PRODUCT_CARD_VARIANT_OPTIONS = [
     label: "Minimal",
     description: "Lean lightweight card for clean dense collections.",
   },
+  {
+    value: "brutalist",
+    label: "Brutalist",
+    description: "Raw structural card with thick borders and high contrast.",
+  },
+  {
+    value: "luxury",
+    label: "Luxury",
+    description: "Refined, spacious card with elegant typography and subtle styling.",
+  },
+  {
+    value: "tech_focus",
+    label: "Tech Focus",
+    description: "Precision-driven dark mode aesthetic with inset shadows.",
+  },
+  {
+    value: "neo_brutalist",
+    label: "Neo-Brutalist",
+    description: "Playful blocky shapes and punchy colors on standard grids.",
+  },
+  {
+    value: "modern_glass",
+    label: "Modern Glass",
+    description: "Deep blur backdrops and translucent floating layers.",
+  },
 ] as const;
 
 export const PRODUCT_DETAILS_VARIANT_OPTIONS = [
@@ -284,6 +309,26 @@ export const PRODUCT_DETAILS_VARIANT_OPTIONS = [
     value: "merchant_brief",
     label: "Merchant Brief",
     description: "A compact trade-style layout with direct actions and the description close to the buy flow.",
+  },
+  {
+    value: "editorial",
+    label: "Editorial",
+    description: "A magazine-style layout focusing on massive typography and asymmetrical flow.",
+  },
+  {
+    value: "brutalist",
+    label: "Brutalist",
+    description: "A stark, aggressive layout with heavy borders, zero border-radius, and harsh grid lines.",
+  },
+  {
+    value: "luxury",
+    label: "Luxury",
+    description: "A soft, elegant structure utilizing sticky overlapping panels and delicate framing.",
+  },
+  {
+    value: "tech_focus",
+    label: "Tech Focus",
+    description: "A dense, dashboard-like presentation packed tightly into an organized, functional grid.",
   },
 ] as const;
 

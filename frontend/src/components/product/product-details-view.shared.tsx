@@ -114,16 +114,29 @@ export function HeaderCluster({
   showCategoryLinks = false,
   highlightSummary = false,
   wide = false,
+  emphasis = "default",
 }: LayoutProps & {
   showCategoryLinks?: boolean;
   highlightSummary?: boolean;
   wide?: boolean;
+  emphasis?: "default" | "brutalist" | "luxury" | "tech" | "glass" | "minimal";
 }) {
   return (
     <section
       className={cn(
-        "rounded-[28px] bg-muted/18 p-5 sm:p-6",
-        wide ? "xl:p-7" : "",
+        "p-5 sm:p-6",
+        wide ? "xl:p-8" : "",
+        emphasis === "brutalist"
+          ? "border-b-4 border-primary bg-background pb-8"
+          : emphasis === "luxury"
+            ? "border-b border-border/40 bg-transparent pb-10"
+            : emphasis === "tech"
+              ? "rounded-none border-l-2 border-primary/50 bg-linear-to-r from-primary/5 to-transparent pl-6"
+              : emphasis === "glass"
+                ? "rounded-[32px] border border-white/10 bg-white/5 backdrop-blur-2xl"
+                : emphasis === "minimal"
+                  ? "bg-transparent p-0 sm:p-0"
+                  : "rounded-[28px] bg-muted/18",
       )}
     >
       <Breadcrumbs
@@ -187,17 +200,32 @@ export function PurchasePanel({
   emphasis = "default",
 }: LayoutProps & {
   compact?: boolean;
-  emphasis?: "default" | "summary" | "order";
+  emphasis?:
+    | "default"
+    | "summary"
+    | "order"
+    | "glass"
+    | "brutalist"
+    | "luxury"
+    | "tech";
 }) {
   return (
     <section
       className={cn(
-        "rounded-[28px] p-5 sm:p-6",
-        emphasis === "order"
-          ? "bg-background"
-          : emphasis === "summary"
-            ? "bg-muted/22"
-            : "bg-card",
+        "p-5 sm:p-6",
+        emphasis === "brutalist"
+          ? "border-4 border-primary bg-background shadow-[8px_8px_0_0_var(--color-primary)]"
+          : emphasis === "luxury"
+            ? "rounded-sm border border-border/50 bg-background/50 backdrop-blur-xl shadow-sm"
+            : emphasis === "tech"
+              ? "rounded-lg border border-primary/20 bg-background/95 shadow-[inset_0_0_20px_rgba(var(--primary),0.05)] ring-1 ring-primary/10"
+              : emphasis === "glass"
+                ? "rounded-[32px] border border-white/10 bg-white/5 backdrop-blur-2xl shadow-2xl"
+                : emphasis === "order"
+                  ? "rounded-[28px] bg-background"
+                  : emphasis === "summary"
+                    ? "rounded-[28px] bg-muted/22"
+                    : "rounded-[28px] bg-card",
       )}
     >
       <div className="space-y-4">
@@ -255,11 +283,15 @@ export function CommerceFactsRow({
     >
       <FactCard
         label="Pricing"
-        value={view.hasVariants ? `From ${view.priceRangeText}` : view.priceRangeText}
+        value={
+          view.hasVariants ? `From ${view.priceRangeText}` : view.priceRangeText
+        }
       />
       <FactCard
         label="Options"
-        value={view.hasVariants ? `${variants.length} variants` : "Single option"}
+        value={
+          view.hasVariants ? `${variants.length} variants` : "Single option"
+        }
       />
       <FactCard
         label="Offer"
@@ -273,15 +305,9 @@ export function CommerceFactsRow({
   );
 }
 
-export function FactCard({
-  label,
-  value,
-}: {
-  label: string;
-  value: string;
-}) {
+export function FactCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl bg-background px-3 py-3">
+    <div className="rounded-2xl bg-background px-3 py-3 transition-transform duration-300 hover:-translate-y-0.5 hover:shadow-sm">
       <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
         {label}
       </p>
@@ -355,13 +381,7 @@ export function TrustList({ compact = false }: { compact?: boolean }) {
   );
 }
 
-export function TrustLine({
-  icon,
-  text,
-}: {
-  icon: ReactNode;
-  text: string;
-}) {
+export function TrustLine({ icon, text }: { icon: ReactNode; text: string }) {
   return (
     <div className="flex items-center gap-2 text-muted-foreground">
       {icon}
@@ -380,7 +400,7 @@ export function ServicePill({
   text: string;
 }) {
   return (
-    <div className="rounded-2xl bg-background px-3 py-3">
+    <div className="rounded-2xl bg-background px-3 py-3 transition-all duration-300 hover:scale-[1.02] hover:shadow-md">
       <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
         {icon}
         {title}
@@ -429,16 +449,38 @@ export function InlineRichDescription({
 
 export function DescriptionSection({
   richText,
+  emphasis = "default",
 }: {
   richText?: string | null;
+  emphasis?: "default" | "brutalist" | "luxury" | "tech" | "minimal";
 }) {
   return (
-    <section className="rounded-[28px] bg-card p-5 sm:p-6">
-      <h2 className="text-base font-semibold tracking-tight">Product Details</h2>
+    <section
+      className={cn(
+        "p-5 sm:p-6",
+        emphasis === "brutalist"
+          ? "border-4 border-primary bg-background shadow-[8px_8px_0_0_var(--color-primary)]"
+          : emphasis === "luxury"
+            ? "border-t border-border/40 bg-transparent pt-8 p-0 sm:p-0"
+            : emphasis === "tech"
+              ? "rounded-lg border border-primary/20 bg-background/50 font-mono text-sm"
+              : emphasis === "minimal"
+                ? "bg-transparent p-0 sm:p-0"
+                : "rounded-[28px] bg-card",
+      )}
+    >
+      <h2 className="text-base font-semibold tracking-tight">
+        Product Details
+      </h2>
       {richText?.trim() ? (
         <div className="mt-4 overflow-x-auto">
           <article
-            className="product-rich-content prose prose-sm max-w-none text-foreground"
+            className={cn(
+              "product-rich-content prose prose-sm max-w-none text-foreground",
+              emphasis === "luxury"
+                ? "prose-headings:font-serif prose-p:leading-relaxed"
+                : "",
+            )}
             dangerouslySetInnerHTML={{ __html: richText }}
           />
         </div>

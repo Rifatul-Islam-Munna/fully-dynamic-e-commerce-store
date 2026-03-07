@@ -45,6 +45,11 @@ export const PRODUCT_CARD_VARIANT_VALUES = [
   'spotlight',
   'stacked',
   'minimal',
+  'brutalist',
+  'luxury',
+  'tech_focus',
+  'neo_brutalist',
+  'modern_glass',
 ] as const;
 
 export const PRODUCT_DETAILS_VARIANT_VALUES = [
@@ -66,6 +71,10 @@ export const PRODUCT_DETAILS_VARIANT_VALUES = [
   'overview_split',
   'gallery_stack',
   'merchant_brief',
+  'editorial',
+  'brutalist',
+  'luxury',
+  'tech_focus',
 ] as const;
 
 @Entity('site_settings')

@@ -80,7 +80,7 @@ function PricePill({
   return (
     <div
       className={cn(
-        "inline-flex items-end gap-2 rounded-[16px] bg-background/90 px-3 py-2 text-foreground backdrop-blur-[6px]",
+        "inline-flex items-end gap-2 rounded-3xl bg-background/90 px-3 py-2 text-foreground backdrop-blur-[6px]",
         className,
       )}
     >
@@ -287,6 +287,16 @@ export function ProductCard({ product }: ProductCardProps) {
       return <StackedCard product={product} />;
     case "minimal":
       return <MinimalCard product={product} />;
+    case "brutalist":
+      return <BrutalistCard product={product} />;
+    case "luxury":
+      return <LuxuryCard product={product} />;
+    case "tech_focus":
+      return <TechFocusCard product={product} />;
+    case "neo_brutalist":
+      return <NeoBrutalistCard product={product} />;
+    case "modern_glass":
+      return <ModernGlassCard product={product} />;
     default:
       return <ClassicCard product={product} />;
   }
@@ -296,10 +306,13 @@ function ClassicCard({ product }: ProductCardProps) {
   const { currentPrice, hasDiscount, savedPercent } = getPricing(product);
 
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-[20px] bg-background/95 transition-colors duration-200 hover:bg-background">
+    <article className="group flex h-full flex-col overflow-hidden rounded-4xl bg-background/95 transition-colors duration-200 hover:bg-background">
       <ProductImageLink product={product} imageClassName="h-36 sm:h-44">
         {hasDiscount ? (
-          <DiscountBadge savedPercent={savedPercent} className="right-2 top-2" />
+          <DiscountBadge
+            savedPercent={savedPercent}
+            className="right-2 top-2"
+          />
         ) : null}
         <div className="pointer-events-none absolute bottom-2 left-2 z-10">
           <PricePill currentPrice={currentPrice} price={product.price} />
@@ -354,7 +367,7 @@ function EditorialCard({ product }: ProductCardProps) {
           <DiscountBadge savedPercent={savedPercent} className="left-2 top-2" />
         ) : null}
 
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black/72 via-black/28 to-transparent px-3 pb-3 pt-10 text-white">
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 bg-linear-to-t from-black/72 via-black/28 to-transparent px-3 pb-3 pt-10 text-white">
           <p className="line-clamp-2 text-sm font-semibold leading-5">
             {product.title}
           </p>
@@ -394,7 +407,7 @@ function PriceStripCard({ product }: ProductCardProps) {
   const pricing = getPricing(product);
 
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-[20px] bg-background">
+    <article className="group flex h-full flex-col overflow-hidden rounded-4xl bg-background">
       <ProductImageLink product={product} imageClassName="h-36 sm:h-40" />
 
       <div className="flex flex-1 flex-col gap-2.5 p-3">
@@ -415,7 +428,7 @@ function BadgeFocusCard({ product }: ProductCardProps) {
   const pricing = getPricing(product);
 
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-[20px] bg-background">
+    <article className="group flex h-full flex-col overflow-hidden rounded-4xl bg-background">
       <ProductImageLink product={product} imageClassName="h-36 sm:h-40">
         {pricing.hasDiscount ? (
           <DiscountBadge
@@ -476,7 +489,7 @@ function StackedCard({ product }: ProductCardProps) {
   const pricing = getPricing(product);
 
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-[20px] bg-background">
+    <article className="group flex h-full flex-col overflow-hidden rounded-4xl bg-background">
       <ProductImageLink product={product} imageClassName="h-32 sm:h-36" />
 
       <div className="flex flex-1 flex-col gap-2.5 p-3">
@@ -523,6 +536,252 @@ function MinimalCard({ product }: ProductCardProps) {
   );
 }
 
+function BrutalistCard({ product }: ProductCardProps) {
+  const pricing = getPricing(product);
+
+  return (
+    <article className="group flex h-full flex-col font-mono border-4 border-primary bg-background shadow-[6px_6px_0_0_var(--color-primary)] transition-transform duration-200 hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[10px_10px_0_0_var(--color-primary)]">
+      <ProductImageLink
+        product={product}
+        imageClassName="h-44 sm:h-52"
+        className="rounded-none border-b-4 border-primary shadow-none"
+      >
+        {pricing.hasDiscount ? (
+          <DiscountBadge
+            savedPercent={pricing.savedPercent}
+            className="right-3 top-3 rounded-none border-2 border-primary bg-emerald-400 px-3 py-1.5 text-[10px] text-primary"
+            label={`${pricing.savedPercent}% OFF`}
+          />
+        ) : null}
+      </ProductImageLink>
+
+      <div className="flex flex-1 flex-col p-4">
+        <TitleLink
+          product={product}
+          className="mb-4 text-sm sm:text-base font-bold uppercase"
+        />
+        <PriceRow
+          currentPrice={pricing.currentPrice}
+          price={product.price}
+          savedPercent={pricing.savedPercent}
+          hasDiscount={pricing.hasDiscount}
+          emphasize
+          className="mb-6 font-bold"
+        />
+        <div className="mt-auto">
+          <AddToCartButton
+            product={product}
+            variant="default"
+            className="h-12 w-full rounded-none border-2 border-primary bg-primary px-4 text-sm font-bold uppercase shadow-none transition-colors hover:bg-background hover:text-primary"
+            label="+++ BUY NOW +++"
+          />
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function LuxuryCard({ product }: ProductCardProps) {
+  const pricing = getPricing(product);
+
+  return (
+    <article className="group flex h-full flex-col overflow-hidden rounded-sm border border-border/40 bg-background/50 backdrop-blur-xl transition-all duration-500 hover:border-border/80 hover:shadow-xl">
+      <ProductImageLink
+        product={product}
+        imageClassName="h-56 sm:h-64 scale-95 transition-transform duration-700 group-hover:scale-100"
+        className="bg-transparent"
+      >
+        {pricing.hasDiscount ? (
+          <DiscountBadge
+            savedPercent={pricing.savedPercent}
+            className="left-4 top-4 bg-foreground/90 font-serif font-normal tracking-widest text-background"
+          />
+        ) : null}
+      </ProductImageLink>
+
+      <div className="flex flex-1 flex-col items-center justify-center p-6 text-center">
+        <TitleLink
+          product={product}
+          className="mb-3 font-serif text-base sm:text-lg tracking-wide hover:text-muted-foreground"
+        />
+        <PriceRow
+          currentPrice={pricing.currentPrice}
+          price={product.price}
+          savedPercent={pricing.savedPercent}
+          hasDiscount={pricing.hasDiscount}
+          className="mb-5 justify-center font-light tracking-wider"
+        />
+        <div className="mt-auto w-full max-w-50 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+          <AddToCartButton
+            product={product}
+            variant="outline"
+            className="h-10 w-full rounded-sm border-foreground text-xs uppercase tracking-widest hover:bg-foreground hover:text-background"
+            label="Add to cart"
+          />
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function TechFocusCard({ product }: ProductCardProps) {
+  const pricing = getPricing(product);
+
+  return (
+    <article className="group flex h-full flex-col overflow-hidden rounded-lg border border-primary/20 bg-background/95 ring-1 ring-primary/5 transition-all duration-300 hover:border-primary/40 hover:shadow-[0_0_30px_rgba(var(--primary),0.1)] hover:ring-primary/10">
+      <ProductImageLink
+        product={product}
+        imageClassName="h-40 sm:h-48 opacity-90 transition-opacity group-hover:opacity-100"
+        className="rounded-none border-b border-primary/10 bg-transparent"
+      >
+        {pricing.hasDiscount ? (
+          <DiscountBadge
+            savedPercent={pricing.savedPercent}
+            className="left-2 top-2 rounded border border-emerald-500/30 bg-emerald-500/10 text-[10px] tracking-wider text-emerald-500 backdrop-blur-md"
+            label={`-${pricing.savedPercent}% DISCOUNT`}
+          />
+        ) : null}
+        <div className="absolute bottom-2 right-2 rounded border border-primary/20 bg-background/80 px-2 py-1 font-mono text-[10px] text-primary backdrop-blur-md">
+          {product.id.slice(0, 8)}
+        </div>
+      </ProductImageLink>
+
+      <div className="flex flex-1 flex-col p-4 font-mono">
+        <TitleLink
+          product={product}
+          className="mb-3 text-xs sm:text-sm text-foreground/90"
+        />
+        <div className="mb-4 flex items-center gap-2 border-l-2 border-primary/50 bg-primary/5 px-3 py-1.5">
+          <span className="text-sm font-semibold text-primary">
+            {formatCurrency(pricing.currentPrice)}
+          </span>
+          {pricing.hasDiscount ? (
+            <span className="text-xs text-muted-foreground line-through">
+              {formatCurrency(product.price)}
+            </span>
+          ) : null}
+        </div>
+
+        <div className="mt-auto grid grid-cols-[1fr_auto] gap-2">
+          <AddToCartButton
+            product={product}
+            variant="default"
+            className="h-9 rounded border border-primary bg-primary/10 text-xs text-primary shadow-none transition-colors hover:bg-primary/20 hover:text-primary"
+            label="INIT_CART_ADD"
+          />
+          <Link
+            href={getProductHref(product.slug)}
+            className="flex h-9 w-9 items-center justify-center rounded border border-primary/20 bg-background hover:bg-muted"
+          >
+            <ArrowUpRight className="size-4 text-primary" />
+          </Link>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function NeoBrutalistCard({ product }: ProductCardProps) {
+  const pricing = getPricing(product);
+
+  return (
+    <article className="group flex h-full flex-col overflow-hidden rounded-3xl border-4 border-foreground bg-[#FFB6B9] shadow-[6px_6px_0_0_var(--color-foreground)] transition-transform hover:-translate-y-1 hover:shadow-[8px_8px_0_0_var(--color-foreground)]">
+      <ProductImageLink
+        product={product}
+        imageClassName="h-40 sm:h-48"
+        className="m-3 rounded-2xl border-4 border-foreground bg-background shadow-[4px_4px_0_0_var(--color-foreground)]"
+      >
+        {pricing.hasDiscount ? (
+          <DiscountBadge
+            savedPercent={pricing.savedPercent}
+            className="right-2 top-2 rounded-full border-2 border-foreground bg-[#FAE3D9] px-3 py-1 text-xs font-black tracking-widest text-foreground shadow-[2px_2px_0_0_var(--color-foreground)]"
+            label={`-${pricing.savedPercent}%`}
+          />
+        ) : null}
+      </ProductImageLink>
+
+      <div className="flex flex-1 flex-col p-4 pt-1">
+        <TitleLink
+          product={product}
+          className="mb-2 text-base font-black uppercase text-foreground"
+        />
+        <div className="mb-4 flex items-center gap-2 rounded-xl border-2 border-foreground bg-background px-3 py-2 shadow-[2px_2px_0_0_var(--color-foreground)]">
+          <span className="text-lg font-black text-foreground">
+            {formatCurrency(pricing.currentPrice)}
+          </span>
+          {pricing.hasDiscount ? (
+            <span className="text-sm font-bold text-foreground/60 line-through">
+              {formatCurrency(product.price)}
+            </span>
+          ) : null}
+        </div>
+
+        <div className="mt-auto">
+          <AddToCartButton
+            product={product}
+            variant="default"
+            className="h-12 w-full rounded-2xl border-4 border-foreground bg-[#8AC6D1] text-sm font-black uppercase text-foreground shadow-[4px_4px_0_0_var(--color-foreground)] transition-transform hover:translate-x-1 hover:translate-y-1 hover:shadow-none"
+            label="SNAG IT!"
+          />
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function ModernGlassCard({ product }: ProductCardProps) {
+  const pricing = getPricing(product);
+
+  return (
+    <article className="group relative flex h-full flex-col overflow-hidden rounded-[32px] border border-white/20 bg-white/5 shadow-2xl backdrop-blur-3xl transition-all duration-300 hover:border-white/40 hover:bg-white/10 hover:shadow-[0_20px_40px_rgba(0,0,0,0.1)]">
+      <div className="absolute -left-12 -top-12 size-32 rounded-full bg-primary/30 blur-3xl transition-opacity duration-500 group-hover:opacity-70 opacity-30"></div>
+      <div className="absolute -bottom-12 -right-12 size-32 rounded-full bg-secondary/30 blur-3xl transition-opacity duration-500 group-hover:opacity-70 opacity-0"></div>
+
+      <ProductImageLink
+        product={product}
+        imageClassName="h-44 sm:h-56 mix-blend-multiply"
+        className="m-2 rounded-[24px] bg-white/40 shadow-inner backdrop-blur-md"
+      >
+        {pricing.hasDiscount ? (
+          <DiscountBadge
+            savedPercent={pricing.savedPercent}
+            className="left-3 top-3 border border-white/40 bg-white/20 px-3 py-1.5 backdrop-blur-xl text-foreground"
+          />
+        ) : null}
+      </ProductImageLink>
+
+      <div className="relative z-10 flex flex-1 flex-col p-5">
+        <TitleLink
+          product={product}
+          className="mb-2 text-sm sm:text-base font-medium"
+        />
+        <PriceRow
+          currentPrice={pricing.currentPrice}
+          price={product.price}
+          savedPercent={pricing.savedPercent}
+          hasDiscount={pricing.hasDiscount}
+          className="mb-5"
+        />
+
+        <div className="mt-auto grid grid-cols-[1fr_auto] gap-2">
+          <AddToCartButton
+            product={product}
+            variant="default"
+            className="h-11 rounded-4xl bg-foreground/90 px-4 text-xs font-medium text-background shadow-lg backdrop-blur-md transition-transform hover:scale-[1.02]"
+            label="Add to Bag"
+          />
+          <Link
+            href={getProductHref(product.slug)}
+            className="flex h-11 w-11 items-center justify-center rounded-4xl border border-white/20 bg-white/10 backdrop-blur-md transition-colors hover:bg-white/20"
+          >
+            <ArrowUpRight className="size-4" />
+          </Link>
+        </div>
+      </div>
+    </article>
+  );
+}
+
 export function ProductCardPreview({
   title,
   price,
@@ -532,23 +791,51 @@ export function ProductCardPreview({
   price: string;
   variant: ProductCardVariant;
 }) {
-  const hasImageBadge = ["classic", "compact", "editorial", "badge_focus", "spotlight", "minimal"].includes(
-    variant,
-  );
+  const hasImageBadge = [
+    "classic",
+    "compact",
+    "editorial",
+    "badge_focus",
+    "spotlight",
+    "minimal",
+    "brutalist",
+    "luxury",
+    "tech_focus",
+    "neo_brutalist",
+    "modern_glass",
+  ].includes(variant);
   const hasImagePrice = ["classic", "compact"].includes(variant);
-  const isEditorialLike = variant === "editorial";
-  const isTall = variant === "spotlight";
-  const hasPriceBelow = ["price_strip", "badge_focus", "spotlight", "stacked", "minimal"].includes(
+  const isEditorialLike = variant === "editorial" || variant === "luxury";
+  const isTall = ["spotlight", "brutalist", "modern_glass", "luxury"].includes(
     variant,
   );
-  const isStacked = ["spotlight", "stacked"].includes(variant);
+  const hasPriceBelow = [
+    "price_strip",
+    "badge_focus",
+    "spotlight",
+    "stacked",
+    "minimal",
+    "brutalist",
+    "tech_focus",
+    "neo_brutalist",
+  ].includes(variant);
+  const isStacked = [
+    "spotlight",
+    "stacked",
+    "brutalist",
+    "neo_brutalist",
+  ].includes(variant);
 
   return (
     <div className="rounded-2xl bg-background p-3">
       <div
         className={cn(
           "relative overflow-hidden rounded-2xl bg-muted/45",
-          isTall ? "h-28" : variant === "compact" || variant === "minimal" ? "h-20" : "h-24",
+          isTall
+            ? "h-28"
+            : variant === "compact" || variant === "minimal"
+              ? "h-20"
+              : "h-24",
         )}
       >
         {hasImageBadge ? (

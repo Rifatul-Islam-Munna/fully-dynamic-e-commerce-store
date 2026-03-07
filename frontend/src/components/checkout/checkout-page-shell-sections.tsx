@@ -5,7 +5,9 @@ import {
   Loader2,
   MapPinned,
   ReceiptText,
+  ShieldCheck,
   TicketPercent,
+  UserRound,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,62 +31,23 @@ import { type CheckoutFieldErrors } from "@/store/checkout-store";
 
 export function CheckoutBackLink({
   onResetNavigation,
+  onSubmit,
+  isPending,
 }: {
   onResetNavigation: () => void;
+  onSubmit: () => void;
+  isPending: boolean;
 }) {
   return (
-    <div className="mb-4 flex items-center gap-2 text-sm text-muted-foreground">
+    <div className="mb-5 flex items-center gap-2 text-sm text-muted-foreground">
       <Link
         href="/search"
         onClick={onResetNavigation}
-        className="inline-flex items-center gap-2 rounded-full bg-muted/35 px-3 py-2 transition-colors hover:bg-muted/50 hover:text-foreground"
+        className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-4 py-2 transition-colors hover:bg-muted/30 hover:text-foreground"
       >
         <ArrowLeft className="size-4" />
         Continue shopping
       </Link>
-    </div>
-  );
-}
-
-function CheckoutHero({
-  displayTotal,
-  isPending,
-}: {
-  displayTotal: number;
-  isPending: boolean;
-}) {
-  return (
-    <div className="rounded-[28px] bg-background p-4 sm:p-5">
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-        <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
-            Ready to place order
-          </p>
-          <p className="mt-2 text-sm text-foreground">
-            Review the total, then submit once the fields are complete.
-          </p>
-        </div>
-
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-          <div className="rounded-[22px] border border-border/70 bg-muted/30 px-4 py-3 sm:text-right">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
-              Payable total
-            </p>
-            <p className="mt-1 text-xl font-semibold text-foreground">
-              {formatCurrency(displayTotal)}
-            </p>
-          </div>
-
-          <Button
-            type="submit"
-            className="h-12 w-full rounded-full px-6 sm:w-auto"
-            disabled={isPending}
-          >
-            {isPending ? <Loader2 className="size-4 animate-spin" /> : null}
-            Place order
-          </Button>
-        </div>
-      </div>
     </div>
   );
 }
@@ -109,7 +72,7 @@ function CheckoutContactSection({
         <div>
           <p className="text-sm font-medium text-foreground">Contact details</p>
           <p className="text-sm text-muted-foreground">
-            These are the main fields the customer needs to complete.
+            Add the phone number and optional email for this order.
           </p>
         </div>
       </div>
@@ -137,7 +100,7 @@ function CheckoutContactSection({
             <p className="text-xs text-destructive">{fieldErrors.email}</p>
           ) : (
             <p className="text-xs text-muted-foreground">
-              Leave empty to checkout without email.
+              Leave empty if you do not want to use email for this order.
             </p>
           )}
         </div>
@@ -162,10 +125,12 @@ function CheckoutContactSection({
             />
           </div>
           {fieldErrors.phoneNumber ? (
-            <p className="text-xs text-destructive">{fieldErrors.phoneNumber}</p>
+            <p className="text-xs text-destructive">
+              {fieldErrors.phoneNumber}
+            </p>
           ) : (
             <p className="text-xs text-muted-foreground">
-              Use the number the delivery team should call.
+              Use the number the delivery team should call first.
             </p>
           )}
         </div>
@@ -190,9 +155,11 @@ function CheckoutAddressSection({
           <MapPinned className="size-4" />
         </div>
         <div>
-          <p className="text-sm font-medium text-foreground">Delivery address</p>
+          <p className="text-sm font-medium text-foreground">
+            Delivery address
+          </p>
           <p className="text-sm text-muted-foreground">
-            Add the exact district and full address for delivery.
+            Use a clear district and full address so the order is easy to find.
           </p>
         </div>
       </div>
@@ -209,7 +176,9 @@ function CheckoutAddressSection({
             <Input
               id="checkout-district"
               value={form.district}
-              onChange={(event) => onUpdateField("district", event.target.value)}
+              onChange={(event) =>
+                onUpdateField("district", event.target.value)
+              }
               placeholder="Dhaka"
               className={INPUT_CLASS_NAME}
               style={FLAT_FIELD_STYLE}
@@ -245,7 +214,7 @@ function CheckoutAddressSection({
             <p className="text-xs text-destructive">{fieldErrors.address}</p>
           ) : (
             <p className="text-xs text-muted-foreground">
-              Include house, road, area, and any useful landmark.
+              Include house, road, area, and a useful landmark.
             </p>
           )}
         </div>
@@ -277,12 +246,12 @@ function CheckoutCouponSection({
           <div>
             <p className="text-sm font-medium text-foreground">Coupon code</p>
             <p className="text-sm text-muted-foreground">
-              Type a coupon here and apply it before submitting the order.
+              Apply a coupon before you place the order.
             </p>
           </div>
 
           <div className="flex flex-col gap-2 sm:flex-row">
-            <div className={`${FIELD_SHELL_CLASS_NAME} sm:flex-1`}>
+            <div className={`${FIELD_SHELL_CLASS_NAME} min-w-0 sm:flex-1`}>
               <Label className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
                 Coupon
               </Label>
@@ -336,14 +305,14 @@ function CheckoutFooterActions({
   onResetNavigation: () => void;
 }) {
   return (
-    <div className="rounded-[28px] bg-background p-4 sm:p-5">
+    <div className="rounded-[28px] border border-border bg-card p-4 sm:p-5">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
-            Final action
+          <p className="text-sm font-medium text-foreground">
+            Ready to place order
           </p>
-          <p className="mt-1 text-sm text-foreground">
-            Use the bottom button if you review the form from top to bottom.
+          <p className="mt-1 text-sm text-muted-foreground">
+            Review the form above, then submit the order from here.
           </p>
         </div>
 
@@ -398,39 +367,67 @@ export function CheckoutFormPanel({
   onSubmit: () => void;
   onResetNavigation: () => void;
 }) {
+  const accountLabel = initialUser ? "Account checkout" : "Guest checkout";
+  const accountNote = initialUser
+    ? initialUser.email || "This order will be linked to your account."
+    : "You can place this order without logging in.";
+  const formId = "checkout-form";
+
   return (
-    <section className="rounded-[32px] bg-muted/35 p-4 sm:p-6">
-      <div className="flex flex-wrap items-center gap-2 text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">
-        <span className="rounded-full bg-background px-3 py-1.5">
-          {initialUser ? "Member checkout" : "Guest checkout"}
-        </span>
-        <span>
-          {initialUser
-            ? "Your order will be linked to your account."
-            : "You can checkout without logging in."}
-        </span>
-        {isDirectCheckout ? <span>Direct checkout for selected item</span> : null}
-      </div>
-
-      <h1 className="mt-4 text-3xl font-semibold tracking-tight text-foreground">
-        Checkout
-      </h1>
-      <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-        Fill in the visible fields below, apply a coupon if you have one, and
-        place the order.
-      </p>
-
+    <section className="rounded-[32px] border border-border bg-card p-4 sm:p-6">
       <form
-        className="mt-5 space-y-3 sm:space-y-4"
+        id={formId}
+        className="space-y-3 sm:space-y-4"
         onSubmit={(event: FormEvent<HTMLFormElement>) => {
           event.preventDefault();
           onSubmit();
         }}
       >
-        <CheckoutHero
-          displayTotal={displayTotal}
-          isPending={isPending}
-        />
+        <div className="rounded-[26px] border border-border bg-muted/20 p-4 sm:p-5">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+            <div className="min-w-0">
+              <div className="flex flex-wrap items-center gap-2 text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">
+                <span className="inline-flex items-center gap-2 rounded-full bg-background px-3 py-1.5">
+                  <UserRound className="size-3.5" />
+                  {accountLabel}
+                </span>
+                {isDirectCheckout ? (
+                  <span className="rounded-full bg-background px-3 py-1.5">
+                    Direct checkout
+                  </span>
+                ) : null}
+              </div>
+
+              <h1 className="mt-4 text-3xl font-semibold tracking-tight text-foreground">
+                Checkout
+              </h1>
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">
+                {accountNote}
+              </p>
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-[minmax(0,150px)_minmax(0,180px)] lg:min-w-[360px]">
+              <div className="rounded-[22px] bg-background px-4 py-3">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+                  Total
+                </p>
+                <p className="mt-1 text-xl font-semibold text-foreground">
+                  {formatCurrency(displayTotal)}
+                </p>
+              </div>
+
+              <Button
+                type="submit"
+                className="h-14 w-full rounded-[22px] px-6"
+                disabled={isPending}
+              >
+                {isPending ? <Loader2 className="size-4 animate-spin" /> : null}
+                Place order
+              </Button>
+            </div>
+          </div>
+        </div>
+
         <CheckoutContactSection
           form={form}
           fieldErrors={fieldErrors}
@@ -472,11 +469,20 @@ export function CheckoutSummaryAside({
   displayTotal: number;
 }) {
   return (
-    <aside className="lg:sticky lg:top-28 lg:self-start">
-      <div className="rounded-[32px] bg-muted/35 p-5">
-        <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-          <ReceiptText className="size-4" />
-          Order summary
+    <aside className="lg:sticky lg:top-24 lg:self-start">
+      <div className="rounded-[32px] border border-border bg-card p-4 sm:p-5">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <p className="text-lg font-semibold tracking-tight text-foreground">
+              Order summary
+            </p>
+            <p className="text-sm text-muted-foreground">
+              {totals.quantity} item{totals.quantity === 1 ? "" : "s"}
+            </p>
+          </div>
+          <div className="rounded-full bg-muted px-3 py-1 text-sm font-medium text-foreground">
+            {formatCurrency(displayTotal)}
+          </div>
         </div>
 
         <div className="mt-4 space-y-3">
@@ -484,22 +490,36 @@ export function CheckoutSummaryAside({
             const unit = item.unitDiscountPrice ?? item.unitPrice;
 
             return (
-              <article key={item.key} className="rounded-[24px] bg-background p-3">
-                <div className="flex gap-3">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={item.thumbnailUrl}
-                    alt={item.title}
-                    className="size-16 rounded-2xl object-cover"
-                  />
-                  <div className="min-w-0 flex-1">
-                    <p className="line-clamp-2 text-sm font-medium text-foreground">
-                      {item.title}
-                    </p>
-                    <p className="mt-1 text-xs text-muted-foreground">
-                      Qty {item.quantity}
-                    </p>
-                    <p className="mt-2 text-sm font-semibold text-foreground">
+              <article
+                key={item.key}
+                className="rounded-[24px] border border-border bg-background p-3"
+              >
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-start">
+                  <div className="flex min-w-0 items-start gap-3">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={item.thumbnailUrl}
+                      alt={item.title}
+                      className="size-16 rounded-[18px] object-cover"
+                    />
+                    <div className="min-w-0 flex-1">
+                      <p className="line-clamp-2 text-sm font-medium text-foreground">
+                        {item.title}
+                      </p>
+                      <div className="mt-2 flex flex-wrap items-center gap-2 text-xs">
+                        <span className="rounded-full bg-muted px-2.5 py-1 text-muted-foreground">
+                          Qty {item.quantity}
+                        </span>
+                        <span className="rounded-full bg-muted px-2.5 py-1 text-muted-foreground">
+                          Unit {formatCurrency(unit)}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="sm:ml-auto sm:text-right">
+                    <p className="text-xs text-muted-foreground">Line total</p>
+                    <p className="text-sm font-semibold text-foreground">
                       {formatCurrency(unit * item.quantity)}
                     </p>
                   </div>
@@ -509,7 +529,7 @@ export function CheckoutSummaryAside({
           })}
         </div>
 
-        <div className="mt-4 rounded-[24px] bg-background p-4">
+        <div className="mt-4 rounded-[24px] border border-border bg-background p-4">
           <div className="flex items-center justify-between text-sm text-muted-foreground">
             <span>Items</span>
             <span>{totals.quantity}</span>
@@ -526,10 +546,17 @@ export function CheckoutSummaryAside({
                 : formatCurrency(0)}
             </span>
           </div>
-          <div className="mt-2 flex items-center justify-between text-base font-semibold text-foreground">
+          <div className="mt-3 flex items-center justify-between border-t border-border pt-3 text-base font-semibold text-foreground">
             <span>Total</span>
             <span>{formatCurrency(displayTotal)}</span>
           </div>
+        </div>
+
+        <div className="mt-4 flex items-start gap-3 rounded-[22px] bg-muted/20 px-4 py-3 text-sm text-muted-foreground">
+          <ShieldCheck className="mt-0.5 size-4 shrink-0 text-primary" />
+          <p>
+            The order remains pending until the team reviews and confirms it.
+          </p>
         </div>
       </div>
     </aside>

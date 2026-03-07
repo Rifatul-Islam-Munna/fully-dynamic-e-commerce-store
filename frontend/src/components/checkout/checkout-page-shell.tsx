@@ -124,7 +124,9 @@ export function CheckoutPageShell({
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(buildCouponPreviewPayload(form.couponCode, items)),
+          body: JSON.stringify(
+            buildCouponPreviewPayload(form.couponCode, items),
+          ),
         });
 
         const payload = (await response.json().catch(() => null)) as
@@ -216,10 +218,14 @@ export function CheckoutPageShell({
   }
 
   return (
-    <main className="mx-auto max-w-6xl px-4 py-6 pb-10 sm:px-6 sm:py-8 lg:px-8">
-      <CheckoutBackLink onResetNavigation={handleResetNavigation} />
+    <main className="mx-auto max-w-6xl px-4 py-6 pb-12 sm:px-6 sm:py-8 lg:px-8">
+      <CheckoutBackLink
+        onResetNavigation={handleResetNavigation}
+        onSubmit={submitCheckout}
+        isPending={isPending}
+      />
 
-      <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_340px]">
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
         <CheckoutFormPanel
           initialUser={initialUser}
           isDirectCheckout={isDirectCheckout}

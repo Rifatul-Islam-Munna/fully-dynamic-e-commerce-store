@@ -1,13 +1,19 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import {
   CheckCheck,
   Clock3,
+  Eye,
   Loader2,
+  Mail,
+  MapPinned,
   PackageSearch,
+  Phone,
   RefreshCcw,
+  TicketPercent,
   Search,
   ShoppingBag,
   UserCheck,
@@ -22,6 +28,13 @@ import {
 } from "@/actions/admin-actions";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -169,6 +182,27 @@ function OrderActionButtons({
   );
 }
 
+function OrderDetailsButton({
+  order,
+  onOpen,
+}: {
+  order: AdminOrder;
+  onOpen: (order: AdminOrder) => void;
+}) {
+  return (
+    <Button
+      type="button"
+      size="sm"
+      variant="secondary"
+      className="h-9 rounded-full px-4"
+      onClick={() => onOpen(order)}
+    >
+      <Eye className="size-4" />
+      Details
+    </Button>
+  );
+}
+
 function OrderItemsPreview({ order }: { order: AdminOrder }) {
   return (
     <div className="space-y-2">
@@ -186,7 +220,9 @@ function OrderItemsPreview({ order }: { order: AdminOrder }) {
             </p>
           </div>
           <div className="text-right">
-            <p className="text-sm font-medium text-foreground">x{item.quantity}</p>
+            <p className="text-sm font-medium text-foreground">
+              x{item.quantity}
+            </p>
             <p className="text-xs text-muted-foreground">
               {formatCurrency(item.lineTotal)}
             </p>
@@ -202,6 +238,220 @@ function OrderItemsPreview({ order }: { order: AdminOrder }) {
   );
 }
 
+function OrderDetailsDialog({
+  order,
+  open,
+  onOpenChange,
+}: {
+  order: AdminOrder | null;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}) {
+  if (!order) {
+    return null;
+  }
+
+  const statusMeta = getStatusMeta(order.status);
+  const modeMeta = getModeMeta(order.checkoutMode);
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-h-[92vh] max-w-4xl gap-0 overflow-hidden rounded-[28px] border border-border/60 p-0 sm:max-w-4xl">
+        <div className="grid max-h-[90vh] min-h-0 lg:grid-cols-[320px_minmax(0,1fr)]">
+          <aside className="border-b border-border/60 bg-muted/30 p-6 lg:border-b-0 lg:border-r">
+            <div className="space-y-4">
+              <div className="space-y-3">
+                <div className="flex flex-wrap items-center gap-2">
+                  <Badge className={cn("border-0", statusMeta.className)}>
+                    {statusMeta.label}
+                  </Badge>
+                  <Badge className={cn("border-0", modeMeta.className)}>
+                    {modeMeta.label}
+                  </Badge>
+                </div>
+                <div>
+                  <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
+                    Order reference
+                  </p>
+                  <p className="mt-2 text-2xl font-semibold tracking-tight text-foreground">
+                    {order.orderNumber}
+                  </p>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    Placed {formatOrderDate(order.createdAt)}
+                  </p>
+                </div>
+              </div>
+
+              <div className="rounded-[26px] border border-border/60 bg-background p-4">
+                <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
+                  Customer
+                </p>
+                <div className="mt-3 space-y-3 text-sm text-foreground">
+                  <div className="flex items-start gap-3">
+                    <Phone className="mt-0.5 size-4 text-muted-foreground" />
+                    <span>{order.customerPhoneNumber}</span>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <Mail className="mt-0.5 size-4 text-muted-foreground" />
+                    <span>{order.customerEmail || "No email provided"}</span>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <MapPinned className="mt-0.5 size-4 text-muted-foreground" />
+                    <div className="space-y-1">
+                      <p>{order.customerDistrict}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {order.customerAddress}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="rounded-[26px] border border-border/60 bg-background p-4">
+                <div className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
+                  <TicketPercent className="size-4" />
+                  Billing snapshot
+                </div>
+                <div className="mt-3 space-y-2 text-sm">
+                  <div className="flex items-center justify-between text-muted-foreground">
+                    <span>Items</span>
+                    <span>{order.itemCount}</span>
+                  </div>
+                  <div className="flex items-center justify-between text-muted-foreground">
+                    <span>Subtotal</span>
+                    <span>{formatCurrency(order.subtotal)}</span>
+                  </div>
+                  <div className="flex items-center justify-between text-muted-foreground">
+                    <span>Discount</span>
+                    <span className={order.discountAmount > 0 ? "text-primary" : ""}>
+                      {order.discountAmount > 0
+                        ? `-${formatCurrency(order.discountAmount)}`
+                        : formatCurrency(0)}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between text-muted-foreground">
+                    <span>Coupon</span>
+                    <span>{order.couponCode || "None"}</span>
+                  </div>
+                  <div className="flex items-center justify-between border-t border-border/60 pt-2 text-base font-semibold text-foreground">
+                    <span>Total</span>
+                    <span>{formatCurrency(order.total)}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </aside>
+
+          <div className="min-h-0 overflow-y-auto p-4 sm:p-6">
+            <DialogHeader className="text-left">
+              <DialogTitle className="text-2xl font-semibold tracking-tight text-foreground">
+                Order details
+              </DialogTitle>
+              <DialogDescription>
+                Full product list, quantities, pricing, and delivery details for
+                this order.
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="mt-6 space-y-4">
+              {order.items.map((item, index) => {
+                const unitPrice = item.unitDiscountPrice ?? item.unitPrice;
+
+                return (
+                  <article
+                    key={item.id}
+                    className="rounded-[24px] border border-border/60 bg-background p-4"
+                  >
+                    <div className="flex flex-col gap-4">
+                      <div className="flex min-w-0 items-start gap-3 sm:gap-4">
+                        {item.productThumbnailUrl ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={item.productThumbnailUrl}
+                            alt={item.productTitle}
+                            className="size-16 rounded-[18px] object-cover sm:size-20 sm:rounded-[22px]"
+                          />
+                        ) : (
+                          <div className="flex size-16 items-center justify-center rounded-[18px] bg-muted text-muted-foreground sm:size-20 sm:rounded-[22px]">
+                            <PackageSearch className="size-5" />
+                          </div>
+                        )}
+
+                        <div className="min-w-0 flex-1 space-y-2">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span className="rounded-full bg-muted px-2.5 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
+                              Item {index + 1}
+                            </span>
+                            {item.variantTitle ? (
+                              <span className="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary">
+                                {item.variantTitle}
+                              </span>
+                            ) : (
+                              <span className="rounded-full bg-muted px-2.5 py-1 text-xs text-muted-foreground">
+                                Base item
+                              </span>
+                            )}
+                          </div>
+                          <div>
+                            <p className="text-base font-semibold text-foreground">
+                              {item.productTitle}
+                            </p>
+                            <p className="mt-1 text-sm text-muted-foreground">
+                              Qty {item.quantity} · Unit {formatCurrency(unitPrice)}
+                            </p>
+                          </div>
+                          <div className="flex flex-wrap gap-2">
+                            <Button asChild variant="outline" className="rounded-full px-4">
+                              <Link
+                                href={`/product/${item.productSlug}`}
+                                target="_blank"
+                                rel="noreferrer"
+                              >
+                                Open product
+                              </Link>
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="grid gap-2 sm:grid-cols-3">
+                        <div className="rounded-[18px] bg-muted/35 px-3 py-2.5">
+                          <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
+                            Qty
+                          </p>
+                          <p className="mt-1 text-sm font-semibold text-foreground sm:text-base">
+                            {item.quantity}
+                          </p>
+                        </div>
+                        <div className="rounded-[18px] bg-muted/35 px-3 py-2.5">
+                          <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
+                            Unit
+                          </p>
+                          <p className="mt-1 break-words text-sm font-semibold text-foreground sm:text-base">
+                            {formatCurrency(unitPrice)}
+                          </p>
+                        </div>
+                        <div className="rounded-[18px] bg-muted/35 px-3 py-2.5">
+                          <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
+                            Line
+                          </p>
+                          <p className="mt-1 break-words text-sm font-semibold text-foreground sm:text-base">
+                            {formatCurrency(item.lineTotal)}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 export function OrderManagementPage() {
   const [orders, setOrders] = useState<AdminOrder[]>([]);
   const [summary, setSummary] = useState<OrderSummary | null>(null);
@@ -210,8 +460,11 @@ export function OrderManagementPage() {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [searchInput, setSearchInput] = useState("");
-  const [statusFilter, setStatusFilter] = useState<"all" | AdminOrderStatus>("all");
+  const [statusFilter, setStatusFilter] = useState<"all" | AdminOrderStatus>(
+    "all",
+  );
   const [modeFilter, setModeFilter] = useState<"all" | AdminOrderMode>("all");
+  const [selectedOrder, setSelectedOrder] = useState<AdminOrder | null>(null);
 
   const loadOrders = useCallback(
     async (
@@ -248,8 +501,10 @@ export function OrderManagementPage() {
   }, [loadOrders, modeFilter, page, search, statusFilter]);
 
   const updateStatusMutation = useMutation({
-    mutationFn: async (payload: { orderId: string; status: AdminOrderStatus }) =>
-      updateAdminOrderStatus(payload),
+    mutationFn: async (payload: {
+      orderId: string;
+      status: AdminOrderStatus;
+    }) => updateAdminOrderStatus(payload),
     onSuccess: async (result) => {
       const [data, error] = result as [unknown, { message?: string } | null];
       if (!data) {
@@ -265,11 +520,21 @@ export function OrderManagementPage() {
 
   return (
     <div className="space-y-6">
+      <OrderDetailsDialog
+        order={selectedOrder}
+        open={selectedOrder !== null}
+        onOpenChange={(open) => {
+          if (!open) {
+            setSelectedOrder(null);
+          }
+        }}
+      />
+
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Order Management</h1>
         <p className="text-sm text-muted-foreground">
-          Confirm or cancel checkout orders. Sales and revenue analytics move only
-          after an order is confirmed.
+          Confirm or cancel checkout orders. Sales and revenue analytics move
+          only after an order is confirmed.
         </p>
       </div>
 
@@ -356,7 +621,11 @@ export function OrderManagementPage() {
           </Select>
 
           <div className="flex gap-2">
-            <Button type="submit" variant="secondary" className="h-11 rounded-full px-5">
+            <Button
+              type="submit"
+              variant="secondary"
+              className="h-11 rounded-full px-5"
+            >
               Search
             </Button>
             <Button
@@ -388,7 +657,10 @@ export function OrderManagementPage() {
             const modeMeta = getModeMeta(order.checkoutMode);
 
             return (
-              <article key={order.id} className="rounded-[28px] bg-muted/35 p-4">
+              <article
+                key={order.id}
+                className="rounded-[28px] bg-muted/35 p-4"
+              >
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
                     <p className="text-sm font-semibold text-foreground">
@@ -417,7 +689,8 @@ export function OrderManagementPage() {
                       {order.customerPhoneNumber}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      {order.customerEmail || "No email"} • {order.customerDistrict}
+                      {order.customerEmail || "No email"} •{" "}
+                      {order.customerDistrict}
                     </p>
                     <p className="mt-1 text-xs text-muted-foreground">
                       {order.customerAddress}
@@ -432,7 +705,8 @@ export function OrderManagementPage() {
                       {formatCurrency(order.total)}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      {order.itemCount} items • subtotal {formatCurrency(order.subtotal)}
+                      {order.itemCount} items • subtotal{" "}
+                      {formatCurrency(order.subtotal)}
                     </p>
                     <p className="mt-1 text-xs text-muted-foreground">
                       Coupon: {order.couponCode || "None"}
@@ -445,13 +719,19 @@ export function OrderManagementPage() {
                 </div>
 
                 <div className="mt-4">
-                  <OrderActionButtons
-                    order={order}
-                    disabled={updateStatusMutation.isPending}
-                    onUpdate={(orderId, status) =>
-                      updateStatusMutation.mutate({ orderId, status })
-                    }
-                  />
+                  <div className="flex flex-wrap gap-2">
+                    <OrderDetailsButton
+                      order={order}
+                      onOpen={setSelectedOrder}
+                    />
+                    <OrderActionButtons
+                      order={order}
+                      disabled={updateStatusMutation.isPending}
+                      onUpdate={(orderId, status) =>
+                        updateStatusMutation.mutate({ orderId, status })
+                      }
+                    />
+                  </div>
                 </div>
               </article>
             );
@@ -487,13 +767,19 @@ export function OrderManagementPage() {
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan={6} className="px-4 py-12 text-center text-muted-foreground">
+                  <td
+                    colSpan={6}
+                    className="px-4 py-12 text-center text-muted-foreground"
+                  >
                     <Loader2 className="mx-auto size-5 animate-spin" />
                   </td>
                 </tr>
               ) : orders.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-4 py-12 text-center text-muted-foreground">
+                  <td
+                    colSpan={6}
+                    className="px-4 py-12 text-center text-muted-foreground"
+                  >
                     No orders found
                   </td>
                 </tr>
@@ -509,11 +795,15 @@ export function OrderManagementPage() {
                     >
                       <td className="px-4 py-4">
                         <div className="space-y-1">
-                          <p className="font-medium text-foreground">{order.orderNumber}</p>
+                          <p className="font-medium text-foreground">
+                            {order.orderNumber}
+                          </p>
                           <p className="text-xs text-muted-foreground">
                             {formatOrderDate(order.createdAt)}
                           </p>
-                          <Badge className={cn("mt-1 border-0", modeMeta.className)}>
+                          <Badge
+                            className={cn("mt-1 border-0", modeMeta.className)}
+                          >
                             {modeMeta.label}
                           </Badge>
                         </div>
@@ -525,18 +815,25 @@ export function OrderManagementPage() {
                           </p>
                           <p>{order.customerEmail || "No email"}</p>
                           <p>{order.customerDistrict}</p>
-                          <p className="max-w-[240px]">{order.customerAddress}</p>
+                          <p className="max-w-[240px]">
+                            {order.customerAddress}
+                          </p>
                         </div>
                       </td>
                       <td className="px-4 py-4">
                         <div className="space-y-1">
                           {order.items.slice(0, 2).map((item) => (
-                            <div key={item.id} className="text-xs text-muted-foreground">
+                            <div
+                              key={item.id}
+                              className="text-xs text-muted-foreground"
+                            >
                               <span className="font-medium text-foreground">
                                 {item.productTitle}
                               </span>{" "}
                               x{item.quantity}
-                              {item.variantTitle ? ` • ${item.variantTitle}` : ""}
+                              {item.variantTitle
+                                ? ` • ${item.variantTitle}`
+                                : ""}
                             </div>
                           ))}
                           {order.items.length > 2 ? (
@@ -552,7 +849,8 @@ export function OrderManagementPage() {
                             {formatCurrency(order.total)}
                           </p>
                           <p className="text-xs text-muted-foreground">
-                            {order.itemCount} items • subtotal {formatCurrency(order.subtotal)}
+                            {order.itemCount} items • subtotal{" "}
+                            {formatCurrency(order.subtotal)}
                           </p>
                           <p className="text-xs text-muted-foreground">
                             Coupon: {order.couponCode || "None"}
@@ -565,7 +863,11 @@ export function OrderManagementPage() {
                         </Badge>
                       </td>
                       <td className="px-4 py-4">
-                        <div className="flex justify-end">
+                        <div className="flex flex-wrap justify-end gap-2">
+                          <OrderDetailsButton
+                            order={order}
+                            onOpen={setSelectedOrder}
+                          />
                           <OrderActionButtons
                             order={order}
                             disabled={updateStatusMutation.isPending}
@@ -586,7 +888,8 @@ export function OrderManagementPage() {
         {pagination && pagination.totalPages > 1 ? (
           <div className="flex items-center justify-between border-t border-border/50 px-4 py-4">
             <p className="text-sm text-muted-foreground">
-              Page {pagination.page} of {pagination.totalPages} • {pagination.total} orders
+              Page {pagination.page} of {pagination.totalPages} •{" "}
+              {pagination.total} orders
             </p>
             <div className="flex gap-2">
               <Button
