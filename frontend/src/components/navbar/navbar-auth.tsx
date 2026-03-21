@@ -2,98 +2,71 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { ChevronDown, LogOut, User, LayoutDashboard } from "lucide-react";
+import { User, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { logOutUser, getUser } from "@/actions/auth";
 
 export function NavbarAuth() {
-  const [user, setUser] = useState<UserInfo | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [token, setToken] = useState<string | null>(null);
+  const [checking, setChecking] = useState(true);
 
   useEffect(() => {
-    getUser().then((u) => {
-      setUser(u);
-      setLoading(false);
-    });
+    const stored =
+      typeof window !== "undefined"
+        ? localStorage.getItem("access_token")
+        : null;
+    setToken(stored);
+    setChecking(false);
   }, []);
 
-  const handleLogout = async () => {
-    await logOutUser();
-    window.location.href = "/login";
-  };
-
-  if (loading) {
-    return <div className="h-9 w-20 animate-pulse rounded-lg bg-muted" />;
+  if (checking) {
+    return null;
   }
 
-  if (!user) {
+  if (token) {
     return (
-      <div className="flex items-center gap-2">
-        <Link href="/login">
-          <Button variant="ghost" size="sm" className="text-sm font-medium">
-            Login
-          </Button>
-        </Link>
-        <Link href="/signup">
-          <Button size="sm" className="text-sm font-medium">
-            Sign up
-          </Button>
-        </Link>
+      <div className="flex items-center gap-1">
+        <Button
+          asChild
+          variant="ghost"
+          size="icon"
+          className="size-10 rounded-full text-[#001819] transition-all duration-300 hover:bg-[#eeeeee]"
+        >
+          <Link href="/profile" aria-label="Profile">
+            <User className="size-[18px]" />
+          </Link>
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="size-10 rounded-full text-[#001819] transition-all duration-300 hover:bg-[#eeeeee]"
+          onClick={() => {
+            localStorage.removeItem("access_token");
+            localStorage.removeItem("refresh_token");
+            window.location.href = "/login";
+          }}
+          aria-label="Sign out"
+        >
+          <LogOut className="size-[18px]" />
+        </Button>
       </div>
     );
   }
 
-  const displayName = user.firstName?.trim() || user.email;
-
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          size="sm"
-          className="h-9 max-w-44 gap-1.5 rounded-md border border-border/55 bg-background px-2.5 text-sm shadow-none hover:bg-muted/70"
-        >
-          <User className="size-4 shrink-0" />
-          <span className="max-w-24 truncate">{displayName}</span>
-          <ChevronDown className="size-4 shrink-0 text-muted-foreground" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent
-        align="end"
-        className="w-52 border-border/60 bg-background shadow-none"
+    <div className="flex items-center gap-2">
+      <Button
+        asChild
+        variant="ghost"
+        className="h-9 rounded-full px-4 font-headline text-xs font-bold uppercase tracking-widest text-on-surface-variant hover:bg-surface-container hover:text-primary transition-colors"
       >
-        <DropdownMenuLabel className="truncate text-xs text-muted-foreground">
-          {user.email}
-        </DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        {user.role === "admin" && (
-          <DropdownMenuItem asChild>
-            <Link href="/admin" className="cursor-pointer">
-              <LayoutDashboard className="size-4" />
-              Dashboard
-            </Link>
-          </DropdownMenuItem>
-        )}
-        <DropdownMenuItem asChild>
-          <Link href="/profile" className="cursor-pointer">
-            <User className="size-4" />
-            Profile
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem variant="destructive" onClick={handleLogout}>
-          <LogOut className="size-4" />
-          Logout
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+        <Link href="/login">Sign In</Link>
+      </Button>
+      <Button
+        asChild
+        className="h-9 rounded-full bg-primary px-5 font-label text-xs font-bold uppercase tracking-widest text-on-primary hover:opacity-90 transition-opacity"
+      >
+        <Link href="/signup">Join</Link>
+      </Button>
+    </div>
   );
 }

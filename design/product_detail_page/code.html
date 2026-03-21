@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Manrope:wght@700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-tertiary-fixed": "#2d1509",
+              "secondary-fixed": "#d9e5e5",
+              "inverse-on-surface": "#f1f1f1",
+              "surface-variant": "#e2e2e2",
+              "outline-variant": "#c1c8c7",
+              "surface-dim": "#dadada",
+              "surface-container-lowest": "#ffffff",
+              "tertiary-container": "#3c2215",
+              "surface": "#f9f9f9",
+              "on-primary": "#ffffff",
+              "on-primary-fixed-variant": "#2f4c4c",
+              "primary-fixed": "#c9e8e9",
+              "inverse-primary": "#adcccd",
+              "tertiary-fixed-dim": "#e9bda9",
+              "background": "#f9f9f9",
+              "on-background": "#1a1c1c",
+              "primary-fixed-dim": "#adcccd",
+              "on-secondary-fixed-variant": "#3e4949",
+              "surface-bright": "#f9f9f9",
+              "primary": "#001819",
+              "on-secondary": "#ffffff",
+              "surface-tint": "#476364",
+              "outline": "#717878",
+              "on-surface": "#1a1c1c",
+              "secondary-fixed-dim": "#bdc9c9",
+              "on-secondary-fixed": "#131d1e",
+              "on-tertiary": "#ffffff",
+              "surface-container": "#eeeeee",
+              "tertiary-fixed": "#ffdbcc",
+              "error": "#ba1a1a",
+              "error-container": "#ffdad6",
+              "on-error-container": "#93000a",
+              "on-secondary-container": "#5b6667",
+              "on-error": "#ffffff",
+              "on-primary-fixed": "#012021",
+              "on-tertiary-fixed-variant": "#5e4031",
+              "surface-container-high": "#e8e8e8",
+              "on-surface-variant": "#414848",
+              "secondary": "#556061",
+              "primary-container": "#0f2d2e",
+              "tertiary": "#240e04",
+              "on-tertiary-container": "#ae8775",
+              "on-primary-container": "#779596",
+              "inverse-surface": "#2f3131",
+              "secondary-container": "#d9e5e5",
+              "surface-container-low": "#f3f3f3",
+              "surface-container-highest": "#e2e2e2"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            font-size: 20px;
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface antialiased">
+<!-- Top Navigation Bar -->
+<nav class="fixed top-0 w-full z-50 bg-[#f9f9f9]/80 dark:bg-[#001819]/80 backdrop-blur-md">
+<div class="flex justify-between items-center w-full px-8 py-6 max-w-full mx-auto">
+<div class="flex items-center gap-12">
+<a class="text-2xl font-black tracking-tighter text-[#001819] dark:text-[#f9f9f9]" href="#">ATELIER</a>
+<div class="hidden md:flex gap-8 font-manrope tracking-tight font-bold text-sm uppercase">
+<a class="text-[#414848] dark:text-[#eeeeee] hover:text-[#001819] transition-colors" href="#">Collections</a>
+<a class="text-[#414848] dark:text-[#eeeeee] hover:text-[#001819] transition-colors" href="#">New Arrivals</a>
+<a class="text-[#414848] dark:text-[#eeeeee] hover:text-[#001819] transition-colors" href="#">Archive</a>
+<a class="text-[#414848] dark:text-[#eeeeee] hover:text-[#001819] transition-colors" href="#">Journal</a>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<button class="hover:bg-[#eeeeee] dark:hover:bg-[#0f2d2e] transition-all duration-300 p-2 rounded-full">
+<span class="material-symbols-outlined">search</span>
+</button>
+<button class="hover:bg-[#eeeeee] dark:hover:bg-[#0f2d2e] transition-all duration-300 p-2 rounded-full">
+<span class="material-symbols-outlined">person</span>
+</button>
+<button class="hover:bg-[#eeeeee] dark:hover:bg-[#0f2d2e] transition-all duration-300 p-2 rounded-full relative">
+<span class="material-symbols-outlined">shopping_bag</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-primary rounded-full"></span>
+</button>
+</div>
+</div>
+</nav>
+<main class="pt-32 pb-24">
+<!-- Breadcrumbs -->
+<div class="px-8 md:px-12 mb-8">
+<nav class="flex gap-2 font-label text-[10px] tracking-widest uppercase text-on-surface-variant">
+<a class="hover:text-primary" href="#">Shop</a>
+<span>/</span>
+<a class="hover:text-primary" href="#">Outerwear</a>
+<span>/</span>
+<span class="text-on-surface font-semibold">Sculpted Wool Overcoat</span>
+</nav>
+</div>
+<div class="max-w-[1440px] mx-auto px-8 md:px-12 lg:flex lg:gap-16">
+<!-- Product Image Gallery (Asymmetric Layout) -->
+<div class="lg:w-[60%] mb-12 lg:mb-0">
+<div class="grid grid-cols-2 gap-4">
+<div class="col-span-2 aspect-[4/5] bg-surface-container overflow-hidden rounded-sm group">
+<img alt="Product View 1" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="High quality close up of beige wool coat texture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBb67Xln1iK3RuXPyY0nYEdwm8NK50xt-cWieOCD5QJJjOlfeld5bPY5nAf0krkU64Z3gaQmrQIYlybP4-rTXiQPCoF6ruyn8owdWBbPBVgvypMpkglbgh8HZ_SYPdwQfnnIcKmg8H2A6Hl0TYNfcHtMD8o6m45NcIVU7y5lgvACuXKLNI8jfuwUNR0s46aHLNNfD6X3rNXHjTelB5JEyya2BH3UaYYwG6Ol1RBJYcS_Dk2k13rT-IT40jj3W85cdvvjUfDTjyZBD5L"/>
+</div>
+<div class="aspect-[3/4] bg-surface-container-low overflow-hidden rounded-sm">
+<img alt="Product View 2" class="w-full h-full object-cover" data-alt="Model wearing beige sculpted wool overcoat street style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2wByKlpRNTSlAewpewDp7PSTUid-RDHTZjsYt8_AA5Z3OQ0V4KWh_PZylWnQ13LoqI66EiHp1DPPzmSR1cndE2OzBsFMsCnJ6EpzWMiXbLyLNXFVbsEQLEfQS1CkKxGFy05R01CcXa_u2-enuO_43m5ElXTturLH-LQ-mdbxMJSlQyGTfhkiTY5tXQgwfiN4jIe9QNmUCF9HzOf2B7Q7Jk3wampzgrCQAIszUQELHaarG-a-GIvAWBgZ5J_Rt_EDp0Ebj1RNzkoZ_"/>
+</div>
+<div class="aspect-[3/4] bg-surface-container-low overflow-hidden rounded-sm">
+<img alt="Product View 3" class="w-full h-full object-cover" data-alt="Detail of high quality coat stitching and buttons" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAM2ku_alIcpnR4Ohbx4kbbwakDsX1uoPfOMQIlyeYm4Uz9V_eY4rkmVT0KIeCf-SfUpIbzdiiNfOsZgA83MizMR5fA4MPbMkxwBOnA-lVMf10rVlYzu22INUa7h91UGZYY404fiBlf7C9gNgkVLkw-zmCHQeo6_IWqvGstvzWYF6WkLwVIaOGdjorR4tXtavKVZSGV1kUASdFH71q1tHugIF7eRfLZlkewXOlba03Z-0UhEZwgCwk6geahMSuGlam0L_DhnFD1rnQJ"/>
+</div>
+</div>
+</div>
+<!-- Sidebar Info -->
+<div class="lg:w-[40%] lg:sticky lg:top-32 h-fit">
+<div class="flex flex-col gap-6">
+<div>
+<span class="font-label text-xs tracking-[0.2em] uppercase text-on-surface-variant mb-2 block">Premium Archive</span>
+<h1 class="font-headline text-4xl md:text-5xl font-extrabold tracking-tighter text-on-surface mb-2 leading-none">Sculpted Wool Overcoat</h1>
+<p class="text-xl font-medium text-primary">€890.00</p>
+</div>
+<div class="h-[1px] bg-outline-variant/20 w-full"></div>
+<p class="text-on-surface-variant leading-relaxed font-body">
+                        A masterclass in structural tailoring. Crafted from double-faced Italian virgin wool, this overcoat features a dramatic notched lapel and a hidden placket for a clean, architectural silhouette.
+                    </p>
+<!-- Variants -->
+<div class="flex flex-col gap-4">
+<div class="flex flex-col gap-2">
+<span class="font-label text-[10px] tracking-widest uppercase font-bold">Select Color: <span class="text-on-surface-variant font-normal">Oatmeal</span></span>
+<div class="flex gap-3">
+<button class="w-8 h-8 rounded-full bg-[#E5DACE] ring-2 ring-primary ring-offset-2"></button>
+<button class="w-8 h-8 rounded-full bg-[#1A1C1C] ring-1 ring-outline-variant ring-offset-1"></button>
+<button class="w-8 h-8 rounded-full bg-[#414848] ring-1 ring-outline-variant ring-offset-1"></button>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<div class="flex justify-between items-end">
+<span class="font-label text-[10px] tracking-widest uppercase font-bold">Select Size</span>
+<button class="text-[10px] uppercase underline tracking-widest text-on-surface-variant hover:text-primary">Size Guide</button>
+</div>
+<div class="grid grid-cols-4 gap-2">
+<button class="py-3 border border-outline-variant/30 text-xs font-medium hover:border-primary transition-colors">XS</button>
+<button class="py-3 border border-primary text-xs font-bold bg-surface-container-lowest">S</button>
+<button class="py-3 border border-outline-variant/30 text-xs font-medium hover:border-primary transition-colors">M</button>
+<button class="py-3 border border-outline-variant/30 text-xs font-medium hover:border-primary transition-colors">L</button>
+</div>
+</div>
+</div>
+<!-- CTA -->
+<div class="flex flex-col gap-3 pt-4">
+<button class="w-full bg-primary text-on-primary py-5 rounded-full font-headline font-bold text-sm tracking-widest uppercase flex items-center justify-center gap-2 hover:bg-primary-container transition-colors shadow-lg shadow-primary/10">
+                            Add to Cart
+                            <span class="material-symbols-outlined">shopping_bag</span>
+</button>
+<button class="w-full bg-surface-container-high text-on-surface py-5 rounded-full font-headline font-bold text-sm tracking-widest uppercase hover:bg-surface-container-highest transition-colors">
+                            Add to Wishlist
+                        </button>
+</div>
+<!-- Expandable Sections -->
+<div class="mt-8 border-t border-outline-variant/20">
+<details class="group py-4 border-b border-outline-variant/20 cursor-pointer">
+<summary class="list-none flex justify-between items-center font-label text-xs font-bold tracking-widest uppercase">
+                                Details &amp; Composition
+                                <span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span>
+</summary>
+<div class="pt-4 text-sm text-on-surface-variant leading-relaxed">
+                                • 100% Virgin Wool<br/>
+                                • Lining: 100% Viscose<br/>
+                                • Professional Dry Clean Only<br/>
+                                • Made in Italy
+                            </div>
+</details>
+<details class="group py-4 border-b border-outline-variant/20 cursor-pointer">
+<summary class="list-none flex justify-between items-center font-label text-xs font-bold tracking-widest uppercase">
+                                Shipping &amp; Returns
+                                <span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span>
+</summary>
+<div class="pt-4 text-sm text-on-surface-variant leading-relaxed">
+                                Free standard shipping on orders over €500. Returns accepted within 14 days of delivery.
+                            </div>
+</details>
+</div>
+</div>
+</div>
+</div>
+<!-- Related Products Section -->
+<section class="mt-32 px-8 md:px-12">
+<div class="flex justify-between items-end mb-12">
+<h2 class="font-headline text-3xl font-extrabold tracking-tighter">Complete the Look</h2>
+<a class="font-label text-xs font-bold tracking-widest uppercase border-b-2 border-primary pb-1" href="#">Shop All</a>
+</div>
+<div class="flex overflow-x-auto gap-6 hide-scrollbar pb-8 -mx-4 px-4">
+<!-- Related Item 1 -->
+<div class="min-w-[280px] md:min-w-[340px] flex flex-col gap-4">
+<div class="aspect-[4/5] bg-surface-container-lowest overflow-hidden rounded-sm relative group">
+<img alt="Related 1" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Minimalist trousers hanging against a white wall" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkt2UaeHgn2lRVXfkawaHm1mDetrNsjgsAyChYyhkE_bUGtIA1PJO9tNHJEZ7vXbkX_i--g6vB4b-txi43cZjnYoPMJEd_657UbNThbG_KyRIXbgVT7LM51RyDtNDmMC9IBv0vCDm1vXDfHTeBZFCFtVR5Zi4kCLOeQppueTBEoH_7cnaxjEAy0flvYPSTCFEYFFi8cf76aXLb9e2Oxsbf6Jbgt6g6ey-SN0cJn0E5OlSQO63LiWdDNop1GSE1eylo7OKljyvniE9Z"/>
+<button class="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm p-3 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-primary">add</span>
+</button>
+</div>
+<div>
+<h3 class="font-label text-xs font-bold uppercase tracking-widest mb-1">Pleated Tapered Trouser</h3>
+<p class="text-sm text-on-surface-variant">€320.00</p>
+</div>
+</div>
+<!-- Related Item 2 -->
+<div class="min-w-[280px] md:min-w-[340px] flex flex-col gap-4">
+<div class="aspect-[4/5] bg-surface-container-lowest overflow-hidden rounded-sm relative group">
+<img alt="Related 2" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Premium white leather sneakers on a stone pedestal" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwJAvbDpxFOmuWQLgpFX3i50Q9OUVw-3qyc-feD8U5bdBLbT14_UvODRPKQDx6u8rRylrnyzxZsTFomHTgUM747t8VK4gSk2k4RA5TcNJRTe1kHcIdAoTpZrsoViSpwLy1K8cwn0XlOypBSIprBif5LShZYCx5YZQvl7fuemM-EWe9l_fGfx61Zaj0BpH3lpDudAuyBGF732YYQ6_lSFmT3JN3qvih_4bNgIVYkAtnV41F9b6M368z0JNyXLosFL62LH50rFFEkp8f"/>
+<button class="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm p-3 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-primary">add</span>
+</button>
+</div>
+<div>
+<h3 class="font-label text-xs font-bold uppercase tracking-widest mb-1">Architectural Sneaker</h3>
+<p class="text-sm text-on-surface-variant">€450.00</p>
+</div>
+</div>
+<!-- Related Item 3 -->
+<div class="min-w-[280px] md:min-w-[340px] flex flex-col gap-4">
+<div class="aspect-[4/5] bg-surface-container-lowest overflow-hidden rounded-sm relative group">
+<img alt="Related 3" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Cashmere roll neck sweater in charcoal grey" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHyURHZj_FI8vISRGGu9IdkPYO0GD9XiG2Gnfw7JjjM-W2_MPCyYVTus_37MUiTKYxMVfCd0VA1u12lEVKrnzJGOmHVwuzVfhFzqE-7vuTXvu3h6PVnvteAHyl51XwV8BT8S4wZIZoLuTHpZmPTdtjwcOMJAwHjV8oWwZT68TMzYAaEVJpydoFEYfVXuty9Klr2l-18pcttigUBFAJJ1u-0_8m7PSzG6bUN8saUVUxb3d_OQ5On2cvQg1FJWCyNJYTWA98U0kIqKVx"/>
+<button class="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm p-3 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-primary">add</span>
+</button>
+</div>
+<div>
+<h3 class="font-label text-xs font-bold uppercase tracking-widest mb-1">Fine Cashmere Knit</h3>
+<p class="text-sm text-on-surface-variant">€280.00</p>
+</div>
+</div>
+<!-- Related Item 4 -->
+<div class="min-w-[280px] md:min-w-[340px] flex flex-col gap-4">
+<div class="aspect-[4/5] bg-surface-container-lowest overflow-hidden rounded-sm relative group">
+<img alt="Related 4" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Sleek black sunglasses on a wooden surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEXA-0qhGD6Sy8HJiRKqSJJ7tJhf-xS3I-bPgsOzWs4mmYb29vHRixOjvuMTrnueWR31xYd7EvxWtyzOccZ5jXkAVy14UJ5softLE9S4exHzmghsGnD_Np8onFpczlmpRurxKm2Q4dj0OcfRJrqmTM4k76o24ZyKesZsSAZiUd7J2RCrpYyHgGkqTEBH_KJEXwN094JdiW4h9bDrlbb9qMT7b9vRznfxPeBr73vlONe4Z645ikE1iB7tRojmXz0olSWx0AvTrzHJFQ"/>
+<button class="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm p-3 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-primary">add</span>
+</button>
+</div>
+<div>
+<h3 class="font-label text-xs font-bold uppercase tracking-widest mb-1">Acetate Core Sunglasses</h3>
+<p class="text-sm text-on-surface-variant">€195.00</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-[#001819] dark:bg-[#000000] text-[#f9f9f9]">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12 px-12 py-20 w-full">
+<div class="flex flex-col gap-6">
+<span class="text-xl font-bold text-[#ffffff]">ATELIER</span>
+<p class="font-inter text-xs tracking-widest uppercase text-[#eeeeee]/60 leading-relaxed">
+                    CURATING THE ESSENTIALS FOR THE MODERN CREATIVE. DESIGNED IN BERLIN, CRAFTED IN ITALY.
+                </p>
+</div>
+<div class="flex flex-col gap-4">
+<span class="font-inter text-xs tracking-widest uppercase font-bold text-white mb-2">Customer Care</span>
+<a class="font-inter text-xs tracking-widest uppercase text-white/60 hover:text-white transition-opacity" href="#">Contact</a>
+<a class="font-inter text-xs tracking-widest uppercase text-white/60 hover:text-white transition-opacity" href="#">Shipping &amp; Returns</a>
+<a class="font-inter text-xs tracking-widest uppercase text-white/60 hover:text-white transition-opacity" href="#">Size Guide</a>
+</div>
+<div class="flex flex-col gap-4">
+<span class="font-inter text-xs tracking-widest uppercase font-bold text-white mb-2">Legal</span>
+<a class="font-inter text-xs tracking-widest uppercase text-white/60 hover:text-white transition-opacity" href="#">Sustainability</a>
+<a class="font-inter text-xs tracking-widest uppercase text-white/60 hover:text-white transition-opacity" href="#">Privacy Policy</a>
+<a class="font-inter text-xs tracking-widest uppercase text-white/60 hover:text-white transition-opacity" href="#">Terms of Service</a>
+</div>
+<div class="flex flex-col gap-6">
+<span class="font-inter text-xs tracking-widest uppercase font-bold text-white mb-2">Newsletter</span>
+<div class="relative">
+<input class="w-full bg-transparent border-b border-white/20 py-2 font-inter text-xs tracking-widest focus:outline-none focus:border-white transition-colors" placeholder="ENTER EMAIL" type="email"/>
+<button class="absolute right-0 bottom-2 text-white">
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<div class="px-12 py-8 border-t border-white/10 flex flex-col md:flex-row justify-between gap-4">
+<p class="font-inter text-[10px] tracking-[0.3em] uppercase text-[#eeeeee]/40">© 2024 ATELIER DIGITAL. ALL RIGHTS RESERVED.</p>
+<div class="flex gap-6">
+<a class="text-white/40 hover:text-white" href="#"><span class="material-symbols-outlined">language</span></a>
+<a class="text-white/40 hover:text-white" href="#"><span class="material-symbols-outlined">share</span></a>
+</div>
+</div>
+</footer>
+</body></html>

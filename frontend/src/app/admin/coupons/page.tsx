@@ -245,14 +245,14 @@ export default function AdminCouponsPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Coupons</h1>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-on-surface-variant">
           Create percentage or value coupons and control whether checkout accepts them.
         </p>
       </div>
 
       <div className="grid gap-5 xl:grid-cols-[360px_minmax(0,1fr)]">
-        <section className="rounded-[28px] bg-muted/35 p-5">
-          <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+        <section className="rounded-[28px] bg-surface-container-low/35 p-5">
+          <div className="flex items-center gap-2 text-sm font-medium text-on-surface">
             <TicketPercent className="size-4" />
             {editingLabel}
           </div>
@@ -270,7 +270,7 @@ export default function AdminCouponsPage() {
                   }))
                 }
                 placeholder="EID10"
-                className="h-11 rounded-2xl border-0 bg-background"
+                className="h-11 rounded-2xl border-0 bg-surface"
                 style={FLAT_FIELD_STYLE}
               />
             </div>
@@ -287,7 +287,7 @@ export default function AdminCouponsPage() {
                     }))
                   }
                 >
-                  <SelectTrigger className="h-11 w-full rounded-2xl border-0 bg-background">
+                  <SelectTrigger className="h-11 w-full rounded-2xl border-0 bg-surface">
                     <SelectValue placeholder="Choose type" />
                   </SelectTrigger>
                   <SelectContent>
@@ -312,7 +312,7 @@ export default function AdminCouponsPage() {
                     }))
                   }
                   placeholder={form.type === "percentage" ? "10" : "500"}
-                  className="h-11 rounded-2xl border-0 bg-background"
+                  className="h-11 rounded-2xl border-0 bg-surface"
                   style={FLAT_FIELD_STYLE}
                 />
               </div>
@@ -334,7 +334,7 @@ export default function AdminCouponsPage() {
                     }))
                   }
                   placeholder="Optional"
-                  className="h-11 rounded-2xl border-0 bg-background"
+                  className="h-11 rounded-2xl border-0 bg-surface"
                   style={FLAT_FIELD_STYLE}
                 />
               </div>
@@ -354,7 +354,7 @@ export default function AdminCouponsPage() {
                     }))
                   }
                   placeholder="Optional"
-                  className="h-11 rounded-2xl border-0 bg-background"
+                  className="h-11 rounded-2xl border-0 bg-surface"
                   style={FLAT_FIELD_STYLE}
                 />
               </div>
@@ -372,7 +372,7 @@ export default function AdminCouponsPage() {
                     expiresAt: event.target.value,
                   }))
                 }
-                className="h-11 rounded-2xl border-0 bg-background"
+                className="h-11 rounded-2xl border-0 bg-surface"
                 style={FLAT_FIELD_STYLE}
               />
             </div>
@@ -389,12 +389,12 @@ export default function AdminCouponsPage() {
                   }))
                 }
                 placeholder="Optional note"
-                className="h-11 rounded-2xl border-0 bg-background"
+                className="h-11 rounded-2xl border-0 bg-surface"
                 style={FLAT_FIELD_STYLE}
               />
             </div>
 
-            <label className="flex items-center gap-3 rounded-2xl bg-background px-4 py-3">
+            <label className="flex items-center gap-3 rounded-2xl bg-surface px-4 py-3">
               <Checkbox
                 checked={form.isActive}
                 onCheckedChange={(checked) =>
@@ -404,7 +404,7 @@ export default function AdminCouponsPage() {
                   }))
                 }
               />
-              <span className="text-sm text-foreground">Coupon is active</span>
+              <span className="text-sm text-on-surface">Coupon is active</span>
             </label>
 
             <div className="flex flex-col gap-2 sm:flex-row">
@@ -434,7 +434,7 @@ export default function AdminCouponsPage() {
         </section>
 
         <section className="space-y-4">
-          <div className="rounded-[28px] bg-muted/35 p-4">
+          <div className="rounded-[28px] bg-surface-container-low/35 p-4">
             <form
               onSubmit={(event) => {
                 event.preventDefault();
@@ -444,12 +444,12 @@ export default function AdminCouponsPage() {
               className="flex flex-col gap-2 sm:flex-row"
             >
               <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-on-surface-variant" />
                 <Input
                   value={searchInput}
                   onChange={(event) => setSearchInput(event.target.value)}
                   placeholder="Search coupon code"
-                  className="h-11 rounded-2xl border-0 bg-background pl-9"
+                  className="h-11 rounded-2xl border-0 bg-surface pl-9"
                   style={FLAT_FIELD_STYLE}
                 />
               </div>
@@ -459,24 +459,24 @@ export default function AdminCouponsPage() {
             </form>
           </div>
 
-          <div className="overflow-hidden rounded-[28px] bg-muted/35">
+          <div className="overflow-hidden rounded-[28px] bg-surface-container-low/35">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-border/60 bg-background/70">
-                    <th className="px-4 py-3 text-left font-medium text-muted-foreground">
+                  <tr className="border-b border-border/60 bg-surface/70">
+                    <th className="px-4 py-3 text-left font-medium text-on-surface-variant">
                       Code
                     </th>
-                    <th className="px-4 py-3 text-left font-medium text-muted-foreground">
+                    <th className="px-4 py-3 text-left font-medium text-on-surface-variant">
                       Discount
                     </th>
-                    <th className="px-4 py-3 text-left font-medium text-muted-foreground">
+                    <th className="px-4 py-3 text-left font-medium text-on-surface-variant">
                       Rules
                     </th>
-                    <th className="px-4 py-3 text-left font-medium text-muted-foreground">
+                    <th className="px-4 py-3 text-left font-medium text-on-surface-variant">
                       Status
                     </th>
-                    <th className="px-4 py-3 text-right font-medium text-muted-foreground">
+                    <th className="px-4 py-3 text-right font-medium text-on-surface-variant">
                       Actions
                     </th>
                   </tr>
@@ -484,13 +484,13 @@ export default function AdminCouponsPage() {
                 <tbody>
                   {loading ? (
                     <tr>
-                      <td colSpan={5} className="px-4 py-12 text-center text-muted-foreground">
+                      <td colSpan={5} className="px-4 py-12 text-center text-on-surface-variant">
                         <Loader2 className="mx-auto size-5 animate-spin" />
                       </td>
                     </tr>
                   ) : coupons.length === 0 ? (
                     <tr>
-                      <td colSpan={5} className="px-4 py-12 text-center text-muted-foreground">
+                      <td colSpan={5} className="px-4 py-12 text-center text-on-surface-variant">
                         No coupons found
                       </td>
                     </tr>
@@ -498,25 +498,25 @@ export default function AdminCouponsPage() {
                     coupons.map((coupon) => (
                       <tr
                         key={coupon.id}
-                        className="border-b border-border/40 transition-colors hover:bg-background/50"
+                        className="border-b border-border/40 transition-colors hover:bg-surface/50"
                       >
                         <td className="px-4 py-3">
                           <div>
-                            <p className="font-medium text-foreground">{coupon.code}</p>
+                            <p className="font-medium text-on-surface">{coupon.code}</p>
                             {coupon.note ? (
-                              <p className="text-xs text-muted-foreground">{coupon.note}</p>
+                              <p className="text-xs text-on-surface-variant">{coupon.note}</p>
                             ) : null}
                           </div>
                         </td>
                         <td className="px-4 py-3">
-                          <p className="font-medium text-foreground">
+                          <p className="font-medium text-on-surface">
                             {formatCouponValue(coupon)}
                           </p>
-                          <p className="text-xs text-muted-foreground">
+                          <p className="text-xs text-on-surface-variant">
                             {coupon.type === "percentage" ? "Percentage" : "Value"}
                           </p>
                         </td>
-                        <td className="px-4 py-3 text-xs text-muted-foreground">
+                        <td className="px-4 py-3 text-xs text-on-surface-variant">
                           <p>
                             Min:{" "}
                             {coupon.minOrderTotal !== null
@@ -579,7 +579,7 @@ export default function AdminCouponsPage() {
                               type="button"
                               variant="outline"
                               size="sm"
-                              className="rounded-full bg-background"
+                              className="rounded-full bg-surface"
                               disabled={toggleMutation.isPending}
                               onClick={() => toggleMutation.mutate(coupon)}
                             >
@@ -596,7 +596,7 @@ export default function AdminCouponsPage() {
 
             {pagination && pagination.totalPages > 1 ? (
               <div className="flex flex-col gap-3 border-t border-border/50 px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-on-surface-variant">
                   Page {pagination.page} of {pagination.totalPages}
                 </p>
                 <div className="flex gap-2">

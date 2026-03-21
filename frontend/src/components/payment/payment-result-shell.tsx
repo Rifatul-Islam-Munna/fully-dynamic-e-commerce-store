@@ -71,25 +71,25 @@ export function PaymentResultShell({
                 )}
               </div>
               <div>
-                <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
+                <p className="text-xs font-medium uppercase tracking-[0.18em] text-on-surface-variant">
                   bKash checkout
                 </p>
-                <h1 className="mt-3 text-3xl font-semibold tracking-tight text-foreground">
+                <h1 className="mt-3 text-3xl font-semibold tracking-tight text-on-surface">
                   {isSuccess ? "Payment successful" : "Payment not completed"}
                 </h1>
-                <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">
+                <p className="mt-3 max-w-2xl text-sm leading-6 text-on-surface-variant">
                   {message}
                 </p>
               </div>
             </div>
 
             {orderNumber ? (
-              <div className="mt-6 rounded-[28px] border border-border/60 bg-background/90 p-5">
-                <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+              <div className="mt-6 rounded-[28px] border border-border/60 bg-surface/90 p-5">
+                <div className="flex items-center gap-2 text-sm font-medium text-on-surface">
                   <ReceiptText className="size-4 text-primary" />
                   Order reference
                 </div>
-                <p className="mt-3 text-2xl font-semibold tracking-tight text-foreground">
+                <p className="mt-3 text-2xl font-semibold tracking-tight text-on-surface">
                   {orderNumber}
                 </p>
               </div>
@@ -118,13 +118,13 @@ export function PaymentResultShell({
             </div>
           </section>
 
-          <aside className="h-fit rounded-[32px] border border-border/60 bg-background/92 p-5">
-            <p className="text-sm font-medium text-foreground">
+          <aside className="h-fit rounded-[32px] border border-border/60 bg-surface/92 p-5">
+            <p className="text-sm font-medium text-on-surface">
               Payment summary
             </p>
             <div className="mt-4 space-y-3 text-sm">
               {total !== null ? (
-                <div className="flex items-center justify-between text-muted-foreground">
+                <div className="flex items-center justify-between text-on-surface-variant">
                   <span>Order total</span>
                   <span>{formatCurrency(total)}</span>
                 </div>
@@ -136,7 +136,7 @@ export function PaymentResultShell({
                 </div>
               ) : null}
               {dueAmount !== null ? (
-                <div className="flex items-center justify-between text-muted-foreground">
+                <div className="flex items-center justify-between text-on-surface-variant">
                   <span>Remaining due</span>
                   <span>{formatCurrency(dueAmount)}</span>
                 </div>

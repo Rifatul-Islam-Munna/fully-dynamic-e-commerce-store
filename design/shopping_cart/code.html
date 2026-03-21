@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-secondary": "#ffffff",
+              "surface-container-lowest": "#ffffff",
+              "on-surface": "#1a1c1c",
+              "tertiary-fixed": "#ffdbcc",
+              "background": "#f9f9f9",
+              "secondary-fixed-dim": "#bdc9c9",
+              "surface-container-highest": "#e2e2e2",
+              "on-secondary-container": "#5b6667",
+              "secondary": "#556061",
+              "primary-fixed-dim": "#adcccd",
+              "primary-fixed": "#c9e8e9",
+              "on-tertiary-fixed": "#2d1509",
+              "surface-tint": "#476364",
+              "on-error-container": "#93000a",
+              "surface-container": "#eeeeee",
+              "on-background": "#1a1c1c",
+              "on-tertiary-container": "#ae8775",
+              "inverse-primary": "#adcccd",
+              "primary-container": "#0f2d2e",
+              "outline-variant": "#c1c8c7",
+              "surface-container-high": "#e8e8e8",
+              "surface-dim": "#dadada",
+              "tertiary": "#240e04",
+              "on-tertiary": "#ffffff",
+              "primary": "#001819",
+              "outline": "#717878",
+              "inverse-surface": "#2f3131",
+              "on-tertiary-fixed-variant": "#5e4031",
+              "on-primary-fixed-variant": "#2f4c4c",
+              "secondary-container": "#d9e5e5",
+              "surface-variant": "#e2e2e2",
+              "on-error": "#ffffff",
+              "on-secondary-fixed-variant": "#3e4949",
+              "error-container": "#ffdad6",
+              "on-secondary-fixed": "#131d1e",
+              "tertiary-container": "#3c2215",
+              "surface-bright": "#f9f9f9",
+              "on-primary-fixed": "#012021",
+              "tertiary-fixed-dim": "#e9bda9",
+              "inverse-on-surface": "#f1f1f1",
+              "on-surface-variant": "#414848",
+              "on-primary": "#ffffff",
+              "surface": "#f9f9f9",
+              "secondary-fixed": "#d9e5e5",
+              "surface-container-low": "#f3f3f3",
+              "error": "#ba1a1a",
+              "on-primary-container": "#779596"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+      }
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f9f9f9;
+        color: #1a1c1c;
+      }
+      h1, h2, h3 {
+        font-family: 'Manrope', sans-serif;
+      }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#f9f9f9]/80 backdrop-blur-md">
+<nav class="flex justify-between items-center w-full px-8 py-6 max-w-none">
+<div class="flex items-center gap-12">
+<a class="text-2xl font-bold tracking-[0.2em] text-[#001819] uppercase" href="#">ATELIER</a>
+<div class="hidden md:flex gap-8">
+<a class="text-[#001819] font-semibold border-b border-[#001819] hover:text-[#001819] transition-colors duration-300" href="#">Shop</a>
+<a class="text-[#414848] font-medium hover:text-[#001819] transition-colors duration-300" href="#">Collections</a>
+<a class="text-[#414848] font-medium hover:text-[#001819] transition-colors duration-300" href="#">About</a>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<button class="text-[#001819] hover:opacity-70 transition-opacity">
+<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+</button>
+<button class="text-[#001819] hover:opacity-70 transition-opacity">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+</button>
+</div>
+</nav>
+</header>
+<main class="pt-32 pb-24 px-8 max-w-7xl mx-auto">
+<header class="mb-16">
+<h1 class="text-5xl font-extrabold tracking-tight text-primary mb-2">Your Bag</h1>
+<p class="text-on-surface-variant font-label tracking-widest uppercase text-xs">2 Items Selected</p>
+</header>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+<!-- Cart Items List -->
+<section class="lg:col-span-8 space-y-12">
+<!-- Item 1 -->
+<div class="group flex flex-col md:flex-row gap-8 pb-12 transition-all">
+<div class="w-full md:w-48 aspect-[3/4] bg-surface-container overflow-hidden rounded-sm">
+<img alt="Sculpted Wool Overcoat" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Modern minimalist charcoal wool overcoat detail" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD61f7CzP5Ms_U7X5nyexI1PAuC-AAQeFfYmeDDAfr6eVKHkai8TJDxRHOaNd_OfbuoT0_lrfAgp2bWrVTKfkgatwwpui-NOP8sT2xrsQUIYx9TqMYHrmwxEzv6-920mP0Zp62GcLIn747gAGOOiHMsjHr9wfvHbVJiecYnqvETn0fx-meL1j4eTmmw0zEYt_rD9JMGik1lEVL58ZtTQUrj6PquGXQjMjAQiLVvUwpb-sYr00_ISGlvLCPks1OLP8xPcgg0xIiioF9T"/>
+</div>
+<div class="flex-1 flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-xl font-bold text-primary mb-1">Sculpted Wool Overcoat</h3>
+<p class="text-sm text-on-surface-variant mb-4">Midnight Navy / 48 (EU)</p>
+</div>
+<span class="text-lg font-bold text-primary">$1,240.00</span>
+</div>
+<div class="flex items-center justify-between mt-8">
+<div class="flex items-center border border-outline-variant/20 rounded-full px-4 py-2 bg-surface-container-low">
+<button class="hover:text-primary text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="remove">remove</span>
+</button>
+<span class="mx-6 text-sm font-semibold w-4 text-center">1</span>
+<button class="hover:text-primary text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+</button>
+</div>
+<button class="text-xs font-label tracking-widest uppercase text-on-surface-variant hover:text-error transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="delete">delete</span>
+                                Remove
+                            </button>
+</div>
+</div>
+</div>
+<!-- Tonal Shift Spacer -->
+<div class="h-px bg-surface-container-high w-full"></div>
+<!-- Item 2 -->
+<div class="group flex flex-col md:flex-row gap-8 pb-12 transition-all">
+<div class="w-full md:w-48 aspect-[3/4] bg-surface-container overflow-hidden rounded-sm">
+<img alt="Aural One Headphones" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Matte black high-end studio headphones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGjT9SRW7mNhvwQDs6urTbTiD2lWFfXf96sv8KXrINhsTADfUkOOw3qA9MrzKK2rMFicekYcayNVqrgOd6CVmcz4GZ7xvAtOzXL3Gc85vtYHqMix_YpHYnIKskjYOMhj5mYIz-pkFShO_9-DlKokwf2HFTUvOXYa5wwyGVsx9bhOUDKfcoh7ELfpxSjLp143TwXjm0erwfCbbjpRHaB4Hel_JXXv4cWLkQz-2TM319nDFsgid0gbkl0kE5BBPJF2899bdmrIvh3TAe"/>
+</div>
+<div class="flex-1 flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-xl font-bold text-primary mb-1">Aural One</h3>
+<p class="text-sm text-on-surface-variant mb-4">Obsidian / Leather Finish</p>
+</div>
+<span class="text-lg font-bold text-primary">$499.00</span>
+</div>
+<div class="flex items-center justify-between mt-8">
+<div class="flex items-center border border-outline-variant/20 rounded-full px-4 py-2 bg-surface-container-low">
+<button class="hover:text-primary text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="remove">remove</span>
+</button>
+<span class="mx-6 text-sm font-semibold w-4 text-center">1</span>
+<button class="hover:text-primary text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+</button>
+</div>
+<button class="text-xs font-label tracking-widest uppercase text-on-surface-variant hover:text-error transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="delete">delete</span>
+                                Remove
+                            </button>
+</div>
+</div>
+</div>
+</section>
+<!-- Summary Section -->
+<aside class="lg:col-span-4 sticky top-32">
+<div class="bg-surface-container p-10 rounded-sm">
+<h2 class="text-2xl font-bold text-primary mb-8">Summary</h2>
+<div class="space-y-6 mb-10">
+<div class="flex justify-between text-sm">
+<span class="text-on-surface-variant">Subtotal</span>
+<span class="font-semibold">$1,739.00</span>
+</div>
+<div class="flex justify-between text-sm">
+<span class="text-on-surface-variant">Estimated Shipping</span>
+<span class="font-semibold text-primary">Complimentary</span>
+</div>
+<div class="flex justify-between text-sm">
+<span class="text-on-surface-variant">Tax</span>
+<span class="font-semibold">$143.46</span>
+</div>
+</div>
+<div class="border-t border-outline-variant/30 pt-6 mb-10">
+<div class="flex justify-between items-baseline">
+<span class="text-lg font-bold">Total</span>
+<div class="text-right">
+<span class="text-2xl font-extrabold text-primary">$1,882.46</span>
+<p class="text-[10px] text-on-surface-variant tracking-wider uppercase mt-1">VAT Included</p>
+</div>
+</div>
+</div>
+<div class="space-y-4">
+<button class="w-full bg-primary text-on-primary py-5 rounded-full font-bold tracking-[0.1em] text-sm uppercase hover:opacity-90 transition-opacity">
+                            PROCEED TO CHECKOUT
+                        </button>
+<p class="text-[10px] text-center text-on-surface-variant tracking-widest uppercase px-4 leading-relaxed">
+                            Secure encrypted transaction. All major cards accepted.
+                        </p>
+</div>
+<!-- Discount code field -->
+<div class="mt-12">
+<label class="text-[10px] font-label tracking-widest uppercase text-on-surface-variant mb-2 block">Promotion Code</label>
+<div class="flex border-b border-outline-variant/40 pb-2">
+<input class="bg-transparent border-none focus:ring-0 text-sm tracking-widest placeholder:text-outline p-0 flex-1 uppercase" placeholder="ENTER CODE" type="text"/>
+<button class="text-xs font-bold tracking-widest text-primary hover:opacity-50 transition-opacity uppercase">Apply</button>
+</div>
+</div>
+</div>
+<div class="mt-8 px-2">
+<div class="flex items-center gap-4 py-4">
+<span class="material-symbols-outlined text-primary-container" data-icon="lock">lock</span>
+<div>
+<p class="text-xs font-bold uppercase tracking-widest">Guaranteed Safe</p>
+<p class="text-[10px] text-on-surface-variant">256-bit SSL certificate protection</p>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full py-12 px-8 bg-[#eeeeee] flex flex-col md:flex-row justify-between items-center gap-8">
+<div class="text-lg font-bold tracking-widest text-[#001819]">ATELIER</div>
+<div class="flex flex-wrap justify-center gap-8">
+<a class="font-['Inter'] text-xs tracking-widest uppercase text-[#414848] hover:text-[#001819] transition-all" href="#">Privacy Policy</a>
+<a class="font-['Inter'] text-xs tracking-widest uppercase text-[#414848] hover:text-[#001819] transition-all" href="#">Terms of Service</a>
+<a class="font-['Inter'] text-xs tracking-widest uppercase text-[#414848] hover:text-[#001819] transition-all" href="#">Shipping &amp; Returns</a>
+</div>
+<div class="font-['Inter'] text-xs tracking-widest uppercase text-[#414848]">© 2024 ATELIER. All rights reserved.</div>
+</footer>
+</body></html>

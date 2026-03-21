@@ -101,7 +101,7 @@ export function ThemeSwitcher() {
 
   if (lockedTheme) {
     return (
-      <div className="inline-flex h-9 items-center gap-2 rounded-md bg-background px-3 text-sm text-muted-foreground">
+      <div className="inline-flex h-9 items-center gap-2 rounded-md bg-surface px-3 text-sm text-on-surface-variant">
         {renderThemeIcon(activeTheme.value, "size-4 text-primary")}
         <span>Theme: {activeTheme.label}</span>
       </div>
@@ -114,16 +114,16 @@ export function ThemeSwitcher() {
         <Button
           type="button"
           variant="outline"
-          className="h-9 gap-2 border-border/60 bg-background shadow-none transition-colors duration-300 ease-out hover:bg-muted"
+          className="h-9 gap-2 border-border/60 bg-surface shadow-none transition-colors duration-300 ease-out hover:bg-surface-container"
         >
           {renderThemeIcon(activeTheme.value, "size-4")}
           <span className="text-sm">{activeTheme.label}</span>
-          <ChevronDown className="size-4 text-muted-foreground" />
+          <ChevronDown className="size-4 text-on-surface-variant" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="start"
-        className="w-40 border-border/60 bg-background shadow-none"
+        className="w-40 border-border/60 bg-surface shadow-none"
       >
         {SITE_THEME_OPTIONS.map(({ value, label }) => {
           const isActive = theme === value;

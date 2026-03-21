@@ -53,9 +53,9 @@ export async function DynamicSectionsPage({
   if (sections.length === 0) {
     return (
       <main className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-        <div className="rounded-[32px] bg-muted/35 px-6 py-14 text-center">
+        <div className="rounded-[32px] bg-surface-container/35 px-6 py-14 text-center">
           <h1 className="text-2xl font-bold tracking-tight">{emptyTitle}</h1>
-          <p className="mt-2 text-sm text-muted-foreground">
+          <p className="mt-2 text-sm text-on-surface-variant">
             {emptyDescription}
           </p>
         </div>

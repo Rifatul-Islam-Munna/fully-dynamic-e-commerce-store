@@ -131,12 +131,12 @@ function FilterLabel({
 }) {
   return (
     <div className="flex items-center gap-1.5">
-      <span className="text-sm font-medium text-foreground">{label}</span>
+      <span className="text-sm font-medium text-on-surface">{label}</span>
       <Tooltip>
         <TooltipTrigger asChild>
           <button
             type="button"
-            className="inline-flex size-4 items-center justify-center rounded-full text-muted-foreground transition-colors hover:text-foreground"
+            className="inline-flex size-4 items-center justify-center rounded-full text-on-surface-variant transition-colors hover:text-on-surface"
             aria-label={`Explain ${label}`}
           >
             <CircleHelp className="size-3.5" />
@@ -180,7 +180,7 @@ function PriceControls({
           value={minDraft}
           onChange={(event) => setMinDraft(event.target.value)}
           onBlur={applyDrafts}
-          className="h-10 rounded-2xl border-0 bg-background"
+          className="h-10 rounded-2xl border-0 bg-surface"
         />
         <Input
           inputMode="decimal"
@@ -188,7 +188,7 @@ function PriceControls({
           value={maxDraft}
           onChange={(event) => setMaxDraft(event.target.value)}
           onBlur={applyDrafts}
-          className="h-10 rounded-2xl border-0 bg-background"
+          className="h-10 rounded-2xl border-0 bg-surface"
         />
       </div>
 
@@ -202,7 +202,7 @@ function PriceControls({
               setMaxDraft(preset.max?.toString() ?? "");
               onPreset(preset.min, preset.max);
             }}
-            className="rounded-full bg-background px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
+            className="rounded-full bg-surface px-3 py-1.5 text-xs font-medium text-on-surface-variant transition-colors hover:text-on-surface"
           >
             {preset.label}
           </button>
@@ -235,16 +235,16 @@ function FilterPanel({
     navbarItems.find((item) => item.url === filters.mainNavUrl) ?? null;
 
   return (
-    <div className="rounded-[28px] bg-muted/35 p-4">
+    <div className="rounded-sm bg-surface-container-low p-4">
       <div className="mb-4 flex items-center justify-between gap-3">
-        <h2 className="text-sm font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+        <h2 className="font-headline text-xs font-bold uppercase tracking-widest text-on-surface-variant">
           Filter & sort
         </h2>
         <Button
           type="button"
           variant="ghost"
           size="sm"
-          className="h-8 rounded-full px-3 text-muted-foreground hover:text-foreground"
+          className="h-8 rounded-full px-3 text-on-surface-variant hover:text-on-surface"
           onClick={onResetAll}
         >
           Reset
@@ -261,9 +261,9 @@ function FilterPanel({
             value={filters.sort}
             onValueChange={(value) => onSortChange(value as ProductSort)}
           >
-            <SelectTrigger className="h-10 w-full rounded-2xl border-0 bg-background">
+            <SelectTrigger className="h-10 w-full rounded-sm border-0 bg-surface">
               <div className="flex items-center gap-2">
-                <SlidersHorizontal className="size-4 text-muted-foreground" />
+                <SlidersHorizontal className="size-4 text-on-surface-variant" />
                 <SelectValue placeholder="Newest first" />
               </div>
             </SelectTrigger>
@@ -288,7 +288,7 @@ function FilterPanel({
               onMainNavChange(value === ALL_VALUE ? null : value)
             }
           >
-            <SelectTrigger className="h-10 w-full rounded-2xl border-0 bg-background">
+            <SelectTrigger className="h-10 w-full rounded-sm border-0 bg-surface">
               <SelectValue placeholder="All departments" />
             </SelectTrigger>
             <SelectContent align="start">
@@ -314,7 +314,7 @@ function FilterPanel({
             }
             disabled={!selectedMainNav || selectedMainNav.subNav.length === 0}
           >
-            <SelectTrigger className="h-10 w-full rounded-2xl border-0 bg-background">
+            <SelectTrigger className="h-10 w-full rounded-sm border-0 bg-surface">
               <SelectValue placeholder="All sections" />
             </SelectTrigger>
             <SelectContent align="start">
@@ -351,7 +351,7 @@ function FilterPanel({
             {PRODUCT_FLAG_CONFIG.map((flag) => (
               <label
                 key={flag.key}
-                className="flex items-center gap-3 rounded-2xl bg-background px-3 py-2.5"
+                className="flex items-center gap-3 rounded-sm bg-surface px-3 py-2.5"
               >
                 <Checkbox
                   checked={filters[flag.key]}
@@ -359,7 +359,7 @@ function FilterPanel({
                     onFlagToggle(flag.key, checked === true)
                   }
                 />
-                <span className="text-sm text-foreground">{flag.label}</span>
+                <span className="text-sm text-on-surface">{flag.label}</span>
               </label>
             ))}
           </div>
@@ -575,10 +575,10 @@ export function SearchPageShell({
           </aside>
 
           <section className="space-y-4">
-            <div className="rounded-[28px] bg-muted/35 px-4 py-4 sm:px-5">
+            <div className="rounded-sm bg-surface-container-low px-4 py-4 sm:px-5">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                 <div className="min-w-0 space-y-1">
-                  <p className="text-lg font-semibold tracking-tight text-foreground">
+                  <p className="font-headline text-lg font-extrabold tracking-tighter text-primary">
                     {searchLabel ? (
                       <>
                         Results for{" "}
@@ -590,7 +590,7 @@ export function SearchPageShell({
                       "All products"
                     )}
                   </p>
-                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-on-surface-variant">
                     <span>
                       {totalResults > 0
                         ? `Showing ${currentStart}-${currentEnd} of ${totalResults}`
@@ -612,7 +612,7 @@ export function SearchPageShell({
 
                 <div className="flex items-center gap-2">
                   {activeFilterCount > 0 ? (
-                    <span className="inline-flex h-9 items-center rounded-full bg-background px-3 text-xs font-medium text-foreground">
+                    <span className="inline-flex h-9 items-center rounded-full bg-surface px-3 text-xs font-medium text-on-surface">
                       {activeFilterCount} filters
                     </span>
                   ) : null}
@@ -635,10 +635,10 @@ export function SearchPageShell({
                       key={chip.key}
                       type="button"
                       onClick={chip.onRemove}
-                      className="inline-flex items-center gap-2 rounded-full bg-background px-3 py-1.5 text-xs font-medium text-foreground"
+                      className="inline-flex items-center gap-2 rounded-full bg-surface px-3 py-1.5 text-xs font-medium text-on-surface"
                     >
                       {chip.label}
-                      <X className="size-3.5 text-muted-foreground" />
+                      <X className="size-3.5 text-on-surface-variant" />
                     </button>
                   ))}
                 </div>
@@ -648,7 +648,7 @@ export function SearchPageShell({
             <Sheet open={isFilterSheetOpen} onOpenChange={setIsFilterSheetOpen}>
               <SheetContent
                 side="left"
-                className="w-[92vw] max-w-sm overflow-y-auto bg-background p-0"
+                className="w-[92vw] max-w-sm overflow-y-auto bg-surface p-0"
               >
                 <SheetHeader className="px-5 py-4">
                   <SheetTitle>Filter & sort</SheetTitle>
@@ -664,28 +664,28 @@ export function SearchPageShell({
                 {Array.from({ length: SEARCH_RESULTS_LIMIT }).map((_, index) => (
                   <div
                     key={`search-skeleton-${index}`}
-                    className="overflow-hidden rounded-[26px] bg-muted/30 p-3"
+                    className="overflow-hidden rounded-sm bg-surface-container-low p-3"
                   >
-                    <div className="h-52 animate-pulse rounded-xl bg-muted/70" />
+                    <div className="h-52 animate-pulse rounded-xl bg-surface-container/70" />
                     <div className="mt-3 space-y-2">
-                      <div className="h-4 animate-pulse rounded bg-muted/70" />
-                      <div className="h-4 w-2/3 animate-pulse rounded bg-muted/60" />
-                      <div className="h-10 animate-pulse rounded-xl bg-muted/50" />
+                      <div className="h-4 animate-pulse rounded bg-surface-container/70" />
+                      <div className="h-4 w-2/3 animate-pulse rounded bg-surface-container/60" />
+                      <div className="h-10 animate-pulse rounded-xl bg-surface-container/50" />
                     </div>
                   </div>
                 ))}
               </div>
             ) : searchResults.isError ? (
-              <div className="rounded-[28px] bg-muted/35 px-6 py-14 text-center">
-                <h2 className="text-2xl font-semibold tracking-tight">
+              <div className="rounded-sm bg-surface-container-low px-6 py-14 text-center">
+                <h2 className="font-headline text-2xl font-extrabold tracking-tighter text-primary">
                   Search service error
                 </h2>
-                <p className="mt-3 text-sm text-muted-foreground">
+                <p className="mt-3 text-sm text-on-surface-variant">
                   {searchResults.error.message}
                 </p>
                 <Button
                   type="button"
-                  className="mt-6 rounded-xl"
+                  className="mt-6 rounded-full font-headline text-xs font-bold uppercase tracking-widest shadow-none"
                   onClick={() => {
                     void searchResults.refetch();
                   }}
@@ -694,16 +694,16 @@ export function SearchPageShell({
                 </Button>
               </div>
             ) : products.length === 0 ? (
-              <div className="rounded-[28px] bg-muted/35 px-6 py-14 text-center">
-                <h2 className="text-2xl font-semibold tracking-tight">
+              <div className="rounded-sm bg-surface-container-low px-6 py-14 text-center">
+                <h2 className="font-headline text-2xl font-extrabold tracking-tighter text-primary">
                   No matching products
                 </h2>
-                <p className="mt-3 text-sm text-muted-foreground">
+                <p className="mt-3 text-sm text-on-surface-variant">
                   Try clearing one or two filters, or browse the full catalog.
                 </p>
                 <Button
                   type="button"
-                  className="mt-6 rounded-xl"
+                  className="mt-6 rounded-full font-headline text-xs font-bold uppercase tracking-widest shadow-none"
                   onClick={() => {
                     void setFilters({
                       search: "",
@@ -733,8 +733,8 @@ export function SearchPageShell({
             )}
 
             {pagination && pagination.totalPages > 1 ? (
-              <div className="flex flex-col gap-3 rounded-[28px] bg-muted/35 px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
-                <p className="text-sm text-muted-foreground">
+              <div className="flex flex-col gap-3 rounded-sm bg-surface-container-low px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
+                <p className="text-sm text-on-surface-variant">
                   Page {pagination.page} of {pagination.totalPages}
                 </p>
                 <div className="flex gap-2">

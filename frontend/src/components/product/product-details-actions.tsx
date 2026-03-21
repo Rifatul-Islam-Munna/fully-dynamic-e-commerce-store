@@ -7,6 +7,7 @@ import { sileo } from "sileo";
 import { AddToCartButton } from "@/components/product/add-to-cart-button";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/currency";
+import { cn } from "@/lib/utils";
 import { useCheckoutStore } from "@/store/checkout-store";
 import { useCartStore } from "@/store/cart-store";
 
@@ -32,6 +33,8 @@ type ProductDetailsActionsProps = {
     hasVariants?: boolean;
     variants?: ProductVariantSummary[];
   };
+  /** When true, all elements use rounded-none and orange Buy Now (Nordic Verve) */
+  sharp?: boolean;
 };
 
 function normalizeVariants(variants?: ProductVariantSummary[]) {
@@ -48,7 +51,7 @@ function normalizeVariants(variants?: ProductVariantSummary[]) {
     );
 }
 
-export function ProductDetailsActions({ product }: ProductDetailsActionsProps) {
+export function ProductDetailsActions({ product, sharp = false }: ProductDetailsActionsProps) {
   const variants = useMemo(
     () => normalizeVariants(product.variants),
     [product.variants],
@@ -100,16 +103,31 @@ export function ProductDetailsActions({ product }: ProductDetailsActionsProps) {
 
   if (!hasVariants) {
     return (
-      <div className="space-y-3 rounded-2xl bg-card/70 p-4">
+      <div className={cn(
+        "space-y-3 p-4",
+        sharp
+          ? "rounded-none border border-[#E5E7EB] bg-white"
+          : "rounded-2xl bg-surface-container-lowest/70",
+      )}>
         <div className="grid gap-2 sm:grid-cols-2">
           <AddToCartButton
             product={product}
             variant="outline"
-            className="h-11 w-full rounded-lg border-border/60 px-6 text-sm font-semibold shadow-none"
+            className={cn(
+              "h-11 w-full px-6 text-sm font-semibold shadow-none",
+              sharp
+                ? "rounded-none border-[#E5E7EB]"
+                : "rounded-lg border-border/60",
+            )}
           />
           <Button
             type="button"
-            className="h-11 w-full rounded-lg px-6 text-sm font-semibold"
+            className={cn(
+              "h-11 w-full px-6 text-sm font-semibold",
+              sharp
+                ? "rounded-none bg-[#F97316] text-white hover:bg-[#EA680C]"
+                : "rounded-lg",
+            )}
             onClick={handleBuyNow}
           >
             <ShoppingBag className="mr-2 size-4" />
@@ -131,11 +149,16 @@ export function ProductDetailsActions({ product }: ProductDetailsActionsProps) {
   const isOutOfStock = !selectedVariant || selectedStock <= 0;
 
   return (
-    <div className="space-y-3 rounded-2xl bg-card/70 p-4">
+    <div className={cn(
+      "space-y-3 p-4",
+      sharp
+        ? "rounded-none border border-[#E5E7EB] bg-white"
+        : "rounded-2xl bg-surface-container-lowest/70",
+    )}>
       <div className="space-y-1">
         <label
           htmlFor="variant"
-          className="text-xs font-semibold uppercase tracking-wide text-muted-foreground"
+          className="text-xs font-semibold uppercase tracking-wide text-on-surface-variant"
         >
           Choose Option
         </label>
@@ -143,7 +166,10 @@ export function ProductDetailsActions({ product }: ProductDetailsActionsProps) {
           id="variant"
           value={selectedVariant?.id ?? ""}
           onChange={(event) => setSelectedVariantId(event.target.value)}
-          className="h-10 w-full rounded-md bg-background px-3 text-sm text-foreground outline-none ring-1 ring-border/50 transition focus:ring-2 focus:ring-primary/30"
+          className={cn(
+            "h-10 w-full bg-surface px-3 text-sm text-on-surface outline-none ring-1 ring-border/50 transition focus:ring-2 focus:ring-primary/30",
+            sharp ? "rounded-none" : "rounded-md",
+          )}
         >
           {variants.map((variant) => {
             const variantPrice = variant.discountPrice ?? variant.price;
@@ -159,18 +185,18 @@ export function ProductDetailsActions({ product }: ProductDetailsActionsProps) {
       {selectedVariant ? (
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <span className="text-lg font-semibold text-foreground">
+            <span className="text-lg font-semibold text-on-surface">
               {selectedCurrentPrice !== null
                 ? formatCurrency(Number(selectedCurrentPrice))
                 : "N/A"}
             </span>
             {selectedHasDiscount ? (
-              <span className="text-xs text-muted-foreground line-through">
+              <span className="text-xs text-on-surface-variant line-through">
                 {formatCurrency(Number(selectedVariant.price))}
               </span>
             ) : null}
           </div>
-          <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+          <div className="flex items-center gap-1.5 text-xs text-on-surface-variant">
             {isOutOfStock ? (
               <AlertTriangle className="size-4 text-amber-500" />
             ) : (
@@ -197,12 +223,22 @@ export function ProductDetailsActions({ product }: ProductDetailsActionsProps) {
           disabled={isOutOfStock}
           variant="outline"
           label={isOutOfStock ? "Out of Stock" : "Add to Cart"}
-          className="h-11 w-full rounded-lg border-border/60 px-6 text-sm font-semibold shadow-none"
+          className={cn(
+            "h-11 w-full px-6 text-sm font-semibold shadow-none",
+            sharp
+              ? "rounded-none border-[#E5E7EB]"
+              : "rounded-lg border-border/60",
+          )}
         />
         <Button
           type="button"
           disabled={isOutOfStock}
-          className="h-11 w-full rounded-lg px-6 text-sm font-semibold"
+          className={cn(
+            "h-11 w-full px-6 text-sm font-semibold",
+            sharp
+              ? "rounded-none bg-[#F97316] text-white hover:bg-[#EA680C]"
+              : "rounded-lg",
+          )}
           onClick={handleBuyNow}
         >
           <ShoppingBag className="mr-2 size-4" />

@@ -124,7 +124,7 @@ export function renderDiscountBannerSection(
     return (
       <section
         key={sectionKey}
-        className="rounded-2xl border border-border/70 bg-background p-3 shadow-[0_30px_90px_-65px_rgba(15,23,42,0.3)] sm:rounded-[38px] sm:p-6"
+        className="rounded-2xl border border-border/70 bg-surface p-3 shadow-[0_30px_90px_-65px_rgba(15,23,42,0.3)] sm:rounded-[38px] sm:p-6"
       >
         <div className="grid gap-4 lg:grid-cols-[1.06fr_0.94fr] lg:items-stretch">
           <div className="rounded-[32px] bg-[linear-gradient(135deg,rgba(79,70,229,0.08),rgba(15,23,42,0.04),rgba(255,255,255,1))] px-5 py-6 sm:px-6">
@@ -136,13 +136,13 @@ export function renderDiscountBannerSection(
                   icon={BadgePercent}
                   title="Special offer"
                   text="Take advantage of this limited-time deal before it ends."
-                  className="bg-background/80"
+                  className="bg-surface/80"
                 />
                 <DetailTile
                   icon={PanelsTopLeft}
                   title="Easy savings"
                   text="Browse the selection and save on your favorite products."
-                  className="bg-background/80"
+                  className="bg-surface/80"
                 />
               </div>
               <SectionCta href={section.buttonUrl} label={ctaLabel} />
@@ -153,7 +153,7 @@ export function renderDiscountBannerSection(
               src={imageUrl}
               alt={title}
               className="h-72 rounded-[28px] sm:h-full"
-              frameClassName="rounded-[32px] border border-border/70 bg-muted/24 p-3"
+              frameClassName="rounded-[32px] border border-border/70 bg-surface-container/24 p-3"
             />
           ) : (
             <SupportPanel
@@ -232,13 +232,13 @@ export function renderDiscountBannerSection(
                   icon={BadgePercent}
                   title="Limited time"
                   text="Don't miss out - grab these savings while they last."
-                  className="bg-background/80"
+                  className="bg-surface/80"
                 />
                 <DetailTile
                   icon={GalleryVerticalEnd}
                   title="Curated picks"
                   text="Handpicked products at special prices just for you."
-                  className="bg-background/80"
+                  className="bg-surface/80"
                 />
               </div>
               <SectionCta href={section.buttonUrl} label={ctaLabel} />
@@ -251,9 +251,9 @@ export function renderDiscountBannerSection(
                   src={imageUrl}
                   alt={title}
                   className="h-full min-h-[220px] rounded-[28px] object-cover"
-                  frameClassName="h-full rounded-[32px] bg-background p-3 shadow-[0_28px_80px_-58px_rgba(15,23,42,0.28)]"
+                  frameClassName="h-full rounded-[32px] bg-surface p-3 shadow-[0_28px_80px_-58px_rgba(15,23,42,0.28)]"
                 />
-                <div className="absolute left-8 top-8 rounded-full bg-background/90 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-foreground shadow-sm">
+                <div className="absolute left-8 top-8 rounded-full bg-surface/90 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-on-surface shadow-sm">
                   Visual edge
                 </div>
               </>
@@ -279,7 +279,7 @@ export function renderDiscountBannerSection(
         className="relative overflow-hidden rounded-2xl bg-primary sm:rounded-[32px]"
       >
         <div className="absolute -right-10 -top-10 size-40 rotate-12 rounded-[40px] bg-white/10 sm:size-60" />
-        <div className="relative z-10 flex flex-col gap-4 p-4 text-primary-foreground sm:flex-row sm:items-center sm:justify-between sm:p-6">
+        <div className="relative z-10 flex flex-col gap-4 p-4 text-on-primary sm:flex-row sm:items-center sm:justify-between sm:p-6">
           <div className="space-y-1.5">
             <SectionEyebrow
               label="Sale"
@@ -350,17 +350,17 @@ export function renderDiscountBannerSection(
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="space-y-2">
             {section.subtitle?.trim() ? (
-              <span className="inline-block rounded-full bg-primary px-3 py-1 text-xs font-bold text-primary-foreground">
+              <span className="inline-block rounded-full bg-primary px-3 py-1 text-xs font-bold text-on-primary">
                 {section.subtitle}
               </span>
             ) : null}
             {title ? (
-              <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl lg:text-3xl">
+              <h2 className="text-xl font-bold tracking-tight text-on-surface sm:text-2xl lg:text-3xl">
                 {title}
               </h2>
             ) : null}
             {sectionCopy ? (
-              <p className="text-sm leading-relaxed text-muted-foreground sm:text-base">
+              <p className="text-sm leading-relaxed text-on-surface-variant sm:text-base">
                 {sectionCopy}
               </p>
             ) : null}
@@ -385,15 +385,15 @@ export function renderDiscountBannerSection(
     return (
       <section
         key={sectionKey}
-        className="rounded-full border border-border/70 bg-background px-4 py-2.5 shadow-sm sm:px-6 sm:py-3"
+        className="rounded-full border border-border/70 bg-surface px-4 py-2.5 shadow-sm sm:px-6 sm:py-3"
       >
         <div className="flex flex-col items-center gap-2 text-center sm:flex-row sm:gap-4 sm:text-left">
           {section.subtitle?.trim() ? (
-            <span className="shrink-0 rounded-full bg-primary px-3 py-1 text-[11px] font-bold text-primary-foreground">
+            <span className="shrink-0 rounded-full bg-primary px-3 py-1 text-[11px] font-bold text-on-primary">
               {section.subtitle}
             </span>
           ) : null}
-          <p className="min-w-0 flex-1 truncate text-sm font-medium text-foreground sm:text-base">
+          <p className="min-w-0 flex-1 truncate text-sm font-medium text-on-surface sm:text-base">
             {title}
           </p>
           <SectionCta href={section.buttonUrl} label={ctaLabel} />

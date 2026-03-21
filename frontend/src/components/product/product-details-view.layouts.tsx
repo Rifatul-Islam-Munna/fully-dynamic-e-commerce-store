@@ -62,6 +62,8 @@ export function renderProductDetailsLayout(
       return <LuxuryDetails {...props} />;
     case "tech_focus":
       return <TechFocusDetails {...props} />;
+    case "nordic_verve":
+      return <NordicVerveDetails {...props} />;
     default:
       return <ClassicDetails {...props} />;
   }
@@ -73,7 +75,7 @@ function OriginalDetails(props: LayoutProps) {
       <ProductImageGallery images={props.gallery} title={props.product.title} />
 
       <div className="space-y-4 xl:sticky xl:top-24 xl:self-start">
-        <section className="rounded-[28px] bg-card p-5 sm:p-6">
+        <section className="rounded-[28px] bg-surface-container-lowest p-5 sm:p-6">
           <Breadcrumbs
             mainNavUrl={props.mainNavUrl}
             subNavUrl={props.subNavUrl}
@@ -93,7 +95,7 @@ function OriginalDetails(props: LayoutProps) {
           </div>
 
           {props.view.summary ? (
-            <p className="mt-3 text-sm leading-6 text-muted-foreground">
+            <p className="mt-3 text-sm leading-6 text-on-surface-variant">
               {props.view.summary}
             </p>
           ) : null}
@@ -536,7 +538,7 @@ function MerchantBriefDetails(props: LayoutProps) {
       <div className="space-y-4 xl:sticky xl:top-24 xl:self-start">
         <HeaderCluster {...props} showCategoryLinks />
 
-        <section className="rounded-[28px] bg-card p-5 sm:p-6">
+        <section className="rounded-[28px] bg-surface-container-lowest p-5 sm:p-6">
           <ProductDetailsActions product={props.actionProduct} />
           <div className="mt-5">
             <InlineRichDescription richText={props.product.richText} />
@@ -593,7 +595,7 @@ function BrutalistDetails(props: LayoutProps) {
     <div className="space-y-12 font-mono">
       <HeaderCluster {...props} showCategoryLinks emphasis="brutalist" />
       <section className="grid gap-8 xl:grid-cols-[1fr_1fr] xl:gap-8">
-        <div className="border-4 border-primary bg-background shadow-[8px_8px_0_0_var(--color-primary)]">
+        <div className="border-4 border-primary bg-surface shadow-[8px_8px_0_0_var(--color-primary)]">
           <ProductImageGallery
             images={props.gallery}
             title={props.product.title}
@@ -675,6 +677,42 @@ function TechFocusDetails(props: LayoutProps) {
           />
         </div>
       </section>
+    </div>
+  );
+}
+
+/* ── Nordic Verve layout: sharp corners, full-width-below design ── */
+function NordicVerveDetails(props: LayoutProps) {
+  return (
+    <div className="space-y-8">
+      {/* ── TOP ROW: Image Gallery (left ~58%) + Purchase Panel (right ~42%) ── */}
+      <section className="grid gap-6 xl:grid-cols-[1.16fr_0.84fr] xl:gap-8">
+        {/* Left column — product image gallery with sharp corners */}
+        <ProductImageGallery
+          images={props.gallery}
+          title={props.product.title}
+          sharp
+        />
+
+        {/* Right column — sticky purchase panel with header + actions + trust badges */}
+        <div className="space-y-4 xl:sticky xl:top-24 xl:self-start">
+          <HeaderCluster {...props} emphasis="nordic_verve" />
+          <PurchasePanel {...props} emphasis="nordic_verve" />
+        </div>
+      </section>
+
+      {/* ── FULL-WIDTH: Product Description / Details ── */}
+      <DescriptionSection
+        richText={props.product.richText}
+        emphasis="nordic_verve"
+      />
+
+      {/* ── FULL-WIDTH: Related Products section — 4-column grid ── */}
+      <RelatedProductsSection
+        title={props.relatedTitle}
+        products={props.relatedProducts}
+        emphasis="nordic_verve"
+      />
     </div>
   );
 }

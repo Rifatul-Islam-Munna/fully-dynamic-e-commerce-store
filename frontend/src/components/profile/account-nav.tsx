@@ -54,8 +54,8 @@ export function AccountNav() {
               className={cn(
                 "flex shrink-0 items-center gap-1.5 rounded-full px-3.5 py-2 text-[13px] font-medium transition-colors",
                 isActive
-                  ? "bg-primary text-primary-foreground shadow-sm"
-                  : "bg-muted/60 text-muted-foreground hover:bg-muted",
+                  ? "bg-primary text-on-primary shadow-sm"
+                  : "bg-surface-container/60 text-on-surface-variant hover:bg-surface-container",
               )}
             >
               <Icon className="size-3.5" />
@@ -79,7 +79,7 @@ export function AccountNav() {
                 "flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium transition-colors",
                 isActive
                   ? "bg-primary/[0.08] text-primary"
-                  : "text-muted-foreground hover:bg-muted/50 hover:text-foreground",
+                  : "text-on-surface-variant hover:bg-surface-container/50 hover:text-on-surface",
               )}
             >
               <Icon className="size-4" />

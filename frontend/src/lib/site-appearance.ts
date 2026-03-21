@@ -149,6 +149,12 @@ export const SITE_THEME_OPTIONS = [
     description: "Clean off-white storefront with a bright terracotta button color.",
     swatches: ["#fffdfa", "#c2410c", "#f7f2ee"],
   },
+  {
+    value: "atelier",
+    label: "Atelier",
+    description: "Curated minimalist storefront with a dark teal primary and tonal surface layering.",
+    swatches: ["#f9f9f9", "#001819", "#eeeeee"],
+  },
 ] as const;
 
 export const PRODUCT_CARD_VARIANT_OPTIONS = [
@@ -216,6 +222,11 @@ export const PRODUCT_CARD_VARIANT_OPTIONS = [
     value: "modern_glass",
     label: "Modern Glass",
     description: "Deep blur backdrops and translucent floating layers.",
+  },
+  {
+    value: "nordic_verve",
+    label: "Nordic Verve",
+    description: "Sharp-cornered premium card with orange CTA and minimal borders.",
   },
 ] as const;
 
@@ -329,6 +340,11 @@ export const PRODUCT_DETAILS_VARIANT_OPTIONS = [
     value: "tech_focus",
     label: "Tech Focus",
     description: "A dense, dashboard-like presentation packed tightly into an organized, functional grid.",
+  },
+  {
+    value: "nordic_verve",
+    label: "Nordic Verve",
+    description: "Sharp-corner premium layout with full-width related products below and orange CTA buttons.",
   },
 ] as const;
 

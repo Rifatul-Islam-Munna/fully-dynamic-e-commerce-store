@@ -47,7 +47,7 @@ export function AdminSidebar() {
       {/* Mobile toggle */}
       <button
         onClick={() => setOpen(!open)}
-        className="fixed left-4 top-4 z-50 flex size-10 items-center justify-center rounded-lg border border-border bg-card text-foreground shadow-sm lg:hidden"
+        className="fixed left-4 top-4 z-50 flex size-10 items-center justify-center rounded-lg border border-border bg-surface-container-lowest text-on-surface shadow-sm lg:hidden"
         aria-label="Toggle sidebar"
       >
         {open ? <X className="size-5" /> : <Menu className="size-5" />}
@@ -70,7 +70,7 @@ export function AdminSidebar() {
       >
         {/* Brand */}
         <div className="flex h-16 items-center gap-2 border-b border-sidebar-border px-6">
-          <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground text-sm font-bold">
+          <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-on-primary text-sm font-bold">
             A
           </div>
           <span className="text-base font-semibold text-sidebar-foreground">

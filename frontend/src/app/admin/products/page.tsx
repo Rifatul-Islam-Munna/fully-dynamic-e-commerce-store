@@ -171,7 +171,7 @@ export default function AdminProductsPage() {
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Products</h1>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-on-surface-variant">
             Manage product list and jump to dedicated create/edit pages.
           </p>
         </div>
@@ -183,10 +183,10 @@ export default function AdminProductsPage() {
         </Button>
       </div>
 
-      <div className="rounded-xl border border-border bg-card p-4 space-y-3">
+      <div className="rounded-xl border border-border bg-surface-container-lowest p-4 space-y-3">
         <form onSubmit={onSearch} className="flex flex-col gap-2 sm:flex-row">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+            <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-on-surface-variant" />
             <Input
               placeholder="Search products..."
               className="pl-9"
@@ -236,24 +236,24 @@ export default function AdminProductsPage() {
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-xl border border-border bg-card">
+      <div className="overflow-hidden rounded-xl border border-border bg-surface-container-lowest">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-border bg-muted/50">
-                <th className="px-4 py-3 text-left font-medium text-muted-foreground">
+              <tr className="border-b border-border bg-surface-container/50">
+                <th className="px-4 py-3 text-left font-medium text-on-surface-variant">
                   Product
                 </th>
-                <th className="px-4 py-3 text-left font-medium text-muted-foreground">
+                <th className="px-4 py-3 text-left font-medium text-on-surface-variant">
                   Price
                 </th>
-                <th className="px-4 py-3 text-left font-medium text-muted-foreground">
+                <th className="px-4 py-3 text-left font-medium text-on-surface-variant">
                   Nav
                 </th>
-                <th className="px-4 py-3 text-left font-medium text-muted-foreground">
+                <th className="px-4 py-3 text-left font-medium text-on-surface-variant">
                   Status
                 </th>
-                <th className="px-4 py-3 text-right font-medium text-muted-foreground">
+                <th className="px-4 py-3 text-right font-medium text-on-surface-variant">
                   Actions
                 </th>
               </tr>
@@ -261,13 +261,13 @@ export default function AdminProductsPage() {
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan={5} className="px-4 py-12 text-center text-muted-foreground">
+                  <td colSpan={5} className="px-4 py-12 text-center text-on-surface-variant">
                     <Loader2 className="mx-auto size-5 animate-spin" />
                   </td>
                 </tr>
               ) : products.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-4 py-12 text-center text-muted-foreground">
+                  <td colSpan={5} className="px-4 py-12 text-center text-on-surface-variant">
                     No products found
                   </td>
                 </tr>
@@ -275,7 +275,7 @@ export default function AdminProductsPage() {
                 products.map((product) => (
                   <tr
                     key={product.id}
-                    className="border-b border-border/50 transition-colors hover:bg-muted/30"
+                    className="border-b border-border/50 transition-colors hover:bg-surface-container-low"
                   >
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
@@ -287,20 +287,20 @@ export default function AdminProductsPage() {
                             className="size-10 rounded-md object-cover"
                           />
                         ) : (
-                          <div className="size-10 rounded-md bg-muted" />
+                          <div className="size-10 rounded-md bg-surface-container" />
                         )}
                         <div>
                           <p className="font-medium">{product.title || "-"}</p>
-                          <p className="text-xs text-muted-foreground">{product.slug}</p>
+                          <p className="text-xs text-on-surface-variant">{product.slug}</p>
                         </div>
                       </div>
                     </td>
                     <td className="px-4 py-3">{formatPrice(product.price)}</td>
                     <td className="px-4 py-3">
-                      <p className="text-xs text-muted-foreground">
+                      <p className="text-xs text-on-surface-variant">
                         Main: {product.mainNavUrl || "-"}
                       </p>
-                      <p className="text-xs text-muted-foreground">
+                      <p className="text-xs text-on-surface-variant">
                         Sub: {product.subNavUrl || "-"}
                       </p>
                     </td>
@@ -344,7 +344,7 @@ export default function AdminProductsPage() {
                           size="sm"
                           onClick={() => deleteMutation.mutate(product.id)}
                           disabled={deleteMutation.isPending}
-                          className="text-destructive hover:text-destructive"
+                          className="text-error hover:text-error"
                         >
                           <Trash2 className="size-4" />
                         </Button>
@@ -360,7 +360,7 @@ export default function AdminProductsPage() {
 
       {pagination && pagination.totalPages > 1 ? (
         <div className="flex items-center justify-between">
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-on-surface-variant">
             Page {pagination.page} of {pagination.totalPages} | {pagination.total} total
           </p>
           <div className="flex gap-2">

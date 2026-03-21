@@ -75,7 +75,7 @@ export function SignupForm() {
             required
             minLength={2}
             maxLength={80}
-            className="rounded-md shadow-sm"
+            className="rounded-sm border-0 bg-surface-container-low shadow-none font-body"
           />
         </div>
         <div className="space-y-2">
@@ -89,7 +89,7 @@ export function SignupForm() {
             required
             minLength={2}
             maxLength={80}
-            className="rounded-md shadow-sm"
+            className="rounded-sm border-0 bg-surface-container-low shadow-none font-body"
           />
         </div>
       </div>
@@ -105,14 +105,14 @@ export function SignupForm() {
           }
           required
           maxLength={160}
-          className="rounded-md shadow-sm"
+          className="rounded-sm border-0 bg-surface-container-low shadow-none font-body"
         />
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="signup-phone">
           Phone{" "}
-          <span className="text-muted-foreground text-xs font-normal ml-1">
+          <span className="text-on-surface-variant text-xs font-normal ml-1">
             (Optional)
           </span>
         </Label>
@@ -126,7 +126,7 @@ export function SignupForm() {
             }))
           }
           maxLength={30}
-          className="rounded-md shadow-sm"
+          className="rounded-sm border-0 bg-surface-container-low shadow-none font-body"
         />
       </div>
 
@@ -142,25 +142,25 @@ export function SignupForm() {
           required
           minLength={8}
           maxLength={100}
-          className="rounded-md shadow-sm"
+          className="rounded-sm border-0 bg-surface-container-low shadow-none font-body"
         />
       </div>
 
       {errorMessage ? (
-        <div className="rounded-md border border-destructive/20 bg-destructive/10 p-3 text-sm text-destructive">
+        <div className="rounded-xl bg-error-container p-3 text-sm text-on-error-container">
           {errorMessage}
         </div>
       ) : null}
 
       {successMessage ? (
-        <div className="rounded-md border border-emerald-500/20 bg-emerald-500/10 p-3 text-sm text-emerald-600 dark:text-emerald-400">
+        <div className="rounded-xl bg-[#d4edda] p-3 text-sm text-[#155724]">
           {successMessage}
         </div>
       ) : null}
 
       <Button
         type="submit"
-        className="w-full rounded-md shadow-sm"
+        className="w-full rounded-full bg-primary text-on-primary font-label text-xs font-bold uppercase tracking-widest shadow-none py-5"
         disabled={isSubmitting}
       >
         {isSubmitting ? (
@@ -174,7 +174,7 @@ export function SignupForm() {
       </Button>
 
       <div className="mt-4 text-center text-sm">
-        <span className="text-muted-foreground">Already have an account? </span>
+        <span className="text-on-surface-variant">Already have an account? </span>
         <Link
           href="/login"
           className="font-medium hover:underline underline-offset-4"

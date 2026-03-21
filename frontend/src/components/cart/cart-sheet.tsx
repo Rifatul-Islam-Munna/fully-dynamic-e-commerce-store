@@ -86,14 +86,13 @@ export function CartSheet() {
       <Button
         type="button"
         variant="ghost"
-        size="sm"
+        size="icon"
         onClick={openCart}
-        className="relative h-9 gap-2 rounded-full border border-border/60 px-3 text-sm"
+        className="relative size-10 rounded-full text-[#001819] transition-all duration-300 hover:bg-[#eeeeee]"
       >
-        <ShoppingCart className="size-4" />
-        <span className="hidden sm:inline">Cart</span>
+        <ShoppingBag className="size-[18px]" />
         {totals.quantity > 0 ? (
-          <span className="inline-flex min-w-5 items-center justify-center rounded-full bg-primary px-1.5 text-[10px] font-bold text-primary-foreground">
+          <span className="absolute right-1 top-1 flex size-[18px] items-center justify-center rounded-full bg-primary text-[9px] font-bold text-on-primary">
             {totals.quantity}
           </span>
         ) : null}
@@ -103,113 +102,110 @@ export function CartSheet() {
         open={isOpen}
         onOpenChange={(nextOpen) => (nextOpen ? openCart() : closeCart())}
       >
-        <SheetContent side="right" className="w-full sm:max-w-md">
-          <SheetHeader className="border-b border-border/60 pb-3">
-            <SheetTitle className="flex items-center gap-2">
-              <ShoppingBag className="size-4" />
-              Your Cart
+        <SheetContent side="right" className="w-full border-l-0 bg-surface-container-low sm:max-w-md">
+          <SheetHeader className="px-6 pb-6 pt-2">
+            <SheetTitle className="font-headline text-2xl font-extrabold tracking-tighter text-on-surface">
+              Your Bag
             </SheetTitle>
-            <SheetDescription>
-              Fast local cart with automatic session sync when logged in.
+            <SheetDescription className="font-label text-xs uppercase tracking-widest text-on-surface-variant">
+              {totals.quantity} item{totals.quantity === 1 ? "" : "s"} selected
             </SheetDescription>
           </SheetHeader>
 
           {items.length === 0 ? (
-            <div className="flex h-full flex-col items-center justify-center gap-3 px-5 text-center">
-              <ShoppingCart className="size-8 text-muted-foreground" />
-              <p className="text-sm text-muted-foreground">
-                Your cart is empty. Add products to see them here.
+            <div className="flex h-full flex-col items-center justify-center gap-4 px-6 text-center">
+              <ShoppingCart className="size-10 text-on-surface-variant/40" />
+              <p className="font-body text-sm text-on-surface-variant">
+                Your bag is empty. Start curating.
               </p>
             </div>
           ) : (
             <div className="flex h-full flex-col">
-              <div className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
+              <div className="flex-1 space-y-4 overflow-y-auto px-6 py-2">
                 {items.map((item) => {
                   const unit = item.unitDiscountPrice ?? item.unitPrice;
                   return (
                     <article
                       key={item.key}
-                      className="rounded-lg border border-border/70 bg-card p-3"
+                      className="group flex gap-4 py-4"
                     >
-                      <div className="flex gap-3">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={item.thumbnailUrl}
-                          alt={item.title}
-                          className="size-16 rounded-md object-cover"
-                        />
-                        <div className="min-w-0 flex-1 space-y-1">
-                          <Link
-                            href={`/product/${encodeURIComponent(item.slug)}`}
-                            className="line-clamp-2 text-sm font-medium transition-colors hover:text-primary"
-                            onClick={closeCart}
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={item.thumbnailUrl}
+                        alt={item.title}
+                        className="size-20 rounded-sm object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-start justify-between">
+                          <div>
+                            <Link
+                              href={`/product/${encodeURIComponent(item.slug)}`}
+                              className="font-headline text-sm font-bold text-on-surface transition-colors hover:text-on-surface-variant"
+                              onClick={closeCart}
+                            >
+                              {item.title}
+                            </Link>
+                            <p className="mt-1 font-body text-xs text-on-surface-variant">
+                              {formatCurrency(Number(unit))}
+                            </p>
+                          </div>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="size-8 text-on-surface-variant transition-colors hover:text-error"
+                            onClick={() => removeItem(item.key)}
                           >
-                            {item.title}
-                          </Link>
-                          <p className="text-xs text-muted-foreground">
-                            {formatCurrency(Number(unit))}
+                            <Trash2 className="size-3.5" />
+                          </Button>
+                        </div>
+
+                        <div className="mt-3 flex items-center justify-between">
+                          <div className="inline-flex items-center rounded-full border border-outline-variant/20 bg-surface-container-low px-4 py-2">
+                            <button
+                              type="button"
+                              className="text-on-surface-variant transition-colors hover:text-on-surface"
+                              onClick={() =>
+                                updateQuantity(
+                                  item.key,
+                                  Math.max(1, item.quantity - 1),
+                                )
+                              }
+                            >
+                              <Minus className="size-3.5" />
+                            </button>
+                            <span className="mx-4 text-xs font-semibold">
+                              {item.quantity}
+                            </span>
+                            <button
+                              type="button"
+                              className="text-on-surface-variant transition-colors hover:text-on-surface"
+                              onClick={() =>
+                                updateQuantity(item.key, item.quantity + 1)
+                              }
+                            >
+                              <Plus className="size-3.5" />
+                            </button>
+                          </div>
+                          <p className="font-headline text-sm font-bold text-on-surface">
+                            {formatCurrency(unit * item.quantity)}
                           </p>
                         </div>
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="icon"
-                          className="size-7 text-muted-foreground hover:text-destructive"
-                          onClick={() => removeItem(item.key)}
-                        >
-                          <Trash2 className="size-3.5" />
-                        </Button>
-                      </div>
-
-                      <div className="mt-3 flex items-center justify-between">
-                        <div className="inline-flex items-center gap-1 rounded-md border border-border/70 p-1">
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="icon"
-                            className="size-7"
-                            onClick={() =>
-                              updateQuantity(
-                                item.key,
-                                Math.max(1, item.quantity - 1),
-                              )
-                            }
-                          >
-                            <Minus className="size-3.5" />
-                          </Button>
-                          <span className="w-6 text-center text-sm font-semibold">
-                            {item.quantity}
-                          </span>
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="icon"
-                            className="size-7"
-                            onClick={() =>
-                              updateQuantity(item.key, item.quantity + 1)
-                            }
-                          >
-                            <Plus className="size-3.5" />
-                          </Button>
-                        </div>
-                        <p className="text-sm font-semibold">
-                          {formatCurrency(unit * item.quantity)}
-                        </p>
                       </div>
                     </article>
                   );
                 })}
               </div>
 
-              <div className="border-t border-border/60 px-4 py-4">
-                <div className="mb-3 flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">Total</span>
-                  <span className="text-base font-bold">
+              <div className="bg-surface-container px-6 py-6">
+                <div className="mb-4 flex items-center justify-between">
+                  <span className="font-label text-xs uppercase tracking-widest text-on-surface-variant">Total</span>
+                  <span className="font-headline text-xl font-extrabold text-on-surface">
                     {formatCurrency(totals.total)}
                   </span>
                 </div>
-                <div className="space-y-2">
-                  <Button asChild className="h-10 w-full">
+                <div className="space-y-3">
+                  <Button asChild className="h-12 w-full rounded-full bg-primary font-label text-xs font-bold uppercase tracking-[0.1em] text-on-primary hover:opacity-90">
                     <Link
                       href="/checkout"
                       onClick={() => {
@@ -218,18 +214,21 @@ export function CartSheet() {
                         closeCart();
                       }}
                     >
-                      <ReceiptText className="size-4" />
-                      Checkout
+                      <ReceiptText className="mr-2 size-4" />
+                      Proceed to Checkout
                     </Link>
                   </Button>
                   <Button
                     type="button"
                     variant="secondary"
-                    className="h-10 w-full"
+                    className="h-12 w-full rounded-full bg-surface-container-high font-label text-xs font-bold uppercase tracking-[0.1em] text-on-surface hover:bg-surface-container-high/80"
                     onClick={clearCart}
                   >
-                    Clear Cart
+                    Clear Bag
                   </Button>
+                  <p className="text-center font-label text-[10px] uppercase tracking-widest text-on-surface-variant">
+                    Secure encrypted transaction
+                  </p>
                 </div>
               </div>
             </div>

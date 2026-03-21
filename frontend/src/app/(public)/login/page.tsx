@@ -66,8 +66,8 @@ export default function LoginPage() {
     <AuthShell>
       <div className="flex flex-col space-y-6">
         <div className="space-y-2 text-center">
-          <h1 className="text-2xl font-semibold tracking-tight">Login</h1>
-          <p className="text-sm text-muted-foreground">
+          <h1 className="font-headline text-2xl font-extrabold tracking-tighter text-on-surface">Login</h1>
+          <p className="font-body text-sm text-on-surface-variant">
             Sign in with your existing account credentials.
           </p>
         </div>
@@ -84,7 +84,7 @@ export default function LoginPage() {
               }
               placeholder="you@example.com"
               required
-              className="rounded-md shadow-sm"
+              className="rounded-sm border-0 bg-surface-container-low shadow-none font-body"
             />
           </div>
           <div className="space-y-2">
@@ -99,25 +99,25 @@ export default function LoginPage() {
               }
               placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
               required
-              className="rounded-md shadow-sm"
+              className="rounded-sm border-0 bg-surface-container-low shadow-none font-body"
             />
           </div>
 
           {errorMessage ? (
-            <div className="rounded-md border border-destructive/20 bg-destructive/10 p-3 text-sm text-destructive">
+            <div className="rounded-xl bg-error-container p-3 text-sm text-on-error-container">
               {errorMessage}
             </div>
           ) : null}
 
           {successMessage ? (
-            <div className="rounded-md border border-emerald-500/20 bg-emerald-500/10 p-3 text-sm text-emerald-600 dark:text-emerald-400">
+            <div className="rounded-xl bg-[#d4edda] p-3 text-sm text-[#155724]">
               {successMessage}
             </div>
           ) : null}
 
           <Button
             type="submit"
-            className="w-full rounded-md shadow-sm"
+            className="w-full rounded-full bg-primary text-on-primary font-label text-xs font-bold uppercase tracking-widest shadow-none py-5"
             disabled={isPending}
           >
             {isPending ? (
@@ -132,7 +132,7 @@ export default function LoginPage() {
         </form>
 
         <div className="text-center text-sm">
-          <span className="text-muted-foreground">
+          <span className="text-on-surface-variant">
             Don&apos;t have an account?{" "}
           </span>
           <Link

@@ -238,7 +238,7 @@ export default function SiteSettingsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 className="size-6 animate-spin text-muted-foreground" />
+        <Loader2 className="size-6 animate-spin text-on-surface-variant" />
       </div>
     );
   }
@@ -248,7 +248,7 @@ export default function SiteSettingsPage() {
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Site Settings</h1>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-on-surface-variant">
             Control the global storefront identity, theme, product card style,
             and product page layout from one place.
           </p>
@@ -288,10 +288,10 @@ export default function SiteSettingsPage() {
               placeholder="e.g. My Online Store"
               value={form.siteTitle}
               onChange={(event) => updateField("siteTitle", event.target.value)}
-              className="h-11 rounded-2xl border-0 bg-background"
+              className="h-11 rounded-2xl border-0 bg-surface"
               style={FLAT_FIELD_STYLE}
             />
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-on-surface-variant">
               Displayed in browser tabs, metadata, and social previews.
             </p>
           </div>
@@ -305,15 +305,15 @@ export default function SiteSettingsPage() {
               onChange={(event) =>
                 updateField("metaDescription", event.target.value)
               }
-              className="h-11 rounded-2xl border-0 bg-background"
+              className="h-11 rounded-2xl border-0 bg-surface"
               style={FLAT_FIELD_STYLE}
             />
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-on-surface-variant">
               Used in SEO and social cards when page-specific copy is missing.
             </p>
           </div>
 
-          <div className="rounded-2xl bg-background px-4 py-4">
+          <div className="rounded-2xl bg-surface px-4 py-4">
             <div className="flex items-center gap-3">
               <Checkbox
                 id="noticeEnabled"
@@ -324,7 +324,7 @@ export default function SiteSettingsPage() {
               />
               <div className="space-y-1">
                 <Label htmlFor="noticeEnabled">Enable top notice bar</Label>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs text-on-surface-variant">
                   Shown above the public navbar on storefront pages.
                 </p>
               </div>
@@ -336,7 +336,7 @@ export default function SiteSettingsPage() {
               value={form.noticeText}
               onChange={(event) => updateField("noticeText", event.target.value)}
               disabled={!form.noticeEnabled}
-              className="mt-4 h-11 rounded-2xl border-0 bg-muted/40"
+              className="mt-4 h-11 rounded-2xl border-0 bg-surface-container/40"
               style={FLAT_FIELD_STYLE}
             />
           </div>
@@ -379,7 +379,7 @@ export default function SiteSettingsPage() {
           onToggle={() => toggleSection("checkout-controls")}
         >
           <div className="grid gap-4 lg:grid-cols-2">
-            <div className="rounded-2xl bg-background px-4 py-4">
+            <div className="rounded-2xl bg-surface px-4 py-4">
               <div className="flex items-center gap-3">
                 <Checkbox
                   id="showPlaceOrderButton"
@@ -392,14 +392,14 @@ export default function SiteSettingsPage() {
                   <Label htmlFor="showPlaceOrderButton">
                     Show place-order button
                   </Label>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-xs text-on-surface-variant">
                     Keeps the standard pending-order flow visible in checkout.
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="rounded-2xl bg-background px-4 py-4">
+            <div className="rounded-2xl bg-surface px-4 py-4">
               <div className="flex items-center gap-3">
                 <Checkbox
                   id="showBkashCheckoutButton"
@@ -412,7 +412,7 @@ export default function SiteSettingsPage() {
                   <Label htmlFor="showBkashCheckoutButton">
                     Show bKash checkout button
                   </Label>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-xs text-on-surface-variant">
                     Lets customers pay the configured bKash amount now and keep
                     the remaining balance due later.
                   </p>
@@ -422,10 +422,10 @@ export default function SiteSettingsPage() {
           </div>
 
           <div className="rounded-[24px] border border-dashed border-primary/30 bg-primary/5 px-4 py-4">
-            <p className="text-sm font-semibold text-foreground">
+            <p className="text-sm font-semibold text-on-surface">
               Checkout button preview
             </p>
-            <p className="mt-1 text-xs text-muted-foreground">
+            <p className="mt-1 text-xs text-on-surface-variant">
               Customers will only see the buttons enabled here. bKash still
               requires saved credentials below before the payment session can be
               created.
@@ -442,7 +442,7 @@ export default function SiteSettingsPage() {
                 </div>
               ) : null}
               {!form.showPlaceOrderButton && !form.showBkashCheckoutButton ? (
-                <div className="rounded-full bg-muted px-4 py-2 text-xs font-medium text-muted-foreground">
+                <div className="rounded-full bg-surface-container px-4 py-2 text-xs font-medium text-on-surface-variant">
                   No checkout button visible
                 </div>
               ) : null}
@@ -469,10 +469,10 @@ export default function SiteSettingsPage() {
                 disabled={
                   Boolean(form.tawkToLink.trim()) && !form.whatsappLink.trim()
                 }
-                className="h-11 rounded-2xl border-0 bg-background"
+                className="h-11 rounded-2xl border-0 bg-surface"
                 style={FLAT_FIELD_STYLE}
               />
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-on-surface-variant">
                 Best for direct mobile chat. Clear the Tawk.to field first if
                 you want to use this option.
               </p>
@@ -488,21 +488,21 @@ export default function SiteSettingsPage() {
                 disabled={
                   Boolean(form.whatsappLink.trim()) && !form.tawkToLink.trim()
                 }
-                className="h-11 rounded-2xl border-0 bg-background"
+                className="h-11 rounded-2xl border-0 bg-surface"
                 style={FLAT_FIELD_STYLE}
               />
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-on-surface-variant">
                 Use this when you want a general live-chat entry point instead
                 of WhatsApp.
               </p>
             </div>
           </div>
 
-          <div className="rounded-[24px] border border-dashed border-foreground/10 bg-background px-4 py-4">
-            <p className="text-sm font-semibold text-foreground">
+          <div className="rounded-[24px] border border-dashed border-foreground/10 bg-surface px-4 py-4">
+            <p className="text-sm font-semibold text-on-surface">
               Floating button preview
             </p>
-            <p className="mt-1 text-xs text-muted-foreground">
+            <p className="mt-1 text-xs text-on-surface-variant">
               A single launcher appears fixed at the bottom-right of storefront
               pages.
             </p>
@@ -518,7 +518,7 @@ export default function SiteSettingsPage() {
                 </div>
               ) : null}
               {!form.whatsappLink.trim() && !form.tawkToLink.trim() ? (
-                <div className="rounded-full bg-muted px-4 py-2 text-xs font-medium text-muted-foreground">
+                <div className="rounded-full bg-surface-container px-4 py-2 text-xs font-medium text-on-surface-variant">
                   No support launcher visible
                 </div>
               ) : null}
@@ -533,10 +533,10 @@ export default function SiteSettingsPage() {
           onToggle={() => toggleSection("bkash-gateway")}
         >
           <div className="rounded-[24px] border border-dashed border-[#E2136E]/30 bg-[linear-gradient(135deg,rgba(226,19,110,0.08),rgba(255,255,255,0.92))] px-4 py-4">
-            <p className="text-sm font-semibold text-foreground">
+            <p className="text-sm font-semibold text-on-surface">
               Write-only credential storage
             </p>
-            <p className="mt-1 text-xs leading-5 text-muted-foreground">
+            <p className="mt-1 text-xs leading-5 text-on-surface-variant">
               Saved values stay hidden. Enter new values only for the fields you
               want to set or replace. Leaving a field empty keeps the currently
               stored secret unchanged.
@@ -551,7 +551,7 @@ export default function SiteSettingsPage() {
                 placeholder="Enter app key"
                 value={form.bkashAppKey}
                 onChange={(event) => updateField("bkashAppKey", event.target.value)}
-                className="h-11 rounded-2xl border-0 bg-background"
+                className="h-11 rounded-2xl border-0 bg-surface"
                 style={FLAT_FIELD_STYLE}
               />
             </div>
@@ -566,7 +566,7 @@ export default function SiteSettingsPage() {
                 onChange={(event) =>
                   updateField("bkashAppSecret", event.target.value)
                 }
-                className="h-11 rounded-2xl border-0 bg-background"
+                className="h-11 rounded-2xl border-0 bg-surface"
                 style={FLAT_FIELD_STYLE}
               />
             </div>
@@ -580,7 +580,7 @@ export default function SiteSettingsPage() {
                 onChange={(event) =>
                   updateField("bkashUsername", event.target.value)
                 }
-                className="h-11 rounded-2xl border-0 bg-background"
+                className="h-11 rounded-2xl border-0 bg-surface"
                 style={FLAT_FIELD_STYLE}
               />
             </div>
@@ -595,7 +595,7 @@ export default function SiteSettingsPage() {
                 onChange={(event) =>
                   updateField("bkashPassword", event.target.value)
                 }
-                className="h-11 rounded-2xl border-0 bg-background"
+                className="h-11 rounded-2xl border-0 bg-surface"
                 style={FLAT_FIELD_STYLE}
               />
             </div>
@@ -624,22 +624,22 @@ export default function SiteSettingsPage() {
                     type="button"
                     onClick={() => updateField("siteTheme", option.value)}
                     className={cn(
-                      "rounded-2xl border-0 bg-background p-4 text-left transition-colors",
-                      active ? "ring-2 ring-primary/45" : "hover:bg-background/80",
+                      "rounded-2xl border-0 bg-surface p-4 text-left transition-colors",
+                      active ? "ring-2 ring-primary/45" : "hover:bg-surface/80",
                     )}
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div>
-                        <p className="text-sm font-semibold text-foreground">
+                        <p className="text-sm font-semibold text-on-surface">
                           {option.label}
                         </p>
-                        <p className="mt-1 text-xs leading-5 text-muted-foreground">
+                        <p className="mt-1 text-xs leading-5 text-on-surface-variant">
                           {option.description}
                         </p>
                       </div>
                       <div
                         className={cn(
-                          "flex size-6 items-center justify-center rounded-full bg-primary text-primary-foreground",
+                          "flex size-6 items-center justify-center rounded-full bg-primary text-on-primary",
                           active ? "opacity-100" : "opacity-0",
                         )}
                       >
@@ -741,8 +741,8 @@ function VariantPicker<T extends string>({
     <div className="space-y-3">
       {!compactHeader ? (
         <div className="space-y-1">
-          <h3 className="text-sm font-semibold text-foreground">{title}</h3>
-          <p className="text-xs text-muted-foreground">{description}</p>
+          <h3 className="text-sm font-semibold text-on-surface">{title}</h3>
+          <p className="text-xs text-on-surface-variant">{description}</p>
         </div>
       ) : null}
 
@@ -756,22 +756,22 @@ function VariantPicker<T extends string>({
               type="button"
               onClick={() => onChange(option.value)}
               className={cn(
-                "rounded-2xl border-0 bg-background p-4 text-left transition-colors",
-                active ? "ring-2 ring-primary/45" : "hover:bg-background/80",
+                "rounded-2xl border-0 bg-surface p-4 text-left transition-colors",
+                active ? "ring-2 ring-primary/45" : "hover:bg-surface/80",
               )}
             >
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <p className="text-sm font-semibold text-foreground">
+                  <p className="text-sm font-semibold text-on-surface">
                     {option.label}
                   </p>
-                  <p className="mt-1 text-xs leading-5 text-muted-foreground">
+                  <p className="mt-1 text-xs leading-5 text-on-surface-variant">
                     {option.description}
                   </p>
                 </div>
                 <div
                   className={cn(
-                    "flex size-6 items-center justify-center rounded-full bg-primary text-primary-foreground",
+                    "flex size-6 items-center justify-center rounded-full bg-primary text-on-primary",
                     active ? "opacity-100" : "opacity-0",
                   )}
                 >
@@ -809,13 +809,13 @@ function ProductDetailsLayoutPreview({
     variant === "overview_split"
   ) {
     return (
-      <div className="rounded-2xl bg-background p-3">
+      <div className="rounded-2xl bg-surface p-3">
         <div className="grid gap-3 sm:grid-cols-[1.1fr_0.9fr]">
-          <div className="h-24 rounded-[18px] bg-muted/45" />
-          <div className="space-y-2 rounded-[18px] bg-muted/28 p-3">
-            <div className="h-3 w-16 rounded-full bg-muted/55" />
-            <div className="h-4 w-3/4 rounded-full bg-muted/55" />
-            <div className="h-3 w-1/2 rounded-full bg-muted/35" />
+          <div className="h-24 rounded-[18px] bg-surface-container/45" />
+          <div className="space-y-2 rounded-[18px] bg-surface-container/28 p-3">
+            <div className="h-3 w-16 rounded-full bg-surface-container/55" />
+            <div className="h-4 w-3/4 rounded-full bg-surface-container/55" />
+            <div className="h-3 w-1/2 rounded-full bg-surface-container-low/35" />
             <div className="h-9 rounded-[14px] bg-primary/14" />
           </div>
         </div>
@@ -832,16 +832,16 @@ function ProductDetailsLayoutPreview({
     variant === "retail_suite"
   ) {
     return (
-      <div className="rounded-2xl bg-background p-3">
+      <div className="rounded-2xl bg-surface p-3">
         <div className="grid gap-3 sm:grid-cols-[0.92fr_1.08fr]">
-          <div className="space-y-2 rounded-[18px] bg-muted/28 p-3">
-            <div className="h-4 w-3/4 rounded-full bg-muted/55" />
-            <div className="h-3 w-1/2 rounded-full bg-muted/35" />
+          <div className="space-y-2 rounded-[18px] bg-surface-container/28 p-3">
+            <div className="h-4 w-3/4 rounded-full bg-surface-container/55" />
+            <div className="h-3 w-1/2 rounded-full bg-surface-container-low/35" />
             <div className="h-9 rounded-[14px] bg-primary/14" />
           </div>
           <div className="space-y-2">
-            <div className="h-20 rounded-[18px] bg-muted/45" />
-            <div className="h-12 rounded-[18px] bg-muted/28" />
+            <div className="h-20 rounded-[18px] bg-surface-container/45" />
+            <div className="h-12 rounded-[18px] bg-surface-container/28" />
           </div>
         </div>
       </div>
@@ -855,19 +855,19 @@ function ProductDetailsLayoutPreview({
     variant === "gallery_stack"
   ) {
     return (
-      <div className="rounded-2xl bg-background p-3">
+      <div className="rounded-2xl bg-surface p-3">
         <div className="grid gap-3 sm:grid-cols-[1.08fr_0.92fr]">
           <div className="space-y-2">
-            <div className="h-24 rounded-[18px] bg-muted/45" />
+            <div className="h-24 rounded-[18px] bg-surface-container/45" />
             <div className="grid gap-2 sm:grid-cols-3">
-              <div className="h-10 rounded-[14px] bg-muted/30" />
-              <div className="h-10 rounded-[14px] bg-muted/30" />
-              <div className="h-10 rounded-[14px] bg-muted/30" />
+              <div className="h-10 rounded-[14px] bg-surface-container-low" />
+              <div className="h-10 rounded-[14px] bg-surface-container-low" />
+              <div className="h-10 rounded-[14px] bg-surface-container-low" />
             </div>
           </div>
-          <div className="space-y-2 rounded-[18px] bg-muted/28 p-3">
-            <div className="h-4 w-3/4 rounded-full bg-muted/55" />
-            <div className="h-3 w-1/2 rounded-full bg-muted/35" />
+          <div className="space-y-2 rounded-[18px] bg-surface-container/28 p-3">
+            <div className="h-4 w-3/4 rounded-full bg-surface-container/55" />
+            <div className="h-3 w-1/2 rounded-full bg-surface-container-low/35" />
             <div className="h-9 rounded-[14px] bg-primary/14" />
           </div>
         </div>
@@ -882,34 +882,34 @@ function ProductDetailsLayoutPreview({
     variant === "commerce_stack"
   ) {
     return (
-      <div className="rounded-2xl bg-background p-3">
+      <div className="rounded-2xl bg-surface p-3">
         <div className="space-y-3">
           <div className="grid gap-3 sm:grid-cols-[0.98fr_1.02fr]">
-            <div className="space-y-2 rounded-[18px] bg-muted/28 p-3">
-              <div className="h-3 w-16 rounded-full bg-muted/55" />
-              <div className="h-4 w-3/4 rounded-full bg-muted/55" />
-              <div className="h-3 w-2/3 rounded-full bg-muted/35" />
+            <div className="space-y-2 rounded-[18px] bg-surface-container/28 p-3">
+              <div className="h-3 w-16 rounded-full bg-surface-container/55" />
+              <div className="h-4 w-3/4 rounded-full bg-surface-container/55" />
+              <div className="h-3 w-2/3 rounded-full bg-surface-container-low/35" />
               <div className="h-9 rounded-[14px] bg-primary/14" />
             </div>
-            <div className="h-24 rounded-[18px] bg-muted/45" />
+            <div className="h-24 rounded-[18px] bg-surface-container/45" />
           </div>
-          <div className="h-14 rounded-[18px] bg-muted/25" />
+          <div className="h-14 rounded-[18px] bg-surface-container/25" />
         </div>
       </div>
     );
   }
 
   return (
-    <div className="rounded-2xl bg-background p-3">
+    <div className="rounded-2xl bg-surface p-3">
       <div className="space-y-3">
-        <div className="h-20 rounded-[18px] bg-muted/45" />
+        <div className="h-20 rounded-[18px] bg-surface-container/45" />
         <div className="grid gap-3 sm:grid-cols-[1.05fr_0.95fr]">
           <div className="space-y-2">
-            <div className="h-4 w-3/4 rounded-full bg-muted/55" />
-            <div className="h-3 w-1/2 rounded-full bg-muted/35" />
+            <div className="h-4 w-3/4 rounded-full bg-surface-container/55" />
+            <div className="h-3 w-1/2 rounded-full bg-surface-container-low/35" />
             <div className="h-9 rounded-[14px] bg-primary/14" />
           </div>
-          <div className="h-14 rounded-[18px] bg-muted/28" />
+          <div className="h-14 rounded-[18px] bg-surface-container/28" />
         </div>
       </div>
     </div>
@@ -930,11 +930,11 @@ function CollapsibleBlock({
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-[28px] bg-muted/35 p-5">
+    <section className="rounded-[28px] bg-surface-container-low/35 p-5">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="space-y-1">
-          <h2 className="text-base font-semibold text-foreground">{title}</h2>
-          <p className="text-sm text-muted-foreground">{description}</p>
+          <h2 className="text-base font-semibold text-on-surface">{title}</h2>
+          <p className="text-sm text-on-surface-variant">{description}</p>
         </div>
         <Button type="button" variant="ghost" size="sm" onClick={onToggle}>
           {collapsed ? (
@@ -970,11 +970,11 @@ function CollapsibleSubsection({
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-[24px] bg-background/80 p-4 sm:p-5">
+    <section className="rounded-[24px] bg-surface/80 p-4 sm:p-5">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="space-y-1">
-          <h3 className="text-sm font-semibold text-foreground">{title}</h3>
-          <p className="text-xs text-muted-foreground">{description}</p>
+          <h3 className="text-sm font-semibold text-on-surface">{title}</h3>
+          <p className="text-xs text-on-surface-variant">{description}</p>
         </div>
         <Button type="button" variant="ghost" size="sm" onClick={onToggle}>
           {collapsed ? (

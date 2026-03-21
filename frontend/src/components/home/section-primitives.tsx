@@ -105,19 +105,12 @@ export function SectionEyebrow({
   return (
     <div
       className={cn(
-        "flex flex-wrap items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.16em]",
-        inverse ? "text-white/70" : "text-muted-foreground",
+        "flex flex-wrap items-center gap-3 font-body text-[10px] font-semibold uppercase tracking-[0.2em]",
+        inverse ? "text-white/60" : "text-on-surface-variant",
       )}
     >
-      <span
-        className={cn(
-          "rounded-full px-3 py-1.5",
-          inverse ? "bg-white/12 text-white" : "bg-background text-foreground",
-        )}
-      >
-        {label}
-      </span>
-      {secondary ? <span>{secondary}</span> : null}
+      <span>{label}</span>
+      {secondary ? <span className="opacity-60">{secondary}</span> : null}
     </div>
   );
 }
@@ -134,12 +127,12 @@ export function SectionHeading({
   compact?: boolean;
 }) {
   return (
-    <div className="space-y-2">
+    <div className="space-y-3">
       <h2
         className={cn(
-          "font-semibold tracking-tight",
-          compact ? "text-xl sm:text-2xl" : "text-2xl sm:text-[2rem]",
-          inverse ? "text-white" : "text-foreground",
+          "font-headline font-extrabold tracking-tighter",
+          compact ? "text-2xl sm:text-3xl" : "text-3xl sm:text-4xl lg:text-5xl",
+          inverse ? "text-white" : "text-primary",
         )}
       >
         {title}
@@ -147,8 +140,9 @@ export function SectionHeading({
       {copy ? (
         <p
           className={cn(
-            compact ? "text-sm leading-6" : "text-sm leading-7 sm:text-base",
-            inverse ? "text-white/76" : "text-muted-foreground",
+            "max-w-2xl font-body leading-relaxed",
+            compact ? "text-xs sm:text-sm" : "text-sm sm:text-base",
+            inverse ? "text-white/60" : "text-on-surface-variant",
           )}
         >
           {copy}
@@ -176,8 +170,8 @@ export function SectionCta({
       asChild
       variant={inverse ? "secondary" : "default"}
       className={cn(
-        "h-10 rounded-full px-5 text-sm font-semibold shadow-none",
-        inverse ? "bg-white text-foreground hover:bg-white/92" : "",
+        "h-12 rounded-full px-8 font-headline text-xs font-bold uppercase tracking-widest shadow-none transition-all duration-300",
+        inverse ? "bg-white text-primary hover:bg-white/90" : "bg-primary text-on-primary hover:opacity-90",
       )}
     >
       <Link href={href} className="inline-flex items-center gap-2">
@@ -211,10 +205,10 @@ export function SectionTagRow({
         <span
           key={`${item}-${index}`}
           className={cn(
-            "rounded-full px-3 py-1.5 text-[11px] font-medium tracking-[0.02em]",
+            "rounded-full px-4 py-2 font-body text-[10px] font-semibold uppercase tracking-widest",
             inverse
-              ? "border border-white/12 bg-white/8 text-white/80"
-              : "border border-border/70 bg-background/82 text-muted-foreground",
+              ? "bg-white/10 text-white/70"
+              : "bg-surface-container text-on-surface-variant",
           )}
         >
           {item}
@@ -240,35 +234,35 @@ export function DetailTile({
   return (
     <div
       className={cn(
-        "rounded-2xl border px-3 py-3 sm:rounded-[24px] sm:px-4 sm:py-4",
+        "rounded-sm p-5",
         inverse
-          ? "border-white/12 bg-white/8 text-white"
-          : "border-border/70 bg-background/82 text-foreground",
+          ? "bg-white/5 text-white"
+          : "bg-surface-container text-on-surface",
         className,
       )}
     >
-      <div className="flex items-start gap-2.5 sm:gap-3">
+      <div className="flex items-start gap-4">
         <div
           className={cn(
-            "mt-0.5 flex size-8 items-center justify-center rounded-xl sm:size-9 sm:rounded-2xl",
-            inverse ? "bg-white/12 text-white" : "bg-primary/10 text-primary",
+            "flex size-10 items-center justify-center rounded-full",
+            inverse ? "bg-white/10 text-white" : "bg-primary/10 text-primary",
           )}
         >
-          <Icon className="size-3.5 sm:size-4" />
+          <Icon className="size-4" />
         </div>
-        <div className="space-y-1">
+        <div className="space-y-1.5">
           <p
             className={cn(
-              "text-[13px] font-semibold sm:text-sm",
-              inverse ? "text-white" : "text-foreground",
+              "font-headline text-sm font-bold",
+              inverse ? "text-white" : "text-primary",
             )}
           >
             {title}
           </p>
           <p
             className={cn(
-              "text-xs leading-5 sm:text-sm sm:leading-6",
-              inverse ? "text-white/72" : "text-muted-foreground",
+              "font-body text-xs leading-relaxed",
+              inverse ? "text-white/60" : "text-on-surface-variant",
             )}
           >
             {text}
@@ -288,8 +282,8 @@ export function ProductGrid({
 }) {
   if (products.length === 0) {
     return (
-      <div className="rounded-2xl bg-muted/25 px-4 py-8 text-center sm:rounded-[24px] sm:py-10">
-        <p className="text-sm text-muted-foreground">
+      <div className="rounded-sm bg-surface-container px-6 py-12 text-center">
+        <p className="font-body text-sm text-on-surface-variant">
           No products found for this section.
         </p>
       </div>
@@ -297,7 +291,7 @@ export function ProductGrid({
   }
 
   return (
-    <div className={cn("grid grid-cols-2 gap-3 lg:grid-cols-4", className)}>
+    <div className={cn("grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4", className)}>
       {products.map((product) => (
         <ProductCard key={product.id} product={product} />
       ))}
@@ -321,14 +315,14 @@ export function MediaFrame({
   }
 
   return (
-    <div className={cn("overflow-hidden rounded-[28px]", frameClassName)}>
+    <div className={cn("overflow-hidden rounded-sm", frameClassName)}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={src}
         alt={alt}
         loading="lazy"
         decoding="async"
-        className={cn("h-full w-full object-cover", className)}
+        className={cn("h-full w-full object-cover transition-transform duration-700 hover:scale-105", className)}
       />
     </div>
   );
@@ -344,12 +338,16 @@ export function SupportPanel({
   text: string;
 }) {
   return (
-    <div className="rounded-[26px] bg-background px-5 py-6">
-      <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+    <div className="rounded-sm bg-primary p-8 text-on-primary">
+      <p className="font-body text-[10px] font-semibold uppercase tracking-[0.2em] text-white/60">
         {label}
       </p>
-      <p className="mt-3 text-xl font-semibold text-foreground">{title}</p>
-      <p className="mt-3 text-sm leading-6 text-muted-foreground">{text}</p>
+      <p className="mt-4 font-headline text-2xl font-extrabold tracking-tighter text-white">
+        {title}
+      </p>
+      <p className="mt-3 font-body text-sm leading-relaxed text-white/60">
+        {text}
+      </p>
     </div>
   );
 }

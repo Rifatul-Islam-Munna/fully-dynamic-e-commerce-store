@@ -102,13 +102,13 @@ export default function AdminUsersPage() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Users</h1>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-on-surface-variant">
             Manage user accounts and roles
           </p>
         </div>
         <form onSubmit={handleSearch} className="flex gap-2">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+            <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-on-surface-variant" />
             <Input
               placeholder="Search users..."
               className="pl-9 w-64"
@@ -123,27 +123,27 @@ export default function AdminUsersPage() {
       </div>
 
       {/* Table */}
-      <div className="overflow-hidden rounded-xl border border-border bg-card">
+      <div className="overflow-hidden rounded-xl border border-border bg-surface-container-lowest">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-border bg-muted/50">
-                <th className="px-4 py-3 text-left font-medium text-muted-foreground">
+              <tr className="border-b border-border bg-surface-container/50">
+                <th className="px-4 py-3 text-left font-medium text-on-surface-variant">
                   Name
                 </th>
-                <th className="px-4 py-3 text-left font-medium text-muted-foreground">
+                <th className="px-4 py-3 text-left font-medium text-on-surface-variant">
                   Email
                 </th>
-                <th className="px-4 py-3 text-left font-medium text-muted-foreground">
+                <th className="px-4 py-3 text-left font-medium text-on-surface-variant">
                   Phone
                 </th>
-                <th className="px-4 py-3 text-left font-medium text-muted-foreground">
+                <th className="px-4 py-3 text-left font-medium text-on-surface-variant">
                   Role
                 </th>
-                <th className="px-4 py-3 text-left font-medium text-muted-foreground">
+                <th className="px-4 py-3 text-left font-medium text-on-surface-variant">
                   Status
                 </th>
-                <th className="px-4 py-3 text-right font-medium text-muted-foreground">
+                <th className="px-4 py-3 text-right font-medium text-on-surface-variant">
                   Actions
                 </th>
               </tr>
@@ -153,7 +153,7 @@ export default function AdminUsersPage() {
                 <tr>
                   <td
                     colSpan={6}
-                    className="px-4 py-12 text-center text-muted-foreground"
+                    className="px-4 py-12 text-center text-on-surface-variant"
                   >
                     <Loader2 className="mx-auto size-5 animate-spin" />
                   </td>
@@ -162,7 +162,7 @@ export default function AdminUsersPage() {
                 <tr>
                   <td
                     colSpan={6}
-                    className="px-4 py-12 text-center text-muted-foreground"
+                    className="px-4 py-12 text-center text-on-surface-variant"
                   >
                     No users found
                   </td>
@@ -171,15 +171,15 @@ export default function AdminUsersPage() {
                 users.map((user) => (
                   <tr
                     key={user.id as string}
-                    className="border-b border-border/50 transition-colors hover:bg-muted/30"
+                    className="border-b border-border/50 transition-colors hover:bg-surface-container-low"
                   >
                     <td className="px-4 py-3 font-medium">
                       {user.firstName as string} {user.lastName as string}
                     </td>
-                    <td className="px-4 py-3 text-muted-foreground">
+                    <td className="px-4 py-3 text-on-surface-variant">
                       {user.email as string}
                     </td>
-                    <td className="px-4 py-3 text-muted-foreground">
+                    <td className="px-4 py-3 text-on-surface-variant">
                       {(user.phoneNumber as string) || "—"}
                     </td>
                     <td className="px-4 py-3">
@@ -225,7 +225,7 @@ export default function AdminUsersPage() {
                         size="sm"
                         onClick={() => deleteMutation.mutate(user.id as string)}
                         disabled={deleteMutation.isPending}
-                        className="text-destructive hover:text-destructive"
+                        className="text-error hover:text-error"
                       >
                         <Trash2 className="size-4" />
                       </Button>
@@ -241,7 +241,7 @@ export default function AdminUsersPage() {
       {/* Pagination */}
       {pagination && pagination.totalPages > 1 && (
         <div className="flex items-center justify-between">
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-on-surface-variant">
             Page {pagination.page} of {pagination.totalPages} ·{" "}
             {pagination.total} total
           </p>

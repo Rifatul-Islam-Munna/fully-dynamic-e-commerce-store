@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export function FooterSkeleton() {
   return (
-    <footer className="w-full border-t bg-background">
+    <footer className="w-full border-t bg-surface">
       <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
         <div className="grid gap-8 md:grid-cols-3">
           <div className="space-y-3">

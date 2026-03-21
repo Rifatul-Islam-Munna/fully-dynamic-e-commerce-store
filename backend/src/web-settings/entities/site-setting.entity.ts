@@ -50,6 +50,7 @@ export const PRODUCT_CARD_VARIANT_VALUES = [
   'tech_focus',
   'neo_brutalist',
   'modern_glass',
+  'nordic_verve',
 ] as const;
 
 export const PRODUCT_DETAILS_VARIANT_VALUES = [
@@ -75,6 +76,7 @@ export const PRODUCT_DETAILS_VARIANT_VALUES = [
   'brutalist',
   'luxury',
   'tech_focus',
+  'nordic_verve',
 ] as const;
 
 @Entity('site_settings')

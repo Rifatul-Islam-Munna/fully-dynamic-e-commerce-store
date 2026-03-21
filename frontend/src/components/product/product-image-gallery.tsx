@@ -8,9 +8,11 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 type ProductImageGalleryProps = {
   images: string[];
   title: string;
+  /** When true, all containers use rounded-none (Nordic Verve design) */
+  sharp?: boolean;
 };
 
-export function ProductImageGallery({ images, title }: ProductImageGalleryProps) {
+export function ProductImageGallery({ images, title, sharp = false }: ProductImageGalleryProps) {
   const gallery = useMemo(
     () => images.filter((item, index, arr) => item && arr.indexOf(item) === index),
     [images],
@@ -26,10 +28,14 @@ export function ProductImageGallery({ images, title }: ProductImageGalleryProps)
 
   return (
     <div className="space-y-3">
+      {/* Main image container — sharp corners when nordic_verve */}
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className="group relative block w-full overflow-hidden rounded-3xl bg-gradient-to-br from-muted/50 via-card to-muted/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+        className={cn(
+          "group relative block w-full overflow-hidden bg-gradient-to-br from-muted/50 via-card to-muted/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50",
+          sharp ? "rounded-none" : "rounded-3xl",
+        )}
         aria-label="Open image preview"
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -38,12 +44,16 @@ export function ProductImageGallery({ images, title }: ProductImageGalleryProps)
           alt={title}
           className="h-[58vh] min-h-[360px] w-full object-contain transition-transform duration-300 group-hover:scale-[1.01]"
         />
-        <span className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full bg-black/70 px-3 py-1 text-xs font-medium text-white">
+        <span className={cn(
+          "absolute bottom-3 right-3 inline-flex items-center gap-1.5 bg-black/70 px-3 py-1 text-xs font-medium text-white",
+          sharp ? "rounded-none" : "rounded-full",
+        )}>
           <Expand className="size-3.5" />
           View
         </span>
       </button>
 
+      {/* Thumbnail strip — sharp corners when nordic_verve */}
       {gallery.length > 1 ? (
         <div className="grid grid-cols-4 gap-2 sm:grid-cols-6">
           {gallery.map((imageUrl, index) => (
@@ -52,7 +62,8 @@ export function ProductImageGallery({ images, title }: ProductImageGalleryProps)
               type="button"
               onClick={() => setSelectedIndex(index)}
               className={cn(
-                "overflow-hidden rounded-xl bg-card transition focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50",
+                "overflow-hidden bg-surface-container-lowest transition focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50",
+                sharp ? "rounded-none" : "rounded-xl",
                 selectedIndex === index
                   ? "ring-2 ring-primary/70"
                   : "opacity-85 hover:opacity-100",

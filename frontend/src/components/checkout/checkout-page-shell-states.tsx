@@ -24,15 +24,15 @@ function formatOrderDate(value: string) {
 export function CheckoutLoadingState() {
   return (
     <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
-      <div className="rounded-[36px] border border-border/60 bg-[linear-gradient(180deg,rgba(248,250,252,0.8),rgba(255,255,255,1))] p-6 shadow-[0_28px_80px_-56px_rgba(15,23,42,0.45)]">
-        <div className="h-6 w-32 animate-pulse rounded-full bg-muted/70" />
+      <div className="rounded-sm bg-surface-container-lowest p-6 ">
+        <div className="h-6 w-32 animate-pulse rounded-full bg-surface-container/70" />
         <div className="mt-4 grid gap-4 lg:grid-cols-[minmax(0,1fr)_340px]">
           <div className="space-y-3">
-            <div className="h-24 animate-pulse rounded-[24px] bg-muted/60" />
-            <div className="h-24 animate-pulse rounded-[24px] bg-muted/60" />
-            <div className="h-32 animate-pulse rounded-[24px] bg-muted/60" />
+            <div className="h-24 animate-pulse rounded-sm bg-surface-container/50" />
+            <div className="h-24 animate-pulse rounded-sm bg-surface-container/50" />
+            <div className="h-32 animate-pulse rounded-sm bg-surface-container/50" />
           </div>
-          <div className="h-64 animate-pulse rounded-[24px] bg-muted/60" />
+          <div className="h-64 animate-pulse rounded-[24px] bg-surface-container/60" />
         </div>
       </div>
     </main>
@@ -52,7 +52,7 @@ export function CheckoutOrderCompleteState({
     <main className="relative mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
       <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[320px] bg-[radial-gradient(circle_at_top_left,rgba(16,185,129,0.12),transparent_34%),radial-gradient(circle_at_top_right,rgba(59,130,246,0.1),transparent_30%),linear-gradient(180deg,rgba(248,250,252,0.95),rgba(248,250,252,0))]" />
 
-      <div className="overflow-hidden rounded-[38px] border border-border/60 bg-[linear-gradient(180deg,rgba(248,250,252,0.82),rgba(255,255,255,1)_24%,rgba(255,255,255,1))] p-6 shadow-[0_32px_90px_-60px_rgba(15,23,42,0.48)] sm:p-8">
+      <div className="overflow-hidden rounded-sm bg-surface-container-lowest p-6  sm:p-8">
         <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
           <section>
             <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
@@ -61,73 +61,73 @@ export function CheckoutOrderCompleteState({
                   <CheckCircle2 className="size-7" />
                 </div>
                 <div>
-                  <div className="flex flex-wrap items-center gap-2 text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">
-                    <span className="rounded-full border border-border/60 bg-background/85 px-3 py-1.5">
+                  <div className="flex flex-wrap items-center gap-2 text-xs font-medium uppercase tracking-[0.16em] text-on-surface-variant">
+                    <span className="rounded-full border border-border/60 bg-surface/85 px-3 py-1.5">
                       Order received
                     </span>
-                    <span className="rounded-full border border-border/60 bg-background/65 px-3 py-1.5">
+                    <span className="rounded-full border border-border/60 bg-surface/65 px-3 py-1.5">
                       {order.checkoutMode === "member"
                         ? "Member checkout"
                         : "Guest checkout"}
                     </span>
                     {isDirectCheckout ? (
-                      <span className="rounded-full border border-border/60 bg-background/65 px-3 py-1.5">
+                      <span className="rounded-full border border-border/60 bg-surface/65 px-3 py-1.5">
                         Direct checkout
                       </span>
                     ) : null}
                   </div>
 
-                  <h1 className="mt-4 text-3xl font-semibold tracking-tight text-foreground sm:text-[2.6rem]">
+                  <h1 className="mt-4 font-headline text-3xl font-extrabold tracking-tighter text-primary sm:text-4xl">
                     {order.orderNumber}
                   </h1>
-                  <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">
+                  <p className="mt-3 max-w-2xl font-body text-sm leading-relaxed text-on-surface-variant">
                     Your order has been recorded as pending. The team can now
                     review the items, address, and total before confirming it.
                   </p>
                 </div>
               </div>
 
-              <div className="rounded-[24px] border border-border/60 bg-background/90 px-4 py-4 lg:min-w-[220px]">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+              <div className="rounded-sm bg-surface-container-low px-4 py-4 lg:min-w-[220px]">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-on-surface-variant">
                   Submitted
                 </p>
-                <p className="mt-2 text-sm font-medium text-foreground">
+                <p className="mt-2 text-sm font-medium text-on-surface">
                   {formatOrderDate(order.createdAt)}
                 </p>
-                <p className="mt-1 text-sm text-muted-foreground">
+                <p className="mt-1 text-sm text-on-surface-variant">
                   Status: pending
                 </p>
               </div>
             </div>
 
             <div className="mt-6 grid gap-4 md:grid-cols-2">
-              <div className="rounded-[28px] border border-border/60 bg-background/90 p-5">
-                <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+              <div className="rounded-[28px] border border-border/60 bg-surface/90 p-5">
+                <div className="flex items-center gap-2 text-sm font-medium text-on-surface">
                   <MapPinned className="size-4 text-primary" />
                   Delivery details
                 </div>
-                <div className="mt-4 space-y-2 text-sm text-foreground">
+                <div className="mt-4 space-y-2 text-sm text-on-surface">
                   <p className="font-medium">{order.customerPhoneNumber}</p>
                   {order.customerEmail ? (
-                    <p className="text-muted-foreground">{order.customerEmail}</p>
+                    <p className="text-on-surface-variant">{order.customerEmail}</p>
                   ) : null}
                   <p>{order.customerDistrict}</p>
-                  <p className="text-muted-foreground">{order.customerAddress}</p>
+                  <p className="text-on-surface-variant">{order.customerAddress}</p>
                 </div>
               </div>
 
-              <div className="rounded-[28px] border border-border/60 bg-background/90 p-5">
-                <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+              <div className="rounded-[28px] border border-border/60 bg-surface/90 p-5">
+                <div className="flex items-center gap-2 text-sm font-medium text-on-surface">
                   <Clock3 className="size-4 text-primary" />
                   What happens next
                 </div>
-                <div className="mt-4 space-y-3 text-sm text-muted-foreground">
+                <div className="mt-4 space-y-3 text-sm text-on-surface-variant">
                   <p>The order stays pending until the admin team confirms it.</p>
                   <p>
                     Keep the order number handy in case you need follow-up or
                     support.
                   </p>
-                  <div className="flex items-start gap-2 rounded-[22px] bg-muted/35 px-3 py-3 text-foreground">
+                  <div className="flex items-start gap-2 rounded-[22px] bg-surface-container/35 px-3 py-3 text-on-surface">
                     <ShieldCheck className="mt-0.5 size-4 shrink-0 text-primary" />
                     <span>Submitted totals and delivery details are now locked in for review.</span>
                   </div>
@@ -136,7 +136,7 @@ export function CheckoutOrderCompleteState({
             </div>
 
             <div className="mt-6">
-              <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+              <div className="flex items-center gap-2 text-sm font-medium text-on-surface">
                 <ReceiptText className="size-4 text-primary" />
                 Ordered items
               </div>
@@ -148,7 +148,7 @@ export function CheckoutOrderCompleteState({
                   return (
                     <article
                       key={item.id}
-                      className="rounded-[28px] border border-border/60 bg-background/92 p-4"
+                      className="rounded-[28px] border border-border/60 bg-surface/92 p-4"
                     >
                       <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                         <div className="flex items-start gap-4">
@@ -160,17 +160,17 @@ export function CheckoutOrderCompleteState({
                               className="size-20 rounded-[22px] object-cover"
                             />
                           ) : (
-                            <div className="flex size-20 items-center justify-center rounded-[22px] bg-muted text-muted-foreground">
+                            <div className="flex size-20 items-center justify-center rounded-[22px] bg-surface-container text-on-surface-variant">
                               <ShoppingBag className="size-5" />
                             </div>
                           )}
 
                           <div className="min-w-0">
-                            <p className="text-base font-semibold text-foreground">
+                            <p className="text-base font-semibold text-on-surface">
                               {item.productTitle}
                             </p>
                             <div className="mt-2 flex flex-wrap items-center gap-2 text-xs">
-                              <span className="rounded-full bg-muted px-2.5 py-1 text-muted-foreground">
+                              <span className="rounded-full bg-surface-container px-2.5 py-1 text-on-surface-variant">
                                 Qty {item.quantity}
                               </span>
                               {item.variantTitle ? (
@@ -178,7 +178,7 @@ export function CheckoutOrderCompleteState({
                                   {item.variantTitle}
                                 </span>
                               ) : null}
-                              <span className="rounded-full bg-background px-2.5 py-1 text-muted-foreground">
+                              <span className="rounded-full bg-surface px-2.5 py-1 text-on-surface-variant">
                                 Unit {formatCurrency(unitPrice)}
                               </span>
                             </div>
@@ -186,10 +186,10 @@ export function CheckoutOrderCompleteState({
                         </div>
 
                         <div className="sm:ml-auto sm:text-right">
-                          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-on-surface-variant">
                             Line total
                           </p>
-                          <p className="mt-1 text-lg font-semibold text-foreground">
+                          <p className="mt-1 text-lg font-semibold text-on-surface">
                             {formatCurrency(item.lineTotal)}
                           </p>
                         </div>
@@ -201,23 +201,23 @@ export function CheckoutOrderCompleteState({
             </div>
           </section>
 
-          <aside className="h-fit rounded-[32px] border border-border/60 bg-background/92 p-5 shadow-[0_24px_72px_-54px_rgba(15,23,42,0.5)]">
-            <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+          <aside className="h-fit rounded-[32px] border border-border/60 bg-surface/92 p-5 shadow-[0_24px_72px_-54px_rgba(15,23,42,0.5)]">
+            <div className="flex items-center gap-2 text-sm font-medium text-on-surface">
               <ReceiptText className="size-4 text-primary" />
               Confirmation summary
             </div>
 
             <div className="mt-4 space-y-3 text-sm">
-              <div className="flex items-center justify-between text-muted-foreground">
+              <div className="flex items-center justify-between text-on-surface-variant">
                 <span>Items</span>
                 <span>{order.itemCount}</span>
               </div>
-              <div className="flex items-center justify-between text-muted-foreground">
+              <div className="flex items-center justify-between text-on-surface-variant">
                 <span>Subtotal</span>
                 <span>{formatCurrency(order.subtotal)}</span>
               </div>
               {order.couponCode ? (
-                <div className="flex items-center justify-between text-muted-foreground">
+                <div className="flex items-center justify-between text-on-surface-variant">
                   <span>Coupon</span>
                   <span className="font-medium text-primary">
                     {order.couponCode}
@@ -230,20 +230,20 @@ export function CheckoutOrderCompleteState({
                   <span>-{formatCurrency(order.discountAmount)}</span>
                 </div>
               ) : null}
-              <div className="flex items-center justify-between border-t border-border/60 pt-3 text-base font-semibold text-foreground">
+              <div className="flex items-center justify-between border-t border-border/60 pt-3 text-base font-semibold text-on-surface">
                 <span>Total</span>
                 <span>{formatCurrency(order.total)}</span>
               </div>
             </div>
 
-            <div className="mt-4 rounded-[24px] bg-muted/35 p-4">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+            <div className="mt-4 rounded-[24px] bg-surface-container/35 p-4">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-on-surface-variant">
                 Reference
               </p>
-              <p className="mt-2 text-sm font-medium text-foreground">
+              <p className="mt-2 text-sm font-medium text-on-surface">
                 {order.orderNumber}
               </p>
-              <p className="mt-2 text-sm text-muted-foreground">
+              <p className="mt-2 text-sm text-on-surface-variant">
                 Keep this number for support or status follow-up.
               </p>
             </div>
@@ -275,13 +275,13 @@ export function CheckoutEmptyState({
   return (
     <main className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
       <div className="rounded-[36px] border border-border/60 bg-[linear-gradient(180deg,rgba(248,250,252,0.82),rgba(255,255,255,1))] p-6 text-center shadow-[0_28px_80px_-56px_rgba(15,23,42,0.45)] sm:p-8">
-        <div className="mx-auto flex size-14 items-center justify-center rounded-full bg-background text-foreground shadow-[0_18px_40px_-28px_rgba(15,23,42,0.55)]">
+        <div className="mx-auto flex size-14 items-center justify-center rounded-full bg-surface text-on-surface shadow-[0_18px_40px_-28px_rgba(15,23,42,0.55)]">
           <ShoppingBag className="size-5" />
         </div>
         <h1 className="mt-4 text-2xl font-semibold tracking-tight">
           Your cart is empty
         </h1>
-        <p className="mt-2 text-sm text-muted-foreground">
+        <p className="mt-2 text-sm text-on-surface-variant">
           Add products first, then come back here to complete checkout.
         </p>
         <Button asChild className="mt-6 rounded-full px-5">

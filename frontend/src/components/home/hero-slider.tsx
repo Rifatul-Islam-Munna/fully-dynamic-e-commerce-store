@@ -71,8 +71,8 @@ export function HeroSlider({ slides, variant = "original" }: HeroSliderProps) {
         asChild
         variant={light ? "secondary" : "default"}
         className={cn(
-          "h-10 rounded-full px-5 text-sm font-semibold shadow-none",
-          light ? "bg-white text-foreground hover:bg-white/92" : "",
+          "h-12 rounded-full px-8 font-headline text-xs font-bold uppercase tracking-widest shadow-none transition-all duration-300",
+          light ? "bg-white text-primary hover:bg-white/90" : "bg-primary text-on-primary hover:opacity-90",
           className,
         )}
       >
@@ -94,7 +94,7 @@ export function HeroSlider({ slides, variant = "original" }: HeroSliderProps) {
         <div className="w-full max-w-[520px]">
           <div className="rounded-2xl border border-white/12 bg-black/24 p-2 backdrop-blur-md sm:rounded-[30px]">
             <div className="rounded-xl bg-[linear-gradient(160deg,rgba(15,23,42,0.96),rgba(30,41,59,0.84))] px-4 py-5 text-white sm:rounded-[26px] sm:px-6 sm:py-7">
-              <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-white/68">
+              <div className="flex flex-wrap items-center gap-3 font-body text-[10px] font-semibold uppercase tracking-[0.2em] text-white/60">
                 {activeSlide.subtitle?.trim() ? (
                   <span className="rounded-full bg-white/10 px-3 py-1.5 text-white">
                     {activeSlide.subtitle}
@@ -104,7 +104,7 @@ export function HeroSlider({ slides, variant = "original" }: HeroSliderProps) {
               </div>
               <div className="mt-4 space-y-3 sm:mt-5 sm:space-y-4">
                 {activeSlide.title?.trim() ? (
-                  <h2 className="text-2xl font-semibold leading-tight tracking-tight sm:text-3xl lg:text-[2.9rem]">
+                  <h2 className="font-headline text-3xl font-extrabold leading-tight tracking-tighter sm:text-4xl lg:text-5xl">
                     {activeSlide.title}
                   </h2>
                 ) : null}
@@ -120,19 +120,19 @@ export function HeroSlider({ slides, variant = "original" }: HeroSliderProps) {
 
     if (variant === "bottom_story") {
       return (
-        <div className="w-full max-w-5xl rounded-2xl border border-border/70 bg-background/94 p-1.5 shadow-[0_35px_110px_-70px_rgba(15,23,42,0.28)] backdrop-blur-md sm:rounded-[30px] sm:p-2">
-          <div className="grid gap-4 rounded-xl bg-background px-4 py-5 sm:rounded-[26px] sm:px-6 sm:py-7 lg:grid-cols-[1fr_auto] lg:items-end">
+        <div className="w-full max-w-5xl rounded-2xl border border-border/70 bg-surface/94 p-1.5 shadow-[0_35px_110px_-70px_rgba(15,23,42,0.28)] backdrop-blur-md sm:rounded-[30px] sm:p-2">
+          <div className="grid gap-4 rounded-xl bg-surface px-4 py-5 sm:rounded-[26px] sm:px-6 sm:py-7 lg:grid-cols-[1fr_auto] lg:items-end">
             <div>
-              <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+              <div className="flex flex-wrap items-center gap-3 font-body text-[10px] font-semibold uppercase tracking-[0.2em] text-on-surface-variant">
                 {activeSlide.subtitle?.trim() ? (
-                  <span className="rounded-full bg-muted px-3 py-1.5 text-foreground">
+                  <span className="rounded-full bg-surface-container px-3 py-1.5 text-on-surface">
                     {activeSlide.subtitle}
                   </span>
                 ) : null}
                 <span>{slidePositionLabel}</span>
               </div>
               {activeSlide.title?.trim() ? (
-                <h2 className="mt-3 text-xl font-semibold leading-tight tracking-tight text-foreground sm:mt-4 sm:text-3xl lg:text-[2.6rem]">
+                <h2 className="mt-3 font-headline text-2xl font-extrabold leading-tight tracking-tighter text-primary sm:mt-4 sm:text-4xl lg:text-5xl">
                   {activeSlide.title}
                 </h2>
               ) : null}
@@ -149,7 +149,7 @@ export function HeroSlider({ slides, variant = "original" }: HeroSliderProps) {
       return (
         <div className="mx-auto max-w-4xl rounded-2xl border border-white/12 bg-black/22 p-1.5 text-white shadow-[0_35px_110px_-70px_rgba(15,23,42,0.52)] backdrop-blur-md sm:rounded-[32px] sm:p-2">
           <div className="rounded-xl bg-[linear-gradient(180deg,rgba(15,23,42,0.56),rgba(15,23,42,0.34))] px-5 py-6 sm:rounded-[28px] sm:px-8 sm:py-8">
-            <div className="mx-auto flex max-w-fit flex-wrap items-center justify-center gap-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-white/72">
+            <div className="mx-auto flex max-w-fit flex-wrap items-center justify-center gap-3 font-body text-[10px] font-semibold uppercase tracking-[0.2em] text-white/60">
               {activeSlide.subtitle?.trim() ? (
                 <span className="rounded-full bg-white/10 px-3 py-1.5 text-white">
                   {activeSlide.subtitle}
@@ -158,7 +158,7 @@ export function HeroSlider({ slides, variant = "original" }: HeroSliderProps) {
               <span>{slidePositionLabel}</span>
             </div>
             {activeSlide.title?.trim() ? (
-              <h2 className="mt-4 text-2xl font-semibold leading-tight tracking-tight sm:mt-5 sm:text-4xl lg:text-[3.35rem]">
+              <h2 className="mt-4 font-headline text-3xl font-extrabold leading-tight tracking-tighter sm:mt-5 sm:text-5xl lg:text-6xl">
                 {activeSlide.title}
               </h2>
             ) : null}
@@ -172,15 +172,15 @@ export function HeroSlider({ slides, variant = "original" }: HeroSliderProps) {
 
     if (variant === "editorial_frame") {
       return (
-        <div className="max-w-xl rounded-2xl border border-black/6 bg-background/96 p-1.5 shadow-[0_32px_90px_-64px_rgba(15,23,42,0.24)] sm:rounded-[32px] sm:p-2">
-          <div className="rounded-xl border border-border/70 bg-background px-4 py-5 text-foreground sm:rounded-[28px] sm:px-6 sm:py-7">
-            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/70 pb-3 text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground sm:pb-4">
+        <div className="max-w-xl rounded-2xl border border-black/6 bg-surface/96 p-1.5 shadow-[0_32px_90px_-64px_rgba(15,23,42,0.24)] sm:rounded-[32px] sm:p-2">
+          <div className="rounded-xl border border-border/70 bg-surface px-4 py-5 text-on-surface sm:rounded-[28px] sm:px-6 sm:py-7">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/70 pb-3 text-[11px] font-semibold uppercase tracking-[0.16em] text-on-surface-variant sm:pb-4">
               {activeSlide.subtitle?.trim() ? (
                 <span>{activeSlide.subtitle}</span>
               ) : (
                 <span>Featured</span>
               )}
-              <span className="rounded-full bg-muted px-3 py-1.5 text-foreground">
+              <span className="rounded-full bg-surface-container px-3 py-1.5 text-on-surface">
                 {slidePositionLabel}
               </span>
             </div>
@@ -202,7 +202,7 @@ export function HeroSlider({ slides, variant = "original" }: HeroSliderProps) {
       return (
         <div className="max-w-lg space-y-2 text-white">
           {activeSlide.title?.trim() ? (
-            <h2 className="text-xl font-semibold leading-tight tracking-tight sm:text-2xl lg:text-3xl">
+            <h2 className="font-headline text-2xl font-extrabold leading-tight tracking-tighter sm:text-3xl lg:text-4xl">
               {activeSlide.title}
             </h2>
           ) : null}
@@ -226,7 +226,7 @@ export function HeroSlider({ slides, variant = "original" }: HeroSliderProps) {
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div className="space-y-1.5">
               {activeSlide.title?.trim() ? (
-                <h2 className="text-xl font-bold tracking-tight text-white sm:text-2xl lg:text-3xl">
+                <h2 className="font-headline text-2xl font-extrabold tracking-tighter text-white sm:text-3xl lg:text-4xl">
                   {activeSlide.title}
                 </h2>
               ) : null}
@@ -251,7 +251,7 @@ export function HeroSlider({ slides, variant = "original" }: HeroSliderProps) {
               {slidePositionLabel}
             </span>
             {activeSlide.title?.trim() ? (
-              <h2 className="mt-3 text-xl font-semibold leading-tight text-white sm:text-2xl lg:text-3xl">
+              <h2 className="mt-3 font-headline text-2xl font-extrabold leading-tight tracking-tighter text-white sm:text-3xl lg:text-4xl">
                 {activeSlide.title}
               </h2>
             ) : null}
@@ -276,12 +276,12 @@ export function HeroSlider({ slides, variant = "original" }: HeroSliderProps) {
             <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               <div className="min-w-0">
                 {activeSlide.title?.trim() ? (
-                  <h2 className="truncate text-lg font-bold tracking-tight text-foreground sm:text-xl">
+                  <h2 className="truncate font-headline text-xl font-extrabold tracking-tighter text-primary sm:text-2xl">
                     {activeSlide.title}
                   </h2>
                 ) : null}
                 {activeSlide.subtitle?.trim() ? (
-                  <p className="truncate text-sm text-muted-foreground">
+                  <p className="truncate text-sm text-on-surface-variant">
                     {activeSlide.subtitle}
                   </p>
                 ) : null}
@@ -301,7 +301,7 @@ export function HeroSlider({ slides, variant = "original" }: HeroSliderProps) {
             <div className="flex flex-col items-center gap-2 text-center sm:flex-row sm:gap-4 sm:text-left">
               <div className="min-w-0 flex-1">
                 {activeSlide.title?.trim() ? (
-                  <p className="truncate text-sm font-bold text-white sm:text-base">
+                  <p className="truncate font-headline text-base font-extrabold tracking-tighter text-white sm:text-lg">
                     {activeSlide.title}
                   </p>
                 ) : null}
@@ -327,16 +327,16 @@ export function HeroSlider({ slides, variant = "original" }: HeroSliderProps) {
       return (
         <div className="w-full max-w-xs">
           <div className="rounded-2xl bg-white/95 p-4 shadow-xl backdrop-blur-md sm:rounded-[24px] sm:p-5">
-            <span className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
+            <span className="text-[10px] font-semibold uppercase tracking-widest text-on-surface-variant">
               {slidePositionLabel}
             </span>
             {activeSlide.title?.trim() ? (
-              <h2 className="mt-2 text-base font-bold leading-snug text-foreground sm:text-lg">
+              <h2 className="mt-2 font-headline text-lg font-extrabold leading-snug tracking-tighter text-primary sm:text-xl">
                 {activeSlide.title}
               </h2>
             ) : null}
             {activeSlide.subtitle?.trim() ? (
-              <p className="mt-1 text-xs leading-relaxed text-muted-foreground sm:text-sm">
+              <p className="mt-1 text-xs leading-relaxed text-on-surface-variant sm:text-sm">
                 {activeSlide.subtitle}
               </p>
             ) : null}
@@ -354,7 +354,7 @@ export function HeroSlider({ slides, variant = "original" }: HeroSliderProps) {
     return (
       <div className="max-w-xl space-y-3 text-right text-white">
         {activeSlide.title?.trim() ? (
-          <h2 className="text-2xl font-semibold leading-tight tracking-tight sm:text-3xl lg:text-4xl">
+          <h2 className="font-headline text-3xl font-extrabold leading-tight tracking-tighter sm:text-4xl lg:text-5xl">
             {activeSlide.title}
           </h2>
         ) : null}
@@ -425,7 +425,7 @@ export function HeroSlider({ slides, variant = "original" }: HeroSliderProps) {
   };
 
   return (
-    <section className="relative overflow-hidden rounded-2xl bg-card sm:rounded-[30px]">
+    <section className="relative overflow-hidden rounded-sm bg-surface-container-lowest">
       <div
         className={cn(
           "relative",
@@ -460,7 +460,7 @@ export function HeroSlider({ slides, variant = "original" }: HeroSliderProps) {
               className={cn(
                 "absolute left-2 top-1/2 z-20 -translate-y-1/2 rounded-full p-1.5 transition-colors sm:left-3 sm:p-2",
                 isLightCard
-                  ? "bg-background/92 text-foreground hover:bg-background"
+                  ? "bg-surface/92 text-on-surface hover:bg-surface"
                   : "bg-black/28 text-white hover:bg-black/44",
               )}
               onClick={() =>
@@ -477,7 +477,7 @@ export function HeroSlider({ slides, variant = "original" }: HeroSliderProps) {
               className={cn(
                 "absolute right-2 top-1/2 z-20 -translate-y-1/2 rounded-full p-1.5 transition-colors sm:right-3 sm:p-2",
                 isLightCard
-                  ? "bg-background/92 text-foreground hover:bg-background"
+                  ? "bg-surface/92 text-on-surface hover:bg-surface"
                   : "bg-black/28 text-white hover:bg-black/44",
               )}
               onClick={() =>

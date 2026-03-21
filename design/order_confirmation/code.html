@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-secondary": "#ffffff",
+              "surface-container-lowest": "#ffffff",
+              "on-surface": "#1a1c1c",
+              "tertiary-fixed": "#ffdbcc",
+              "background": "#f9f9f9",
+              "secondary-fixed-dim": "#bdc9c9",
+              "surface-container-highest": "#e2e2e2",
+              "on-secondary-container": "#5b6667",
+              "secondary": "#556061",
+              "primary-fixed-dim": "#adcccd",
+              "primary-fixed": "#c9e8e9",
+              "on-tertiary-fixed": "#2d1509",
+              "surface-tint": "#476364",
+              "on-error-container": "#93000a",
+              "surface-container": "#eeeeee",
+              "on-background": "#1a1c1c",
+              "on-tertiary-container": "#ae8775",
+              "inverse-primary": "#adcccd",
+              "primary-container": "#0f2d2e",
+              "outline-variant": "#c1c8c7",
+              "surface-container-high": "#e8e8e8",
+              "surface-dim": "#dadada",
+              "tertiary": "#240e04",
+              "on-tertiary": "#ffffff",
+              "primary": "#001819",
+              "outline": "#717878",
+              "inverse-surface": "#2f3131",
+              "on-tertiary-fixed-variant": "#5e4031",
+              "on-primary-fixed-variant": "#2f4c4c",
+              "secondary-container": "#d9e5e5",
+              "surface-variant": "#e2e2e2",
+              "on-error": "#ffffff",
+              "on-secondary-fixed-variant": "#3e4949",
+              "error-container": "#ffdad6",
+              "on-secondary-fixed": "#131d1e",
+              "tertiary-container": "#3c2215",
+              "surface-bright": "#f9f9f9",
+              "on-primary-fixed": "#012021",
+              "tertiary-fixed-dim": "#e9bda9",
+              "inverse-on-surface": "#f1f1f1",
+              "on-surface-variant": "#414848",
+              "on-primary": "#ffffff",
+              "surface": "#f9f9f9",
+              "secondary-fixed": "#d9e5e5",
+              "surface-container-low": "#f3f3f3",
+              "error": "#ba1a1a",
+              "on-primary-container": "#779596"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9f9f9;
+            color: #1a1c1c;
+        }
+        h1, h2, h3 {
+            font-family: 'Manrope', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col">
+<!-- TopAppBar Navigation Shell is suppressed for Transactional Success Screen per Shell Visibility Rule -->
+<main class="flex-grow flex items-center justify-center px-4 py-20">
+<div class="max-w-5xl w-full grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+<!-- Left Column: Success Messaging -->
+<div class="lg:col-span-7 flex flex-col items-start space-y-12">
+<div class="space-y-6">
+<div class="inline-flex items-center space-x-4">
+<div class="w-12 h-12 rounded-full bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary text-2xl">check</span>
+</div>
+<span class="font-label text-sm tracking-[0.2em] uppercase text-on-surface-variant">Order Confirmed</span>
+</div>
+<h1 class="text-5xl md:text-7xl font-headline font-extrabold tracking-tight text-primary leading-none">
+                        Thank you for your trust.
+                    </h1>
+<p class="text-xl text-on-surface-variant font-body max-w-lg leading-relaxed">
+                        Your selection from ATELIER is being prepared with precision. We have sent a confirmation to your email.
+                    </p>
+</div>
+<div class="w-full grid grid-cols-2 gap-8 py-8 border-t border-outline-variant/20">
+<div>
+<p class="font-label text-xs tracking-widest uppercase text-on-surface-variant mb-2">Order Number</p>
+<p class="font-headline font-bold text-lg text-primary">#AT-102938</p>
+</div>
+<div>
+<p class="font-label text-xs tracking-widest uppercase text-on-surface-variant mb-2">Est. Delivery</p>
+<p class="font-headline font-bold text-lg text-primary">Oct 24 — Oct 27</p>
+</div>
+</div>
+<div class="flex flex-col sm:flex-row gap-4">
+<button class="px-10 py-5 bg-primary text-on-primary rounded-full font-label text-xs tracking-widest uppercase font-bold hover:opacity-90 transition-opacity">
+                        CONTINUE SHOPPING
+                    </button>
+<button class="px-10 py-5 bg-surface-container-high text-on-surface rounded-full font-label text-xs tracking-widest uppercase font-bold hover:bg-surface-container-highest transition-colors">
+                        TRACK ORDER
+                    </button>
+</div>
+</div>
+<!-- Right Column: Order Summary Bento Card -->
+<div class="lg:col-span-5 w-full">
+<div class="bg-surface-container-low p-8 rounded-xl space-y-8">
+<h2 class="font-headline text-2xl font-bold tracking-tight text-primary">Order Summary</h2>
+<!-- Items List -->
+<div class="space-y-6">
+<div class="flex items-center space-x-4">
+<div class="w-20 h-24 bg-surface-container-highest rounded overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Minimalist dark grey ceramic vase" src="https://lh3.googleusercontent.com/aida-public/AB6AXuADFLibrDuAXqS6it7Lb1hVtSRFNmxfkHeWmyPEfD_sQTkBV31744IY8qjAKgKCDQkfJuslrYrL1m4N4lMXC90UL2-xU-plVmeeBjkdpybekNwDCMfxarp-oD5pw6BMbddhVEdOtimlILWiO3ZYkRCc4zqo_zWqBoCAYInT0v8FZCNkz9jL3ITjR8VsFf2nrDE6cUYvoPMc46J8QzrYiBWFCaeU6owJEX5L3A_qGHOD0Ao228PjBZrk40T9uhd9s7y8YbYy9otO984l"/>
+</div>
+<div class="flex-grow">
+<h3 class="font-headline font-semibold text-primary">Obscura Ceramic Vase</h3>
+<p class="text-sm text-on-surface-variant font-body">Large / Graphite</p>
+<p class="text-sm font-bold mt-1">$120.00</p>
+</div>
+</div>
+<div class="flex items-center space-x-4">
+<div class="w-20 h-24 bg-surface-container-highest rounded overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="High-end textured linen throw blanket" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDY1oUeAtDZt7ih-AYdtb3XMKop5Wk3mjwReayODwQzOMPqoch8wBNbKhodvR1xs93LKA-sTFjHsVP0s2yguhyOWNTDvah1T9GFgypc1tqryY1I-3xp7yZCi36rLOObndMuSm6zEN8YGPOhR8zicMxF8f8caOMMCR80vq2K2WgvrXPrNZuyX6NE1U1fSVoq9S3njs5IqbLRsQuwB-BkPZEZmTEX2WoFGGbe0m7Nc7b7nVZBF-Z8xErApdyVTY8cDI-McBn0O9mscqpU"/>
+</div>
+<div class="flex-grow">
+<h3 class="font-headline font-semibold text-primary">Textured Linen Throw</h3>
+<p class="text-sm text-on-surface-variant font-body">Oatmeal</p>
+<p class="text-sm font-bold mt-1">$85.00</p>
+</div>
+</div>
+</div>
+<!-- Totals -->
+<div class="pt-6 border-t border-outline-variant/20 space-y-3">
+<div class="flex justify-between text-sm text-on-surface-variant font-body">
+<span>Subtotal</span>
+<span>$205.00</span>
+</div>
+<div class="flex justify-between text-sm text-on-surface-variant font-body">
+<span>Shipping</span>
+<span class="text-primary font-medium">Complimentary</span>
+</div>
+<div class="flex justify-between pt-4 font-headline text-xl font-bold text-primary">
+<span>Total</span>
+<span>$205.00</span>
+</div>
+</div>
+<!-- Shipping Address Callout -->
+<div class="mt-8 p-4 bg-surface-container-lowest rounded-lg">
+<p class="font-label text-[10px] tracking-[0.2em] uppercase text-on-surface-variant mb-2">Shipping To</p>
+<p class="text-sm text-on-surface leading-relaxed font-body">
+                            Julianne Aris<br/>
+                            1048 Curated Way, Penthouse 4<br/>
+                            Stockholm, SE 111 22
+                        </p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer Component from Shared JSON -->
+<footer class="w-full py-12 px-8 bg-[#eeeeee] dark:bg-[#0f2d2e] flex flex-col md:flex-row justify-between items-center gap-8">
+<div class="text-lg font-bold tracking-widest text-[#001819] dark:text-[#f9f9f9] uppercase font-['Manrope']">
+            ATELIER
+        </div>
+<div class="flex flex-wrap justify-center gap-8">
+<a class="font-['Inter'] text-xs tracking-widest uppercase text-[#414848] dark:text-[#eeeeee] hover:text-[#001819] dark:hover:text-white transition-all" href="#">Privacy Policy</a>
+<a class="font-['Inter'] text-xs tracking-widest uppercase text-[#414848] dark:text-[#eeeeee] hover:text-[#001819] dark:hover:text-white transition-all" href="#">Terms of Service</a>
+<a class="font-['Inter'] text-xs tracking-widest uppercase text-[#414848] dark:text-[#eeeeee] hover:text-[#001819] dark:hover:text-white transition-all" href="#">Shipping &amp; Returns</a>
+</div>
+<div class="font-['Inter'] text-xs tracking-widest uppercase text-[#414848] dark:text-[#eeeeee]">
+            © 2024 ATELIER. All rights reserved.
+        </div>
+</footer>
+</body></html>

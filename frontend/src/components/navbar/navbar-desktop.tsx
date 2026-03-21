@@ -35,7 +35,7 @@ function DesktopSubNavDropdown({
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="start"
-        className="w-56 border-border/60 bg-background shadow-none"
+        className="w-56 border-border/30 bg-background/95 shadow-lg shadow-primary/5 backdrop-blur-xl"
       >
         <DropdownMenuItem asChild>
           <Link href={item.url} className="cursor-pointer font-medium">
@@ -67,7 +67,7 @@ function DesktopOverflowMenu({ items }: { items: NavbarItem[] }) {
             type="button"
             variant="ghost"
             size="sm"
-            className="h-9 gap-1.5 px-2.5 text-sm font-medium hover:bg-muted"
+            className="h-9 gap-1.5 px-3 font-headline text-sm font-bold uppercase tracking-tight text-on-surface-variant hover:text-primary transition-colors"
           >
             <Ellipsis className="size-4" />
             More
@@ -76,7 +76,7 @@ function DesktopOverflowMenu({ items }: { items: NavbarItem[] }) {
         </DropdownMenuTrigger>
         <DropdownMenuContent
           align="end"
-          className="w-60 border-border/60 bg-background shadow-none"
+          className="w-60 border-border/30 bg-background/95 shadow-lg shadow-primary/5 backdrop-blur-xl"
         >
           {items.map((item) => {
             const hasSubNav = item.subNav.length > 0;
@@ -94,7 +94,7 @@ function DesktopOverflowMenu({ items }: { items: NavbarItem[] }) {
             return (
               <DropdownMenuSub key={item.url}>
                 <DropdownMenuSubTrigger>{item.title}</DropdownMenuSubTrigger>
-                <DropdownMenuSubContent className="w-56 border-border/60 bg-background shadow-none">
+                <DropdownMenuSubContent className="w-56 border-border/30 bg-background/95 shadow-lg shadow-primary/5 backdrop-blur-xl">
                   <DropdownMenuItem asChild>
                     <Link href={item.url} className="cursor-pointer font-medium">
                       View {item.title}
@@ -123,7 +123,7 @@ export function NavbarDesktop({ items }: NavbarDesktopProps) {
 
   return (
     <nav aria-label="Main navigation" className="hidden min-w-0 md:flex">
-      <ul className="flex items-center gap-1">
+      <ul className="flex items-center gap-8">
         {primaryItems.map((item) => {
           const hasSubNav = item.subNav.length > 0;
 
@@ -132,7 +132,7 @@ export function NavbarDesktop({ items }: NavbarDesktopProps) {
               <li key={item.url}>
                 <Link
                   href={item.url}
-                  className="inline-flex h-9 max-w-40 items-center rounded-md px-2.5 text-sm font-medium transition-colors duration-300 ease-out hover:bg-muted"
+                  className="inline-flex items-center font-headline text-sm font-bold uppercase tracking-tight text-on-surface-variant transition-colors hover:text-primary"
                 >
                   <span className="truncate">{item.title}</span>
                 </Link>
@@ -144,7 +144,7 @@ export function NavbarDesktop({ items }: NavbarDesktopProps) {
             <li key={item.url}>
               <DesktopSubNavDropdown
                 item={item}
-                triggerClassName="inline-flex h-9 max-w-40 items-center gap-1 rounded-md px-2.5 text-sm font-medium transition-colors duration-300 ease-out hover:bg-muted"
+                triggerClassName="inline-flex items-center gap-1 font-headline text-sm font-bold uppercase tracking-tight text-on-surface-variant transition-colors hover:text-primary"
               />
             </li>
           );

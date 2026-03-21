@@ -36,7 +36,7 @@ function MobileSidebarTrigger() {
       variant="ghost"
       size="icon"
       onClick={toggleSidebar}
-      className="size-10 rounded-md border border-border/55 bg-background shadow-none transition-colors duration-300 ease-out hover:bg-muted/70"
+      className="size-10 rounded-full text-primary transition-all duration-300 hover:bg-surface-container"
       aria-label="Open mobile menu"
     >
       <RiMenu4Fill className="size-5" />
@@ -74,20 +74,20 @@ export function NavbarMobile({ items }: NavbarMobileProps) {
         <Sidebar
           side="right"
           collapsible="offcanvas"
-          className="border-l border-border/55 bg-background shadow-none"
+          className="border-l-0 bg-surface-container-low shadow-none"
         >
-          <SidebarHeader className="border-b border-border/50 px-4 py-3">
+          <SidebarHeader className="px-6 py-6">
             <MobileNavLink
               href="/"
-              className="text-base font-semibold tracking-tight"
+              className="font-headline text-xl font-extrabold tracking-tighter text-primary"
             >
               Menu
             </MobileNavLink>
           </SidebarHeader>
 
-          <SidebarContent className="px-4 py-4">
+          <SidebarContent className="px-4 py-2">
             <SidebarGroup className="p-0">
-              <SidebarMenu className="gap-3">
+              <SidebarMenu className="gap-1">
                 {items.map((item) => {
                   const hasSubNav = item.subNav.length > 0;
 
@@ -95,7 +95,7 @@ export function NavbarMobile({ items }: NavbarMobileProps) {
                     <SidebarMenuItem key={item.url} className="space-y-1">
                       <SidebarMenuButton
                         asChild
-                        className="h-9 rounded-md px-2 text-sm font-medium hover:bg-muted/70"
+                        className="h-10 rounded-lg px-4 font-headline text-sm font-bold uppercase tracking-widest text-on-surface-variant hover:bg-surface-container hover:text-primary"
                       >
                         <MobileNavLink href={item.url}>
                           {item.title}
@@ -103,14 +103,14 @@ export function NavbarMobile({ items }: NavbarMobileProps) {
                       </SidebarMenuButton>
 
                       {hasSubNav && (
-                        <SidebarMenuSub className="mt-1 border-l border-border/45 pl-3">
+                        <SidebarMenuSub className="mt-1 border-l-0 pl-4">
                           {item.subNav.map((subItem) => (
                             <SidebarMenuSubItem
                               key={`${item.url}-${subItem.url}`}
                             >
                               <SidebarMenuSubButton
                                 asChild
-                                className="rounded-md px-2 text-sm text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+                                className="rounded-lg px-4 text-sm text-on-surface-variant hover:bg-surface-container hover:text-primary"
                               >
                                 <MobileNavLink href={subItem.url}>
                                   {subItem.title}
@@ -127,22 +127,21 @@ export function NavbarMobile({ items }: NavbarMobileProps) {
             </SidebarGroup>
           </SidebarContent>
 
-          {/* Auth links in mobile sidebar */}
-          <SidebarFooter className="border-t border-border/50 px-4 py-4">
-            <div className="flex flex-col gap-2">
+          <SidebarFooter className="px-6 py-6">
+            <div className="flex flex-col gap-3">
               <MobileNavLink
                 href="/login"
-                className="flex items-center gap-2 rounded-md px-2 py-2 text-sm font-medium hover:bg-muted/70"
+                className="flex items-center justify-center gap-2 rounded-full bg-surface-container px-5 py-3 font-headline text-xs font-bold uppercase tracking-widest text-primary transition-colors hover:bg-surface-container-high"
               >
                 <LogIn className="size-4" />
-                Login
+                Sign In
               </MobileNavLink>
               <MobileNavLink
                 href="/signup"
-                className="flex items-center gap-2 rounded-md bg-primary px-2 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+                className="flex items-center justify-center gap-2 rounded-full bg-primary px-5 py-3 font-headline text-xs font-bold uppercase tracking-widest text-on-primary transition-opacity hover:opacity-90"
               >
                 <UserPlus className="size-4" />
-                Sign Up
+                Join
               </MobileNavLink>
             </div>
           </SidebarFooter>

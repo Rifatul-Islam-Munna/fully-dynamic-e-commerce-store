@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;family=Inter:wght@300..700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-tertiary-fixed": "#2d1509",
+              "secondary-fixed": "#d9e5e5",
+              "inverse-on-surface": "#f1f1f1",
+              "surface-variant": "#e2e2e2",
+              "outline-variant": "#c1c8c7",
+              "surface-dim": "#dadada",
+              "surface-container-lowest": "#ffffff",
+              "tertiary-container": "#3c2215",
+              "surface": "#f9f9f9",
+              "on-primary": "#ffffff",
+              "on-primary-fixed-variant": "#2f4c4c",
+              "primary-fixed": "#c9e8e9",
+              "inverse-primary": "#adcccd",
+              "tertiary-fixed-dim": "#e9bda9",
+              "background": "#f9f9f9",
+              "on-background": "#1a1c1c",
+              "primary-fixed-dim": "#adcccd",
+              "on-secondary-fixed-variant": "#3e4949",
+              "surface-bright": "#f9f9f9",
+              "primary": "#001819",
+              "on-secondary": "#ffffff",
+              "surface-tint": "#476364",
+              "outline": "#717878",
+              "on-surface": "#1a1c1c",
+              "secondary-fixed-dim": "#bdc9c9",
+              "on-secondary-fixed": "#131d1e",
+              "on-tertiary": "#ffffff",
+              "surface-container": "#eeeeee",
+              "tertiary-fixed": "#ffdbcc",
+              "error": "#ba1a1a",
+              "error-container": "#ffdad6",
+              "on-error-container": "#93000a",
+              "on-secondary-container": "#5b6667",
+              "on-error": "#ffffff",
+              "on-primary-fixed": "#012021",
+              "on-tertiary-fixed-variant": "#5e4031",
+              "surface-container-high": "#e8e8e8",
+              "on-surface-variant": "#414848",
+              "secondary": "#556061",
+              "primary-container": "#0f2d2e",
+              "tertiary": "#240e04",
+              "on-tertiary-container": "#ae8775",
+              "on-primary-container": "#779596",
+              "inverse-surface": "#2f3131",
+              "secondary-container": "#d9e5e5",
+              "surface-container-low": "#f3f3f3",
+              "surface-container-highest": "#e2e2e2"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            font-size: 20px;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3 { font-family: 'Manrope', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-[#f9f9f9]/80 dark:bg-[#001819]/80 backdrop-blur-md flex justify-between items-center w-full px-8 py-6 max-w-full mx-auto">
+<div class="text-2xl font-black tracking-tighter text-[#001819] dark:text-[#f9f9f9]">ATELIER</div>
+<div class="hidden md:flex items-center space-x-8 font-manrope tracking-tight font-bold text-sm uppercase">
+<a class="text-[#414848] dark:text-[#eeeeee] hover:text-[#001819] transition-colors" href="#">Collections</a>
+<a class="text-[#414848] dark:text-[#eeeeee] hover:text-[#001819] transition-colors" href="#">New Arrivals</a>
+<a class="text-[#414848] dark:text-[#eeeeee] hover:text-[#001819] transition-colors" href="#">Archive</a>
+<a class="text-[#414848] dark:text-[#eeeeee] hover:text-[#001819] transition-colors" href="#">Journal</a>
+</div>
+<div class="flex items-center space-x-6">
+<button class="hover:bg-[#eeeeee] dark:hover:bg-[#0f2d2e] transition-all duration-300 p-2 rounded-full scale-95 duration-200 ease-in-out">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+<button class="hover:bg-[#eeeeee] dark:hover:bg-[#0f2d2e] transition-all duration-300 p-2 rounded-full scale-95 duration-200 ease-in-out">
+<span class="material-symbols-outlined text-[#001819] dark:text-[#f9f9f9]" data-icon="person" style="font-variation-settings: 'FILL' 1;">person</span>
+</button>
+<button class="hover:bg-[#eeeeee] dark:hover:bg-[#0f2d2e] transition-all duration-300 p-2 rounded-full scale-95 duration-200 ease-in-out">
+<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+</button>
+</div>
+</nav>
+<main class="pt-32 pb-24 px-8 max-w-7xl mx-auto flex flex-col md:flex-row gap-12">
+<!-- Sidebar Navigation -->
+<aside class="w-full md:w-64 flex-shrink-0">
+<div class="sticky top-32 space-y-8">
+<div>
+<h3 class="text-on-surface-variant font-label text-[0.65rem] uppercase tracking-[0.2em] mb-6">Account Management</h3>
+<nav class="flex flex-col space-y-1">
+<a class="flex items-center space-x-3 px-4 py-3 bg-primary-container text-on-primary-container rounded-lg font-medium transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="person" style="font-variation-settings: 'FILL' 1;">person</span>
+<span>Profile</span>
+</a>
+<a class="flex items-center space-x-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-low transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="package_2">package_2</span>
+<span>Orders</span>
+</a>
+<a class="flex items-center space-x-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-low transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="favorite">favorite</span>
+<span>Wishlist</span>
+</a>
+<a class="flex items-center space-x-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-low transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="location_on">location_on</span>
+<span>Addresses</span>
+</a>
+<a class="flex items-center space-x-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-low transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>Settings</span>
+</a>
+</nav>
+</div>
+<div class="pt-8 border-t border-outline-variant/20">
+<button class="flex items-center space-x-3 px-4 py-3 text-error w-full hover:bg-error-container/10 transition-all rounded-lg">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-medium">Sign Out</span>
+</button>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<div class="flex-1 space-y-12">
+<!-- Header & Quick Stats -->
+<section class="space-y-8">
+<div>
+<h1 class="text-4xl font-extrabold tracking-tighter text-on-surface mb-2 uppercase">Welcome back, Adrian</h1>
+<p class="text-on-surface-variant">Manage your atelier selections and track your journey.</p>
+</div>
+<!-- Bento Grid Stats -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="bg-surface-container-lowest p-8 rounded-xl flex flex-col justify-between h-40 border-b-2 border-primary-container/5">
+<div class="flex justify-between items-start">
+<span class="text-on-surface-variant font-label text-[0.65rem] uppercase tracking-widest">Atelier Points</span>
+<span class="material-symbols-outlined text-on-primary-container" data-icon="token">token</span>
+</div>
+<div class="text-3xl font-black font-headline tracking-tighter">2,450</div>
+</div>
+<div class="bg-primary-container p-8 rounded-xl flex flex-col justify-between h-40">
+<div class="flex justify-between items-start">
+<span class="text-on-primary-container font-label text-[0.65rem] uppercase tracking-widest">Active Orders</span>
+<span class="material-symbols-outlined text-primary-fixed" data-icon="local_shipping">local_shipping</span>
+</div>
+<div class="text-3xl font-black font-headline tracking-tighter text-on-primary">02</div>
+</div>
+<div class="bg-surface-container p-8 rounded-xl flex flex-col justify-between h-40">
+<div class="flex justify-between items-start">
+<span class="text-on-surface-variant font-label text-[0.65rem] uppercase tracking-widest">Saved Items</span>
+<span class="material-symbols-outlined text-on-surface" data-icon="bookmark">bookmark</span>
+</div>
+<div class="text-3xl font-black font-headline tracking-tighter">14</div>
+</div>
+</div>
+</section>
+<!-- Recent Orders Section -->
+<section class="bg-surface-container-lowest rounded-xl p-0 overflow-hidden">
+<div class="p-8 flex justify-between items-end border-b border-surface-container">
+<div>
+<h2 class="text-xl font-bold tracking-tight uppercase">Recent Orders</h2>
+<p class="text-sm text-on-surface-variant">Last 3 months of activity</p>
+</div>
+<a class="text-xs font-bold uppercase tracking-widest text-primary border-b border-primary pb-1 hover:opacity-70 transition-opacity" href="#">View All History</a>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low/50">
+<th class="px-8 py-4 text-[0.65rem] font-bold uppercase tracking-widest text-on-surface-variant">Order ID</th>
+<th class="px-8 py-4 text-[0.65rem] font-bold uppercase tracking-widest text-on-surface-variant">Items</th>
+<th class="px-8 py-4 text-[0.65rem] font-bold uppercase tracking-widest text-on-surface-variant">Date</th>
+<th class="px-8 py-4 text-[0.65rem] font-bold uppercase tracking-widest text-on-surface-variant">Status</th>
+<th class="px-8 py-4 text-[0.65rem] font-bold uppercase tracking-widest text-on-surface-variant text-right">Total</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container">
+<tr class="hover:bg-surface-container-low/30 transition-colors group">
+<td class="px-8 py-6 font-mono text-sm">#AT-902341</td>
+<td class="px-8 py-6">
+<div class="flex -space-x-3">
+<div class="w-10 h-12 bg-surface-container rounded overflow-hidden border-2 border-surface-container-lowest">
+<img class="w-full h-full object-cover" data-alt="Minimalist wool coat in charcoal gray" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBmpcztdbEWJ7pMWYBGdPiwo9-SwrKltGduBVoSOnQUKO88Umcse8ZR3Lfo-HyzlnuRwFSqenb4JDPhpxX0W7TAJwRRsOVAeSBgguALW7RcJ4gJPLNBnluz_ecywBlU7CfGkZYYTR96bJso9YYIout7hyxo2cR2guKIS92DLLPgcHdEpuYu1cYFSNKkO30HKNSDpItkc2PWCni9NSQpaiEOfsPNZQKl8jZ-HMUvWi_txTeg5xYRgzyPv45h11Uu139ugMHhm_jczjv"/>
+</div>
+<div class="w-10 h-12 bg-surface-container rounded overflow-hidden border-2 border-surface-container-lowest">
+<img class="w-full h-full object-cover" data-alt="White tailored linen shirt" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPxER4p3TwJLiKR4EvgV0KsX1-zJVFVgcuqswpGhK4ykawPwN7giHrzqnfa9YJ58L1iCkB5OZmsQ9IQDaXoTGRBOEanKUwN5xdmgHx0466Xz2Rviu6cVBo9YDbgzNxK0Jskd2TnwkGK7TaJjInik61Yb-ZeEpXAp_BHTjT7eJ7uT8LyEki2KHNMqi5-DefDznd0lRXsrG-_blIIfWSapoTYxmXEyxurVrpxRkvnaKZeTwOCs2vEQMfMly9-kUdreNCMhGAVeq9A-zm"/>
+</div>
+<div class="w-10 h-12 flex items-center justify-center bg-surface-container-high rounded text-[10px] font-bold border-2 border-surface-container-lowest">+1</div>
+</div>
+</td>
+<td class="px-8 py-6 text-sm text-on-surface-variant">Oct 12, 2023</td>
+<td class="px-8 py-6">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-primary-container text-on-primary-container">
+                                        In Transit
+                                    </span>
+</td>
+<td class="px-8 py-6 text-right font-bold text-sm">$842.00</td>
+</tr>
+<tr class="hover:bg-surface-container-low/30 transition-colors group">
+<td class="px-8 py-6 font-mono text-sm">#AT-891204</td>
+<td class="px-8 py-6">
+<div class="w-10 h-12 bg-surface-container rounded overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Black luxury leather bag" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC29mHEXVM5Bi_rVYUhOCvFiGx87xUPLJa1kfDO4ZjvcVBTtxhVbKeVKr0Wlf3Phh4h2SiB1HaL_p_738w5fk4GZzyjvk40wtMJHUn1E3e-EFFeMSBKRmAqDuLl4DyUv24CBRj4p1kMs73dFkTN1ljU8i2dL0Kk3FKVDT175-JhxxFYihj533sExzM7l7aqAPaeSo9t7lYgwdcmgq4_uVugXG8NCL10be1lbOovqgl36Cq2TGrg6eVJzyhCd3LsboXzXkxp8Bfe3tGk"/>
+</div>
+</td>
+<td class="px-8 py-6 text-sm text-on-surface-variant">Sep 28, 2023</td>
+<td class="px-8 py-6">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-secondary-container text-on-secondary-container">
+                                        Delivered
+                                    </span>
+</td>
+<td class="px-8 py-6 text-right font-bold text-sm">$1,250.00</td>
+</tr>
+<tr class="hover:bg-surface-container-low/30 transition-colors group">
+<td class="px-8 py-6 font-mono text-sm">#AT-887122</td>
+<td class="px-8 py-6">
+<div class="flex -space-x-3">
+<div class="w-10 h-12 bg-surface-container rounded overflow-hidden border-2 border-surface-container-lowest">
+<img class="w-full h-full object-cover" data-alt="Navy blue cashmere sweater" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-nA1v0yiPxopwJBLfwFVYJSvK6A5FkU8UXfgFBzCrjdKgWCMmVEOFoiQ6tbpMh9LRfjiuKB-DnkQhYVrLQg0BD0GcPlsIDOtx1Ni2K0Yifla3CZmRvavoye7nyN9cNymrCZ1r_jH8bbgmj9yxvoOccF1v3cOYOSHYGNDusfb5QbC2NxHjI4I4PMqZ6VnU495lNnxg5NiTD2gTM7YbcQtwHFda7kBQuzyW8sn6eP_qa9vCc8h2ZiN0RNtj_n8s808K5rn9TxZN-3Ze"/>
+</div>
+<div class="w-10 h-12 bg-surface-container rounded overflow-hidden border-2 border-surface-container-lowest">
+<img class="w-full h-full object-cover" data-alt="Pair of designer denim jeans" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAeTqGDf_N2W9RtH_UIynT7C36DZBTM3FnXsJIGf-u7OMbPAvXfWM5VByeD7Kw1uKS4bhmXIapxJs6TJKPDmADhlXUrkpYO-pq8whcnaqOQ9BL7snBe8PpV72N476IEfj8gQGD6Bge_8VzC43ilKleJPcILq6UhEJo8A1siD1BCC9Sm34nduEr0k0sDIyi3xwkkvqNm1vgVTnLv46VamplqqhWo8iXW7QLz3x2WbD_PynVYs_IJuMrfEwEgRw1GDBVMr7-bs9SkVx8b"/>
+</div>
+</div>
+</td>
+<td class="px-8 py-6 text-sm text-on-surface-variant">Aug 15, 2023</td>
+<td class="px-8 py-6">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-secondary-container text-on-secondary-container">
+                                        Delivered
+                                    </span>
+</td>
+<td class="px-8 py-6 text-right font-bold text-sm">$495.00</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- Order Status Tracking UI -->
+<section class="bg-primary-container text-on-primary p-12 rounded-xl relative overflow-hidden">
+<div class="relative z-10 flex flex-col md:flex-row justify-between items-center gap-8">
+<div class="max-w-md">
+<span class="text-on-primary-container font-label text-[0.65rem] uppercase tracking-[0.3em] mb-4 block">Current Tracking</span>
+<h2 class="text-3xl font-black font-headline tracking-tighter mb-4 uppercase leading-none">Order #AT-902341 is arriving tomorrow</h2>
+<button class="bg-surface text-primary px-8 py-3 rounded-full font-bold text-xs uppercase tracking-widest hover:bg-surface-bright transition-all">Track shipment</button>
+</div>
+<div class="flex-1 w-full max-w-lg">
+<div class="relative flex justify-between">
+<div class="absolute top-1/2 left-0 w-full h-0.5 bg-on-primary-container/30 -translate-y-1/2"></div>
+<div class="absolute top-1/2 left-0 w-2/3 h-0.5 bg-surface -translate-y-1/2 transition-all"></div>
+<div class="relative z-10 flex flex-col items-center">
+<div class="w-6 h-6 rounded-full bg-surface text-primary flex items-center justify-center mb-3 shadow-lg">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<span class="text-[9px] uppercase font-bold tracking-tighter opacity-60">Confirmed</span>
+</div>
+<div class="relative z-10 flex flex-col items-center">
+<div class="w-6 h-6 rounded-full bg-surface text-primary flex items-center justify-center mb-3 shadow-lg">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<span class="text-[9px] uppercase font-bold tracking-tighter opacity-60">Shipped</span>
+</div>
+<div class="relative z-10 flex flex-col items-center">
+<div class="w-10 h-10 -mt-2 rounded-full bg-surface-bright text-primary flex items-center justify-center mb-2 ring-4 ring-on-primary-container/20">
+<span class="material-symbols-outlined text-[20px]" data-icon="local_shipping">local_shipping</span>
+</div>
+<span class="text-[9px] uppercase font-bold tracking-tighter">In Transit</span>
+</div>
+<div class="relative z-10 flex flex-col items-center">
+<div class="w-6 h-6 rounded-full bg-on-primary-container/40 flex items-center justify-center mb-3"></div>
+<span class="text-[9px] uppercase font-bold tracking-tighter opacity-60">Delivered</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Abstract visual texture -->
+<div class="absolute top-0 right-0 w-64 h-64 bg-primary-fixed opacity-5 rounded-full -mr-32 -mt-32"></div>
+</section>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-[#001819] dark:bg-[#000000] w-full border-t border-white/10">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12 px-12 py-20 w-full">
+<div class="space-y-6">
+<div class="text-xl font-bold text-[#ffffff]">ATELIER</div>
+<p class="font-inter text-xs tracking-widest uppercase text-[#eeeeee]/60 leading-relaxed">
+                    Crafting timeless digital experiences and physical artifacts for the modern curator.
+                </p>
+</div>
+<div class="space-y-4">
+<h4 class="font-bold text-white text-xs uppercase tracking-widest">Navigation</h4>
+<ul class="space-y-2">
+<li><a class="font-inter text-xs tracking-widest uppercase text-white/60 hover:text-white transition-opacity" href="#">Sustainability</a></li>
+<li><a class="font-inter text-xs tracking-widest uppercase text-white/60 hover:text-white transition-opacity" href="#">Shipping &amp; Returns</a></li>
+<li><a class="font-inter text-xs tracking-widest uppercase text-white/60 hover:text-white transition-opacity" href="#">Journal</a></li>
+</ul>
+</div>
+<div class="space-y-4">
+<h4 class="font-bold text-white text-xs uppercase tracking-widest">Legal</h4>
+<ul class="space-y-2">
+<li><a class="font-inter text-xs tracking-widest uppercase text-white/60 hover:text-white transition-opacity" href="#">Privacy Policy</a></li>
+<li><a class="font-inter text-xs tracking-widest uppercase text-white/60 hover:text-white transition-opacity" href="#">Terms of Service</a></li>
+</ul>
+</div>
+<div class="space-y-4">
+<h4 class="font-bold text-white text-xs uppercase tracking-widest">Contact</h4>
+<p class="font-inter text-xs tracking-widest uppercase text-white/60">support@atelier.com</p>
+<div class="flex space-x-4 pt-4">
+<span class="material-symbols-outlined text-white/60 cursor-pointer hover:text-white transition-colors">public</span>
+<span class="material-symbols-outlined text-white/60 cursor-pointer hover:text-white transition-colors">alternate_email</span>
+</div>
+</div>
+</div>
+<div class="px-12 py-8 border-t border-white/5">
+<p class="font-inter text-xs tracking-widest uppercase text-[#eeeeee]/60">© 2024 ATELIER DIGITAL. ALL RIGHTS RESERVED.</p>
+</div>
+</footer>
+</body></html>

@@ -33,15 +33,15 @@ export function Breadcrumbs({
   return (
     <nav
       aria-label="Breadcrumb"
-      className="flex flex-wrap items-center gap-1 text-xs text-muted-foreground"
+      className="flex flex-wrap items-center gap-1 text-xs text-on-surface-variant"
     >
-      <Link href="/" className="hover:text-foreground">
+      <Link href="/" className="hover:text-on-surface">
         Home
       </Link>
       {mainNavUrl && mainLabel ? (
         <>
           <ArrowRight className="size-3" />
-          <Link href={mainNavUrl} className="hover:text-foreground">
+          <Link href={mainNavUrl} className="hover:text-on-surface">
             {mainLabel}
           </Link>
         </>
@@ -49,7 +49,7 @@ export function Breadcrumbs({
       {subNavUrl && subLabel ? (
         <>
           <ArrowRight className="size-3" />
-          <Link href={subNavUrl} className="hover:text-foreground">
+          <Link href={subNavUrl} className="hover:text-on-surface">
             {subLabel}
           </Link>
         </>
@@ -85,11 +85,11 @@ export function ProductHeader({
       </h1>
 
       <div className="flex flex-wrap items-center gap-2">
-        <span className="text-2xl font-semibold text-foreground">
+        <span className="text-2xl font-semibold text-on-surface">
           {hasVariants ? `From ${priceText}` : priceText}
         </span>
         {!hasVariants && hasBaseDiscount ? (
-          <span className="text-sm text-muted-foreground line-through">
+          <span className="text-sm text-on-surface-variant line-through">
             {formatCurrency(product.price)}
           </span>
         ) : null}
@@ -119,7 +119,7 @@ export function HeaderCluster({
   showCategoryLinks?: boolean;
   highlightSummary?: boolean;
   wide?: boolean;
-  emphasis?: "default" | "brutalist" | "luxury" | "tech" | "glass" | "minimal";
+  emphasis?: "default" | "brutalist" | "luxury" | "tech" | "glass" | "minimal" | "nordic_verve";
 }) {
   return (
     <section
@@ -127,7 +127,7 @@ export function HeaderCluster({
         "p-5 sm:p-6",
         wide ? "xl:p-8" : "",
         emphasis === "brutalist"
-          ? "border-b-4 border-primary bg-background pb-8"
+          ? "border-b-4 border-primary bg-surface pb-8"
           : emphasis === "luxury"
             ? "border-b border-border/40 bg-transparent pb-10"
             : emphasis === "tech"
@@ -136,7 +136,9 @@ export function HeaderCluster({
                 ? "rounded-[32px] border border-white/10 bg-white/5 backdrop-blur-2xl"
                 : emphasis === "minimal"
                   ? "bg-transparent p-0 sm:p-0"
-                  : "rounded-[28px] bg-muted/18",
+                  : emphasis === "nordic_verve"
+                    ? "rounded-none border border-[#E5E7EB] bg-white"
+                    : "rounded-[28px] bg-surface-container/18",
       )}
     >
       <Breadcrumbs
@@ -151,7 +153,7 @@ export function HeaderCluster({
           {mainLabel && mainNavUrl ? (
             <Link
               href={mainNavUrl}
-              className="rounded-full bg-background px-3 py-1 text-foreground"
+              className="rounded-full bg-surface px-3 py-1 text-on-surface"
             >
               {mainLabel}
             </Link>
@@ -159,7 +161,7 @@ export function HeaderCluster({
           {subLabel && subNavUrl ? (
             <Link
               href={subNavUrl}
-              className="rounded-full bg-background px-3 py-1 text-muted-foreground"
+              className="rounded-full bg-surface px-3 py-1 text-on-surface-variant"
             >
               {subLabel}
             </Link>
@@ -180,8 +182,8 @@ export function HeaderCluster({
         {view.summary ? (
           <p
             className={cn(
-              "max-w-3xl text-sm leading-6 text-muted-foreground",
-              highlightSummary ? "text-foreground/78" : "",
+              "max-w-3xl text-sm leading-6 text-on-surface-variant",
+              highlightSummary ? "text-on-surface/78" : "",
             )}
           >
             {view.summary}
@@ -207,29 +209,32 @@ export function PurchasePanel({
     | "glass"
     | "brutalist"
     | "luxury"
-    | "tech";
+    | "tech"
+    | "nordic_verve";
 }) {
   return (
     <section
       className={cn(
         "p-5 sm:p-6",
         emphasis === "brutalist"
-          ? "border-4 border-primary bg-background shadow-[8px_8px_0_0_var(--color-primary)]"
+          ? "border-4 border-primary bg-surface shadow-[8px_8px_0_0_var(--color-primary)]"
           : emphasis === "luxury"
-            ? "rounded-sm border border-border/50 bg-background/50 backdrop-blur-xl shadow-sm"
+            ? "rounded-sm border border-border/50 bg-surface/50 backdrop-blur-xl shadow-sm"
             : emphasis === "tech"
-              ? "rounded-lg border border-primary/20 bg-background/95 shadow-[inset_0_0_20px_rgba(var(--primary),0.05)] ring-1 ring-primary/10"
+              ? "rounded-lg border border-primary/20 bg-surface/95 shadow-[inset_0_0_20px_rgba(var(--primary),0.05)] ring-1 ring-primary/10"
               : emphasis === "glass"
                 ? "rounded-[32px] border border-white/10 bg-white/5 backdrop-blur-2xl shadow-2xl"
                 : emphasis === "order"
-                  ? "rounded-[28px] bg-background"
+                  ? "rounded-[28px] bg-surface"
                   : emphasis === "summary"
-                    ? "rounded-[28px] bg-muted/22"
-                    : "rounded-[28px] bg-card",
+                    ? "rounded-[28px] bg-surface-container/22"
+                    : emphasis === "nordic_verve"
+                      ? "rounded-none border border-[#E5E7EB] bg-white"
+                      : "rounded-[28px] bg-surface-container-lowest",
       )}
     >
       <div className="space-y-4">
-        <ProductDetailsActions product={actionProduct} />
+        <ProductDetailsActions product={actionProduct} sharp={emphasis === "nordic_verve"} />
         <CommerceFactsRow view={view} variants={variants} compact={compact} />
         <TrustList compact={compact} />
       </div>
@@ -307,18 +312,18 @@ export function CommerceFactsRow({
 
 export function FactCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl bg-background px-3 py-3 transition-transform duration-300 hover:-translate-y-0.5 hover:shadow-sm">
-      <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
+    <div className="rounded-none border-t border-[#E5E7EB] bg-white px-3 py-3">
+      <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-[#6B7280]">
         {label}
       </p>
-      <p className="mt-1 text-sm font-semibold text-foreground">{value}</p>
+      <p className="mt-1 text-sm font-semibold text-[#111111]">{value}</p>
     </div>
   );
 }
 
 export function SupportStrip() {
   return (
-    <div className="grid gap-2 rounded-[24px] bg-muted/18 p-4 sm:grid-cols-3">
+    <div className="grid gap-2 rounded-[24px] bg-surface-container/18 p-4 sm:grid-cols-3">
       <ServicePill
         icon={<Truck className="size-4" />}
         title="Fast delivery"
@@ -340,7 +345,7 @@ export function SupportStrip() {
 
 export function SupportNotes({ compact = false }: { compact?: boolean }) {
   return (
-    <section className="rounded-[24px] bg-muted/18 p-4">
+    <section className="rounded-[24px] bg-surface-container/18 p-4">
       <div className={cn("grid gap-3", compact ? "" : "sm:grid-cols-3")}>
         <NoteLine
           icon={<Truck className="size-4" />}
@@ -383,7 +388,7 @@ export function TrustList({ compact = false }: { compact?: boolean }) {
 
 export function TrustLine({ icon, text }: { icon: ReactNode; text: string }) {
   return (
-    <div className="flex items-center gap-2 text-muted-foreground">
+    <div className="flex items-center gap-2 text-on-surface-variant">
       {icon}
       <span>{text}</span>
     </div>
@@ -400,12 +405,12 @@ export function ServicePill({
   text: string;
 }) {
   return (
-    <div className="rounded-2xl bg-background px-3 py-3 transition-all duration-300 hover:scale-[1.02] hover:shadow-md">
-      <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
+    <div className="rounded-2xl bg-surface px-3 py-3 transition-all duration-300 hover:scale-[1.02] hover:shadow-md">
+      <div className="flex items-center gap-2 text-sm font-semibold text-on-surface">
         {icon}
         {title}
       </div>
-      <p className="mt-1 text-sm leading-6 text-muted-foreground">{text}</p>
+      <p className="mt-1 text-sm leading-6 text-on-surface-variant">{text}</p>
     </div>
   );
 }
@@ -421,11 +426,11 @@ export function NoteLine({
 }) {
   return (
     <div className="space-y-1">
-      <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
+      <div className="flex items-center gap-2 text-sm font-semibold text-on-surface">
         {icon}
         {title}
       </div>
-      <p className="text-sm leading-6 text-muted-foreground">{text}</p>
+      <p className="text-sm leading-6 text-on-surface-variant">{text}</p>
     </div>
   );
 }
@@ -437,11 +442,11 @@ export function InlineRichDescription({
 }) {
   return richText?.trim() ? (
     <article
-      className="product-rich-content prose prose-sm max-w-none text-foreground"
+      className="product-rich-content prose prose-sm max-w-none text-on-surface"
       dangerouslySetInnerHTML={{ __html: richText }}
     />
   ) : (
-    <p className="text-sm text-muted-foreground">
+    <p className="text-sm text-on-surface-variant">
       Detailed description will be added soon.
     </p>
   );
@@ -452,21 +457,23 @@ export function DescriptionSection({
   emphasis = "default",
 }: {
   richText?: string | null;
-  emphasis?: "default" | "brutalist" | "luxury" | "tech" | "minimal";
+  emphasis?: "default" | "brutalist" | "luxury" | "tech" | "minimal" | "nordic_verve";
 }) {
   return (
     <section
       className={cn(
         "p-5 sm:p-6",
         emphasis === "brutalist"
-          ? "border-4 border-primary bg-background shadow-[8px_8px_0_0_var(--color-primary)]"
+          ? "border-4 border-primary bg-surface shadow-[8px_8px_0_0_var(--color-primary)]"
           : emphasis === "luxury"
             ? "border-t border-border/40 bg-transparent pt-8 p-0 sm:p-0"
             : emphasis === "tech"
-              ? "rounded-lg border border-primary/20 bg-background/50 font-mono text-sm"
+              ? "rounded-lg border border-primary/20 bg-surface/50 font-mono text-sm"
               : emphasis === "minimal"
                 ? "bg-transparent p-0 sm:p-0"
-                : "rounded-[28px] bg-card",
+                : emphasis === "nordic_verve"
+                  ? "rounded-none border border-[#E5E7EB] bg-white"
+                  : "rounded-[28px] bg-surface-container-lowest",
       )}
     >
       <h2 className="text-base font-semibold tracking-tight">
@@ -476,7 +483,7 @@ export function DescriptionSection({
         <div className="mt-4 overflow-x-auto">
           <article
             className={cn(
-              "product-rich-content prose prose-sm max-w-none text-foreground",
+              "product-rich-content prose prose-sm max-w-none text-on-surface",
               emphasis === "luxury"
                 ? "prose-headings:font-serif prose-p:leading-relaxed"
                 : "",
@@ -485,7 +492,7 @@ export function DescriptionSection({
           />
         </div>
       ) : (
-        <p className="mt-4 text-sm text-muted-foreground">
+        <p className="mt-4 text-sm text-on-surface-variant">
           Detailed description will be added soon.
         </p>
       )}
@@ -497,13 +504,47 @@ export function RelatedProductsSection({
   title,
   products,
   compact = false,
+  emphasis = "default",
+  viewAllHref,
 }: {
   title: string;
   products: RelatedProduct[];
   compact?: boolean;
+  emphasis?: "default" | "nordic_verve";
+  viewAllHref?: string;
 }) {
+  /* ── Nordic Verve: full-width, sharp corners, 4-col grid ── */
+  if (emphasis === "nordic_verve") {
+    return (
+      <section>
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="text-xl font-bold text-[#111111]">{title}</h2>
+          {viewAllHref ? (
+            <Link
+              href={viewAllHref}
+              className="text-sm font-medium text-[#111111] underline underline-offset-4 hover:text-[#F97316]"
+            >
+              View All →
+            </Link>
+          ) : null}
+        </div>
+        {products.length > 0 ? (
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+            {products.map((related) => (
+              <ProductCard key={related.id} product={related} />
+            ))}
+          </div>
+        ) : (
+          <p className="text-sm text-[#6B7280]">
+            No related products available for this category yet.
+          </p>
+        )}
+      </section>
+    );
+  }
+
   return (
-    <section className="rounded-[28px] bg-card p-5 sm:p-6">
+    <section className="rounded-[28px] bg-surface-container-lowest p-5 sm:p-6">
       <div className="mb-4">
         <h2 className="text-base font-semibold tracking-tight">{title}</h2>
       </div>
@@ -521,7 +562,7 @@ export function RelatedProductsSection({
           ))}
         </div>
       ) : (
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-on-surface-variant">
           No related products available for this category yet.
         </p>
       )}

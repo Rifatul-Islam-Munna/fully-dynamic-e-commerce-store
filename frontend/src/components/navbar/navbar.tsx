@@ -56,17 +56,17 @@ export async function Navbar({
   ]);
   const items = normalizeNavbar(payload);
 
-  const brandTitle = normalizeBrandValue(siteBrand?.siteTitle) ?? "Home";
+  const brandTitle = normalizeBrandValue(siteBrand?.siteTitle) ?? "ATELIER";
   const brandLogo = normalizeBrandValue(siteBrand?.logoUrl);
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-border/65 bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/70">
-      <div className="relative mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+    <header className="fixed top-0 z-50 w-full bg-[#f9f9f9]/80 backdrop-blur-md">
+      <div className="mx-auto flex w-full items-center justify-between px-8 py-6">
         {/* Left: Brand + Nav */}
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-12">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 rounded-md transition-opacity duration-300 ease-out hover:opacity-80"
+            className="inline-flex items-center gap-2 transition-opacity duration-300 ease-out hover:opacity-80"
           >
             {brandLogo ? (
               // eslint-disable-next-line @next/next/no-img-element -- Admin-configured logo can come from any external domain.
@@ -75,13 +75,17 @@ export async function Navbar({
                 alt={brandTitle}
                 className="h-8 w-auto max-w-28 object-contain"
               />
-            ) : null}
+            ) : (
+              <span className="text-2xl font-black tracking-tighter text-[#001819]">
+                {brandTitle}
+              </span>
+            )}
           </Link>
           <NavbarDesktop items={items} />
         </div>
 
-        {/* Right: Search + Auth + Mobile Menu */}
-        <div className="flex items-center gap-3">
+        {/* Right: Search + Cart + Auth + Mobile Menu */}
+        <div className="flex items-center gap-6">
           <SearchDialog />
           <CartSheet />
           <div className="hidden md:flex">

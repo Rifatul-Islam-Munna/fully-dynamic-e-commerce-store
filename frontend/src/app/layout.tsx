@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Manrope, Inter } from "next/font/google";
 import { Toaster } from "sileo";
 import { GetRequestNormal } from "@/api-hooks/api-hooks";
 import { SiteContactLauncher } from "@/components/site/site-contact-launcher";
@@ -54,6 +55,18 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const manrope = Manrope({
+  variable: "--font-headline",
+  subsets: ["latin"],
+  weight: ["200", "400", "700", "800"],
+});
+
+const inter = Inter({
+  variable: "--font-body",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
+});
+
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettingsMetadata("default");
 
@@ -103,7 +116,7 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${manrope.variable} ${inter.variable} antialiased`}
       >
         <QueryClint appearance={appearance}>
           {children}

@@ -448,7 +448,7 @@ export default function HomeSettingsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 className="size-6 animate-spin text-muted-foreground" />
+        <Loader2 className="size-6 animate-spin text-on-surface-variant" />
       </div>
     );
   }
@@ -458,7 +458,7 @@ export default function HomeSettingsPage() {
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Home Settings</h1>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-on-surface-variant">
             Build dynamic page sections with custom order and rich hero slider
             content.
           </p>
@@ -484,9 +484,9 @@ export default function HomeSettingsPage() {
         </div>
       </div>
 
-      <div className="rounded-xl border border-border bg-card p-5 space-y-4">
+      <div className="rounded-xl border border-border bg-surface-container-lowest p-5 space-y-4">
         <h2 className="text-base font-semibold">Page Target</h2>
-        <p className="text-xs text-muted-foreground">
+        <p className="text-xs text-on-surface-variant">
           Select which page layout you are editing. You can create separate
           design for homepage, main-nav page, or sub-nav page.
         </p>
@@ -494,7 +494,7 @@ export default function HomeSettingsPage() {
           <div className="space-y-1">
             <Label className="text-xs">Main Nav Page</Label>
             <select
-              className="flex h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
+              className="flex h-9 w-full rounded-md border border-input bg-surface px-3 text-sm"
               value={targetMainNav}
               onChange={(e) => {
                 const nextMain = e.target.value;
@@ -520,7 +520,7 @@ export default function HomeSettingsPage() {
           <div className="space-y-1">
             <Label className="text-xs">Sub Nav Page</Label>
             <select
-              className="flex h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
+              className="flex h-9 w-full rounded-md border border-input bg-surface px-3 text-sm"
               value={targetSubNav}
               onChange={(e) => setTargetSubNav(e.target.value)}
               disabled={!selectedTargetMain || selectedTargetMain.subNav.length === 0}
@@ -535,9 +535,9 @@ export default function HomeSettingsPage() {
           </div>
         </div>
 
-        <div className="rounded-md border border-border/60 bg-muted/25 px-3 py-2 text-xs text-muted-foreground">
+        <div className="rounded-md border border-border/60 bg-surface-container/25 px-3 py-2 text-xs text-on-surface-variant">
           Editing target:{" "}
-          <span className="font-medium text-foreground">
+          <span className="font-medium text-on-surface">
             {targetMainNav || "/"}
             {targetSubNav ? `  ->  ${targetSubNav}` : ""}
           </span>
@@ -550,7 +550,7 @@ export default function HomeSettingsPage() {
         </div>
       </div>
 
-      <div className="rounded-xl border border-border bg-card p-5 space-y-3">
+      <div className="rounded-xl border border-border bg-surface-container-lowest p-5 space-y-3">
         <h2 className="flex items-center gap-2 text-base font-semibold">
           <Sparkles className="size-4 text-primary" />
           Global Theme
@@ -565,8 +565,8 @@ export default function HomeSettingsPage() {
       </div>
 
       {form.sections.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-border bg-card p-12 text-center">
-          <p className="text-sm text-muted-foreground">
+        <div className="rounded-xl border border-dashed border-border bg-surface-container-lowest p-12 text-center">
+          <p className="text-sm text-on-surface-variant">
             No sections yet. Add hero, product, discount, or custom sections.
           </p>
         </div>
@@ -597,12 +597,12 @@ export default function HomeSettingsPage() {
             return (
               <div
                 key={section.id}
-                className="rounded-xl border border-border bg-card p-5 space-y-4"
+                className="rounded-xl border border-border bg-surface-container-lowest p-5 space-y-4"
               >
                 <div className="flex flex-wrap items-center gap-3">
                   <button
                     type="button"
-                    className="section-handle cursor-grab text-muted-foreground active:cursor-grabbing"
+                    className="section-handle cursor-grab text-on-surface-variant active:cursor-grabbing"
                     aria-label="Drag section"
                   >
                     <GripVertical className="size-4" />
@@ -633,7 +633,7 @@ export default function HomeSettingsPage() {
                     )}
                   </Button>
                   <div className="ml-auto flex items-center gap-2">
-                    <label className="flex items-center gap-2 text-xs text-muted-foreground">
+                    <label className="flex items-center gap-2 text-xs text-on-surface-variant">
                       <Checkbox
                         checked={section.isActive}
                         onCheckedChange={(checked) =>
@@ -646,7 +646,7 @@ export default function HomeSettingsPage() {
                       variant="ghost"
                       size="sm"
                       onClick={() => removeSection(section.id)}
-                      className="text-destructive hover:text-destructive"
+                      className="text-error hover:text-error"
                     >
                       <Trash2 className="size-4" />
                     </Button>
@@ -655,12 +655,12 @@ export default function HomeSettingsPage() {
 
                 {!isCollapsed ? (
                   <div className="space-y-4">
-                    <div className="rounded-lg border border-border/60 bg-muted/20 p-4">
+                    <div className="rounded-lg border border-border/60 bg-surface-container-low/50 p-4">
                       <div className="grid gap-3 sm:grid-cols-[minmax(0,220px)_1fr] sm:items-start">
                         <div className="space-y-1">
                           <Label className="text-xs">Section Variant</Label>
                           <select
-                            className="flex h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
+                            className="flex h-9 w-full rounded-md border border-input bg-surface px-3 text-sm"
                             value={section.variant}
                             onChange={(e) =>
                               updateSection(sectionIndex, "variant", e.target.value)
@@ -673,11 +673,11 @@ export default function HomeSettingsPage() {
                             ))}
                           </select>
                         </div>
-                        <div className="rounded-md bg-background px-3 py-2">
-                          <p className="text-xs font-semibold text-foreground">
+                        <div className="rounded-md bg-surface px-3 py-2">
+                          <p className="text-xs font-semibold text-on-surface">
                             {variantMeta.label}
                           </p>
-                          <p className="mt-1 text-xs leading-5 text-muted-foreground">
+                          <p className="mt-1 text-xs leading-5 text-on-surface-variant">
                             {variantMeta.description}
                           </p>
                         </div>
@@ -750,7 +750,7 @@ export default function HomeSettingsPage() {
                       </div>
                     ) : (
                       <div className="space-y-3">
-                        <div className="rounded-md border border-border/60 bg-muted/20 px-3 py-2 text-xs text-muted-foreground">
+                        <div className="rounded-md border border-border/60 bg-surface-container-low/50 px-3 py-2 text-xs text-on-surface-variant">
                           Hero slider supports title/subtitle/button/link. Only image
                           is required.
                         </div>
@@ -768,14 +768,14 @@ export default function HomeSettingsPage() {
                     )}
 
                     {section.type === "product_collection" && (
-                      <div className="rounded-lg border border-border/60 bg-muted/20 p-4 space-y-4">
+                      <div className="rounded-lg border border-border/60 bg-surface-container-low/50 p-4 space-y-4">
                         <h3 className="text-sm font-semibold">Product Query</h3>
 
                         <div className="grid gap-3 sm:grid-cols-2">
                           <div className="space-y-1">
                             <Label className="text-xs">Product Flag</Label>
                             <select
-                              className="flex h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
+                              className="flex h-9 w-full rounded-md border border-input bg-surface px-3 text-sm"
                               value={section.productFlag}
                               onChange={(e) =>
                                 updateSection(
@@ -847,7 +847,7 @@ export default function HomeSettingsPage() {
                     )}
 
                     {section.type === "hero_slider" && (
-                      <div className="rounded-lg border border-border/60 bg-muted/20 p-4 space-y-3">
+                      <div className="rounded-lg border border-border/60 bg-surface-container-low/50 p-4 space-y-3">
                         <div className="flex items-center justify-between">
                           <h3 className="text-sm font-semibold">Hero Slides</h3>
                           <Button
@@ -861,7 +861,7 @@ export default function HomeSettingsPage() {
                         </div>
 
                         {section.slides.length === 0 ? (
-                          <p className="text-xs text-muted-foreground">
+                          <p className="text-xs text-on-surface-variant">
                             Add at least one slide image.
                           </p>
                         ) : (
@@ -877,20 +877,20 @@ export default function HomeSettingsPage() {
                             {section.slides.map((slide, slideIndex) => (
                               <div
                                 key={slide.id}
-                                className="rounded-md border border-border bg-card p-3 space-y-3"
+                                className="rounded-md border border-border bg-surface-container-lowest p-3 space-y-3"
                               >
                                 <div className="flex items-center gap-2">
                                   <button
                                     type="button"
-                                    className="slide-handle cursor-grab text-muted-foreground active:cursor-grabbing"
+                                    className="slide-handle cursor-grab text-on-surface-variant active:cursor-grabbing"
                                     aria-label="Drag slide"
                                   >
                                     <GripVertical className="size-4" />
                                   </button>
-                                  <span className="text-xs font-medium text-muted-foreground">
+                                  <span className="text-xs font-medium text-on-surface-variant">
                                     Slide #{slideIndex + 1}
                                   </span>
-                                  <label className="ml-auto flex items-center gap-2 text-xs text-muted-foreground">
+                                  <label className="ml-auto flex items-center gap-2 text-xs text-on-surface-variant">
                                     <Checkbox
                                       checked={slide.isActive}
                                       onCheckedChange={(checked) =>
@@ -910,7 +910,7 @@ export default function HomeSettingsPage() {
                                     onClick={() =>
                                       removeSlide(sectionIndex, slideIndex)
                                     }
-                                    className="text-destructive hover:text-destructive"
+                                    className="text-error hover:text-error"
                                   >
                                     <Trash2 className="size-4" />
                                   </Button>
@@ -980,7 +980,7 @@ export default function HomeSettingsPage() {
                                     )
                                   }
                                   hint="Recommended: 16:9 ratio (e.g. 1920x1080) for hero slides."
-                                  previewClassName="h-44 w-full rounded-md bg-muted/30 object-contain"
+                                  previewClassName="h-44 w-full rounded-md bg-surface-container-low object-contain"
                                 />
                               </div>
                             ))}

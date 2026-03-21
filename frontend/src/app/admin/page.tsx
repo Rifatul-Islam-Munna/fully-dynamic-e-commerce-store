@@ -25,10 +25,10 @@ export default async function AdminDashboardPage() {
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-foreground">
+        <h1 className="text-2xl font-bold tracking-tight text-on-surface">
           Dashboard
         </h1>
-        <p className="mt-1 text-sm text-muted-foreground">
+        <p className="mt-1 text-sm text-on-surface-variant">
           Welcome back. Here&apos;s an overview of your store.
         </p>
       </div>
@@ -63,7 +63,7 @@ export default async function AdminDashboardPage() {
 
       {/* Quick Actions */}
       <div className="space-y-4">
-        <h2 className="text-lg font-semibold text-foreground">Quick Actions</h2>
+        <h2 className="text-lg font-semibold text-on-surface">Quick Actions</h2>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           <QuickAction
             title="Manage Products"
@@ -123,12 +123,12 @@ function QuickAction({
   return (
     <a
       href={href}
-      className="group flex flex-col gap-1 rounded-xl border border-border bg-card p-5 transition-all hover:border-primary/30 hover:shadow-md"
+      className="group flex flex-col gap-1 rounded-xl border border-border bg-surface-container-lowest p-5 transition-all hover:border-primary/30 hover:shadow-md"
     >
       <p className="text-sm font-semibold text-card-foreground group-hover:text-primary transition-colors">
         {title}
       </p>
-      <p className="text-xs text-muted-foreground">{description}</p>
+      <p className="text-xs text-on-surface-variant">{description}</p>
     </a>
   );
 }

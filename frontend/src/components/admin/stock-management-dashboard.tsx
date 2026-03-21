@@ -128,7 +128,7 @@ function getMovementMeta(status: AdminStockInventoryItem["movementStatus"]) {
       return {
         label: "Best seller",
         className:
-          "bg-primary/12 text-primary dark:bg-primary/18 dark:text-primary-foreground",
+          "bg-primary/12 text-primary dark:bg-primary/18 dark:text-on-primary",
       };
     case "steady":
       return {
@@ -152,7 +152,7 @@ function getMovementMeta(status: AdminStockInventoryItem["movementStatus"]) {
       return {
         label: "No sales",
         className:
-          "bg-muted text-muted-foreground dark:bg-muted/60 dark:text-muted-foreground",
+          "bg-surface-container text-on-surface-variant dark:bg-surface-container/60 dark:text-on-surface-variant",
       };
   }
 }
@@ -183,16 +183,16 @@ function StatTile({
   icon: typeof Boxes;
 }) {
   return (
-    <div className="rounded-2xl border border-border/50 bg-card/90 p-4">
+    <div className="rounded-2xl border border-border/50 bg-surface-container-lowest/90 p-4">
       <div className="flex items-start justify-between gap-4">
         <div className="space-y-1">
-          <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
+          <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-on-surface-variant">
             {title}
           </p>
-          <p className="text-xl font-semibold tracking-tight text-foreground">
+          <p className="text-xl font-semibold tracking-tight text-on-surface">
             {value}
           </p>
-          <p className="text-xs text-muted-foreground">{description}</p>
+          <p className="text-xs text-on-surface-variant">{description}</p>
         </div>
         <div className="flex size-10 items-center justify-center rounded-2xl bg-primary/10 text-primary">
           <Icon className="size-5" />
@@ -213,15 +213,15 @@ function HighlightCard({
   const movementMeta = getMovementMeta(item.movementStatus);
 
   return (
-    <div className="rounded-2xl border border-border/50 bg-card/90 p-4">
+    <div className="rounded-2xl border border-border/50 bg-surface-container-lowest/90 p-4">
       <div className="flex gap-3">
         <ProductThumb src={item.thumbnailUrl} alt={item.title} />
         <div className="min-w-0 flex-1 space-y-2">
           <div className="space-y-1">
-            <p className="line-clamp-1 text-sm font-semibold text-foreground">
+            <p className="line-clamp-1 text-sm font-semibold text-on-surface">
               {item.title}
             </p>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-on-surface-variant">
               {item.hasVariants ? `${item.variantCount} variants` : "Simple product"} •{" "}
               {formatPriceRange(item)}
             </p>
@@ -236,10 +236,10 @@ function HighlightCard({
             </Badge>
           </div>
 
-          <div className="grid grid-cols-2 gap-2 text-xs text-muted-foreground">
+          <div className="grid grid-cols-2 gap-2 text-xs text-on-surface-variant">
             <div>
               <p className="text-[11px] uppercase tracking-[0.18em]">Stock</p>
-              <p className="mt-1 font-medium text-foreground">
+              <p className="mt-1 font-medium text-on-surface">
                 {item.totalStock ?? "Pending"}
               </p>
             </div>
@@ -247,7 +247,7 @@ function HighlightCard({
               <p className="text-[11px] uppercase tracking-[0.18em]">
                 {accent === "top" ? "Units sold" : accent === "risk" ? "Revenue" : "Last sale"}
               </p>
-              <p className="mt-1 font-medium text-foreground">
+              <p className="mt-1 font-medium text-on-surface">
                 {accent === "top"
                   ? item.soldUnits
                   : accent === "risk"
@@ -271,7 +271,7 @@ function ProductThumb({ src, alt }: { src: string; alt: string }) {
       className="h-16 w-14 rounded-2xl object-cover sm:h-20 sm:w-16"
     />
   ) : (
-    <div className="h-16 w-14 rounded-2xl bg-muted sm:h-20 sm:w-16" />
+    <div className="h-16 w-14 rounded-2xl bg-surface-container sm:h-20 sm:w-16" />
   );
 }
 
@@ -283,11 +283,11 @@ function Metric({
   value: string | number;
 }) {
   return (
-    <div className="rounded-2xl bg-muted/35 px-3 py-2">
-      <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+    <div className="rounded-2xl bg-surface-container-low/35 px-3 py-2">
+      <p className="text-[11px] uppercase tracking-[0.18em] text-on-surface-variant">
         {label}
       </p>
-      <p className="mt-1 text-sm font-medium text-foreground">{value}</p>
+      <p className="mt-1 text-sm font-medium text-on-surface">{value}</p>
     </div>
   );
 }
@@ -378,7 +378,7 @@ export function StockManagementDashboard() {
   return (
     <TooltipProvider>
       <div className="space-y-6">
-        <section className="rounded-[28px] border border-border/50 bg-card/90 p-4 sm:p-5">
+        <section className="rounded-[28px] border border-border/50 bg-surface-container-lowest/90 p-4 sm:p-5">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
             <div className="space-y-3">
               <div className="inline-flex items-center gap-2 rounded-full bg-primary/8 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.22em] text-primary">
@@ -386,10 +386,10 @@ export function StockManagementDashboard() {
                 Stock Management
               </div>
               <div className="space-y-2">
-                <h1 className="text-2xl font-semibold tracking-tight text-foreground sm:text-[2rem]">
+                <h1 className="text-2xl font-semibold tracking-tight text-on-surface sm:text-[2rem]">
                   Inventory health, slow movers, and top sellers
                 </h1>
-                <p className="max-w-3xl text-sm leading-6 text-muted-foreground">
+                <p className="max-w-3xl text-sm leading-6 text-on-surface-variant">
                   Track live stock against real checkout demand. Sales signals are
                   calculated from confirmed orders, so the page doubles as both
                   inventory control and merchandising review.
@@ -398,12 +398,12 @@ export function StockManagementDashboard() {
             </div>
 
             <div className="grid gap-3 sm:grid-cols-2 lg:min-w-[320px]">
-              <div className="rounded-2xl bg-muted/40 p-3">
-                <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
+              <div className="rounded-2xl bg-surface-container/40 p-3">
+                <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-on-surface-variant">
                   Stale window
                 </p>
                 <Select value={staleAfterDays} onValueChange={setStaleAfterDays}>
-                  <SelectTrigger className="mt-2 h-10 w-full border-0 bg-background">
+                  <SelectTrigger className="mt-2 h-10 w-full border-0 bg-surface">
                     <SelectValue placeholder="Select stale window" />
                   </SelectTrigger>
                   <SelectContent>
@@ -415,15 +415,15 @@ export function StockManagementDashboard() {
                 </Select>
               </div>
 
-              <div className="rounded-2xl bg-muted/40 p-3">
-                <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
+              <div className="rounded-2xl bg-surface-container/40 p-3">
+                <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-on-surface-variant">
                   Low stock line
                 </p>
                 <Select
                   value={lowStockThreshold}
                   onValueChange={setLowStockThreshold}
                 >
-                  <SelectTrigger className="mt-2 h-10 w-full border-0 bg-background">
+                  <SelectTrigger className="mt-2 h-10 w-full border-0 bg-surface">
                     <SelectValue placeholder="Select low stock line" />
                   </SelectTrigger>
                   <SelectContent>
@@ -435,12 +435,12 @@ export function StockManagementDashboard() {
                 </Select>
               </div>
 
-              <div className="flex items-center justify-between rounded-2xl bg-muted/40 px-3 py-3 sm:col-span-2">
+              <div className="flex items-center justify-between rounded-2xl bg-surface-container/40 px-3 py-3 sm:col-span-2">
                 <div>
-                  <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
+                  <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-on-surface-variant">
                     Last sync
                   </p>
-                  <p className="mt-1 text-sm font-medium text-foreground">
+                  <p className="mt-1 text-sm font-medium text-on-surface">
                     {report ? lastUpdatedLabel : "Loading"}
                   </p>
                 </div>
@@ -465,8 +465,8 @@ export function StockManagementDashboard() {
         </section>
 
         {loading && !report ? (
-          <div className="flex min-h-[280px] items-center justify-center rounded-[28px] border border-border/50 bg-card/90">
-            <div className="flex items-center gap-3 text-sm text-muted-foreground">
+          <div className="flex min-h-[280px] items-center justify-center rounded-[28px] border border-border/50 bg-surface-container-lowest/90">
+            <div className="flex items-center gap-3 text-sm text-on-surface-variant">
               <Loader2 className="size-4 animate-spin" />
               Loading stock intelligence...
             </div>
@@ -512,7 +512,7 @@ export function StockManagementDashboard() {
               />
             </section>
 
-            <section className="rounded-[28px] border border-border/50 bg-card/90 p-4 sm:p-5">
+            <section className="rounded-[28px] border border-border/50 bg-surface-container-lowest/90 p-4 sm:p-5">
               <div className="flex flex-wrap items-center gap-2">
                 <Badge className="border-0 bg-rose-500/10 text-rose-700 dark:bg-rose-500/15 dark:text-rose-300">
                   {report.summary.outOfStockProducts} out of stock
@@ -526,7 +526,7 @@ export function StockManagementDashboard() {
                 <Badge className="border-0 bg-primary/10 text-primary">
                   {report.summary.neverSoldProducts} never sold
                 </Badge>
-                <div className="ml-auto inline-flex items-center gap-2 text-xs text-muted-foreground">
+                <div className="ml-auto inline-flex items-center gap-2 text-xs text-on-surface-variant">
                   <CircleHelp className="size-3.5" />
                   Review the highlighted groups first, then use the registry below for
                   the full product list.
@@ -534,14 +534,14 @@ export function StockManagementDashboard() {
               </div>
             </section>
 
-            <section className="rounded-[28px] border border-border/50 bg-card/90 p-4 sm:p-5">
+            <section className="rounded-[28px] border border-border/50 bg-surface-container-lowest/90 p-4 sm:p-5">
               <Tabs defaultValue="top" className="gap-4">
                 <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
                   <div>
-                    <h2 className="text-lg font-semibold tracking-tight text-foreground">
+                    <h2 className="text-lg font-semibold tracking-tight text-on-surface">
                       Priority views
                     </h2>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-on-surface-variant">
                       Start with what is moving, what is slowing down, and what needs
                       replenishment.
                     </p>
@@ -563,7 +563,7 @@ export function StockManagementDashboard() {
                         <HighlightCard key={item.productId} item={item} accent="top" />
                       ))
                     ) : (
-                      <div className="rounded-2xl bg-muted/40 p-5 text-sm text-muted-foreground md:col-span-2 xl:col-span-4">
+                      <div className="rounded-2xl bg-surface-container/40 p-5 text-sm text-on-surface-variant md:col-span-2 xl:col-span-4">
                         No sales yet.
                       </div>
                     )}
@@ -577,7 +577,7 @@ export function StockManagementDashboard() {
                         <HighlightCard key={item.productId} item={item} accent="stale" />
                       ))
                     ) : (
-                      <div className="rounded-2xl bg-muted/40 p-5 text-sm text-muted-foreground md:col-span-2 xl:col-span-4">
+                      <div className="rounded-2xl bg-surface-container/40 p-5 text-sm text-on-surface-variant md:col-span-2 xl:col-span-4">
                         No stale inventory for the selected window.
                       </div>
                     )}
@@ -591,7 +591,7 @@ export function StockManagementDashboard() {
                         <HighlightCard key={item.productId} item={item} accent="risk" />
                       ))
                     ) : (
-                      <div className="rounded-2xl bg-muted/40 p-5 text-sm text-muted-foreground md:col-span-2 xl:col-span-4">
+                      <div className="rounded-2xl bg-surface-container/40 p-5 text-sm text-on-surface-variant md:col-span-2 xl:col-span-4">
                         Nothing is under the current low-stock threshold.
                       </div>
                     )}
@@ -600,14 +600,14 @@ export function StockManagementDashboard() {
               </Tabs>
             </section>
 
-            <section className="rounded-[28px] border border-border/50 bg-card/90 p-4 sm:p-5">
+            <section className="rounded-[28px] border border-border/50 bg-surface-container-lowest/90 p-4 sm:p-5">
               <div className="flex flex-col gap-3">
                 <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
                   <div>
-                    <h2 className="text-lg font-semibold tracking-tight text-foreground">
+                    <h2 className="text-lg font-semibold tracking-tight text-on-surface">
                       Inventory registry
                     </h2>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-on-surface-variant">
                       Search the full catalog, then sort by stock pressure or sales
                       momentum.
                     </p>
@@ -618,12 +618,12 @@ export function StockManagementDashboard() {
                 </div>
                 <div className="grid gap-3 lg:grid-cols-[minmax(0,1.5fr)_repeat(3,minmax(0,0.7fr))]">
                   <div className="relative">
-                    <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                    <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-on-surface-variant" />
                     <Input
                       value={search}
                       onChange={(event) => setSearch(event.target.value)}
                       placeholder="Search by product, slug, or nav URL"
-                      className="h-11 rounded-2xl border-border/60 bg-background pl-9"
+                      className="h-11 rounded-2xl border-border/60 bg-surface pl-9"
                     />
                   </div>
 
@@ -631,7 +631,7 @@ export function StockManagementDashboard() {
                     value={stockFilter}
                     onValueChange={(value) => setStockFilter(value as StockFilter)}
                   >
-                    <SelectTrigger className="h-11 w-full rounded-2xl border-border/60 bg-background">
+                    <SelectTrigger className="h-11 w-full rounded-2xl border-border/60 bg-surface">
                       <SelectValue placeholder="Stock status" />
                     </SelectTrigger>
                     <SelectContent>
@@ -649,7 +649,7 @@ export function StockManagementDashboard() {
                       setMovementFilter(value as MovementFilter)
                     }
                   >
-                    <SelectTrigger className="h-11 w-full rounded-2xl border-border/60 bg-background">
+                    <SelectTrigger className="h-11 w-full rounded-2xl border-border/60 bg-surface">
                       <SelectValue placeholder="Movement" />
                     </SelectTrigger>
                     <SelectContent>
@@ -666,7 +666,7 @@ export function StockManagementDashboard() {
                     value={sortKey}
                     onValueChange={(value) => setSortKey(value as SortKey)}
                   >
-                    <SelectTrigger className="h-11 w-full rounded-2xl border-border/60 bg-background">
+                    <SelectTrigger className="h-11 w-full rounded-2xl border-border/60 bg-surface">
                       <SelectValue placeholder="Sort" />
                     </SelectTrigger>
                     <SelectContent>
@@ -683,7 +683,7 @@ export function StockManagementDashboard() {
 
               <div className="mt-4 space-y-3 md:hidden">
                 {filteredInventory.length === 0 ? (
-                  <div className="rounded-2xl bg-muted/40 p-5 text-sm text-muted-foreground">
+                  <div className="rounded-2xl bg-surface-container/40 p-5 text-sm text-on-surface-variant">
                     No products match the current filters.
                   </div>
                 ) : (
@@ -694,16 +694,16 @@ export function StockManagementDashboard() {
                     return (
                       <article
                         key={item.productId}
-                        className="rounded-2xl border border-border/50 bg-background/80 p-3"
+                        className="rounded-2xl border border-border/50 bg-surface/80 p-3"
                       >
                         <div className="flex gap-3">
                           <ProductThumb src={item.thumbnailUrl} alt={item.title} />
                           <div className="min-w-0 flex-1 space-y-2">
                             <div className="space-y-1">
-                              <p className="line-clamp-2 text-sm font-semibold text-foreground">
+                              <p className="line-clamp-2 text-sm font-semibold text-on-surface">
                                 {item.title}
                               </p>
-                              <p className="text-xs text-muted-foreground">
+                              <p className="text-xs text-on-surface-variant">
                                 {item.mainNavUrl || "No nav"} • {formatPriceRange(item)}
                               </p>
                             </div>
@@ -725,8 +725,8 @@ export function StockManagementDashboard() {
                             </div>
 
                             {item.hasVariants && item.stockBreakdown.length > 0 ? (
-                              <details className="rounded-2xl bg-muted/35 p-3 text-xs">
-                                <summary className="cursor-pointer font-medium text-foreground">
+                              <details className="rounded-2xl bg-surface-container-low/35 p-3 text-xs">
+                                <summary className="cursor-pointer font-medium text-on-surface">
                                   Variant breakdown
                                 </summary>
                                 <div className="mt-3 space-y-2">
@@ -736,18 +736,18 @@ export function StockManagementDashboard() {
                                       className="flex items-center justify-between gap-3"
                                     >
                                       <div className="min-w-0">
-                                        <p className="truncate text-foreground">
+                                        <p className="truncate text-on-surface">
                                           {variant.title}
                                         </p>
-                                        <p className="truncate text-muted-foreground">
+                                        <p className="truncate text-on-surface-variant">
                                           {variant.sku || "No SKU"}
                                         </p>
                                       </div>
                                       <div className="text-right">
-                                        <p className="font-medium text-foreground">
+                                        <p className="font-medium text-on-surface">
                                           {variant.stock} in stock
                                         </p>
-                                        <p className="text-muted-foreground">
+                                        <p className="text-on-surface-variant">
                                           {variant.soldUnits} sold
                                         </p>
                                       </div>
@@ -767,24 +767,24 @@ export function StockManagementDashboard() {
               <div className="mt-4 hidden overflow-hidden rounded-[24px] border border-border/50 md:block">
                 <div className="overflow-x-auto">
                   <table className="w-full min-w-[980px] text-sm">
-                    <thead className="bg-muted/40">
+                    <thead className="bg-surface-container/40">
                       <tr className="text-left">
-                        <th className="px-4 py-3 font-medium text-muted-foreground">
+                        <th className="px-4 py-3 font-medium text-on-surface-variant">
                           Product
                         </th>
-                        <th className="px-4 py-3 font-medium text-muted-foreground">
+                        <th className="px-4 py-3 font-medium text-on-surface-variant">
                           Stock
                         </th>
-                        <th className="px-4 py-3 font-medium text-muted-foreground">
+                        <th className="px-4 py-3 font-medium text-on-surface-variant">
                           Sales
                         </th>
-                        <th className="px-4 py-3 font-medium text-muted-foreground">
+                        <th className="px-4 py-3 font-medium text-on-surface-variant">
                           Revenue
                         </th>
-                        <th className="px-4 py-3 font-medium text-muted-foreground">
+                        <th className="px-4 py-3 font-medium text-on-surface-variant">
                           Last sale
                         </th>
-                        <th className="px-4 py-3 font-medium text-muted-foreground">
+                        <th className="px-4 py-3 font-medium text-on-surface-variant">
                           Status
                         </th>
                       </tr>
@@ -794,7 +794,7 @@ export function StockManagementDashboard() {
                         <tr>
                           <td
                             colSpan={6}
-                            className="px-4 py-10 text-center text-muted-foreground"
+                            className="px-4 py-10 text-center text-on-surface-variant"
                           >
                             No products match the current filters.
                           </td>
@@ -813,17 +813,17 @@ export function StockManagementDashboard() {
                                 <div className="flex items-start gap-3">
                                   <ProductThumb src={item.thumbnailUrl} alt={item.title} />
                                   <div className="min-w-0 space-y-1">
-                                    <p className="line-clamp-1 font-medium text-foreground">
+                                    <p className="line-clamp-1 font-medium text-on-surface">
                                       {item.title}
                                     </p>
-                                    <p className="text-xs text-muted-foreground">
+                                    <p className="text-xs text-on-surface-variant">
                                       /{item.slug}
                                     </p>
-                                    <p className="text-xs text-muted-foreground">
+                                    <p className="text-xs text-on-surface-variant">
                                       {item.mainNavUrl || "No main nav"}{" "}
                                       {item.subNavUrl ? `• ${item.subNavUrl}` : ""}
                                     </p>
-                                    <p className="text-xs text-muted-foreground">
+                                    <p className="text-xs text-on-surface-variant">
                                       {item.hasVariants
                                         ? `${item.variantCount} variants • ${formatPriceRange(item)}`
                                         : `Simple product • ${formatPriceRange(item)}`}
@@ -833,14 +833,14 @@ export function StockManagementDashboard() {
                               </td>
                               <td className="px-4 py-4">
                                 <div className="space-y-2">
-                                  <p className="font-medium text-foreground">
+                                  <p className="font-medium text-on-surface">
                                     {item.totalStock ?? "Pending"}
                                   </p>
                                   <Badge className={cn("border-0", stockMeta.className)}>
                                     {stockMeta.label}
                                   </Badge>
                                   {item.hasVariants ? (
-                                    <p className="text-xs text-muted-foreground">
+                                    <p className="text-xs text-on-surface-variant">
                                       {item.activeVariantCount} active variants
                                     </p>
                                   ) : null}
@@ -848,30 +848,30 @@ export function StockManagementDashboard() {
                               </td>
                               <td className="px-4 py-4">
                                 <div className="space-y-1">
-                                  <p className="font-medium text-foreground">
+                                  <p className="font-medium text-on-surface">
                                     {item.soldUnits} units
                                   </p>
-                                  <p className="text-xs text-muted-foreground">
+                                  <p className="text-xs text-on-surface-variant">
                                     {item.orderCount} orders
                                   </p>
                                 </div>
                               </td>
                               <td className="px-4 py-4">
                                 <div className="space-y-1">
-                                  <p className="font-medium text-foreground">
+                                  <p className="font-medium text-on-surface">
                                     {formatMoney(item.revenue)}
                                   </p>
-                                  <p className="text-xs text-muted-foreground">
+                                  <p className="text-xs text-on-surface-variant">
                                     Value: {formatMoney(item.inventoryValue)}
                                   </p>
                                 </div>
                               </td>
                               <td className="px-4 py-4">
                                 <div className="space-y-1">
-                                  <p className="font-medium text-foreground">
+                                  <p className="font-medium text-on-surface">
                                     {formatDate(item.lastSoldAt)}
                                   </p>
-                                  <p className="text-xs text-muted-foreground">
+                                  <p className="text-xs text-on-surface-variant">
                                     {formatLastSale(item)}
                                   </p>
                                 </div>
@@ -886,7 +886,7 @@ export function StockManagementDashboard() {
                                       Active
                                     </Badge>
                                   ) : (
-                                    <Badge className="border-0 bg-muted text-muted-foreground">
+                                    <Badge className="border-0 bg-surface-container text-on-surface-variant">
                                       Inactive
                                     </Badge>
                                   )}
@@ -915,8 +915,8 @@ export function StockManagementDashboard() {
             </section>
           </>
         ) : (
-          <div className="rounded-[28px] border border-border/50 bg-card/90 p-6">
-            <div className="flex items-center gap-3 text-sm text-muted-foreground">
+          <div className="rounded-[28px] border border-border/50 bg-surface-container-lowest/90 p-6">
+            <div className="flex items-center gap-3 text-sm text-on-surface-variant">
               <PackageSearch className="size-4" />
               Stock intelligence could not be loaded.
             </div>

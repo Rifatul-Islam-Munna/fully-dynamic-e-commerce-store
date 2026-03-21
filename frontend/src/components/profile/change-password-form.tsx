@@ -48,12 +48,12 @@ export function ChangePasswordForm() {
   }
 
   return (
-    <div className="rounded-xl border border-border/60 bg-background sm:rounded-2xl">
+    <div className="rounded-xl border border-border/60 bg-surface sm:rounded-2xl">
       <div className="border-b border-border/60 px-4 py-3 sm:px-5 sm:py-4">
-        <h2 className="text-base font-semibold text-foreground sm:text-lg">
+        <h2 className="text-base font-semibold text-on-surface sm:text-lg">
           Change password
         </h2>
-        <p className="mt-0.5 text-xs text-muted-foreground sm:text-sm">
+        <p className="mt-0.5 text-xs text-on-surface-variant sm:text-sm">
           Update your sign-in password.
         </p>
       </div>
@@ -65,8 +65,8 @@ export function ChangePasswordForm() {
             <ShieldCheck className="size-4" />
           </div>
           <div>
-            <p className="text-sm font-medium text-foreground">Password tips</p>
-            <p className="mt-0.5 text-xs text-muted-foreground sm:text-sm">
+            <p className="text-sm font-medium text-on-surface">Password tips</p>
+            <p className="mt-0.5 text-xs text-on-surface-variant sm:text-sm">
               Use at least 8 characters and choose something different from your
               current password.
             </p>

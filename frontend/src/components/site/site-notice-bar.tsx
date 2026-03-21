@@ -27,7 +27,7 @@ export async function SiteNoticeBar() {
   }
 
   return (
-    <div className="w-full border-b border-primary/20 bg-gradient-to-r from-primary/20 via-primary/10 to-primary/20 px-4 py-2 text-center text-xs font-medium text-foreground sm:text-sm">
+    <div className="w-full border-b border-primary/20 bg-gradient-to-r from-primary/20 via-primary/10 to-primary/20 px-4 py-2 text-center text-xs font-medium text-on-surface sm:text-sm">
       {noticeText}
     </div>
   );

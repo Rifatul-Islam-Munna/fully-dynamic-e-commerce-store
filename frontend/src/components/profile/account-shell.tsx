@@ -37,15 +37,15 @@ export function AccountShell({
               className="size-12 rounded-2xl object-cover shadow-sm sm:size-14"
             />
           ) : (
-            <div className="flex size-12 items-center justify-center rounded-2xl bg-primary text-base font-semibold text-primary-foreground shadow-sm sm:size-14 sm:text-lg">
+            <div className="flex size-12 items-center justify-center rounded-2xl bg-primary text-base font-semibold text-on-primary shadow-sm sm:size-14 sm:text-lg">
               {initials || "U"}
             </div>
           )}
           <div className="min-w-0 flex-1">
-            <h1 className="truncate text-lg font-semibold tracking-tight text-foreground sm:text-xl">
+            <h1 className="truncate text-lg font-semibold tracking-tight text-on-surface sm:text-xl">
               {fullName || "My Account"}
             </h1>
-            <p className="mt-0.5 truncate text-sm text-muted-foreground">
+            <p className="mt-0.5 truncate text-sm text-on-surface-variant">
               {profile.email}
             </p>
           </div>
@@ -76,26 +76,26 @@ export function AccountShell({
         {/* Desktop sidebar */}
         <aside className="hidden lg:block">
           <div className="sticky top-6 space-y-4">
-            <div className="rounded-xl border border-border/60 bg-background p-4 shadow-sm">
-              <p className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
+            <div className="rounded-xl border border-border/60 bg-surface p-4 shadow-sm">
+              <p className="text-xs font-medium uppercase tracking-widest text-on-surface-variant">
                 Account
               </p>
               <div className="mt-3 space-y-1.5 border-t border-border/60 pt-3">
                 <div>
-                  <p className="text-xs text-muted-foreground">Phone</p>
-                  <p className="mt-0.5 text-sm text-foreground">
+                  <p className="text-xs text-on-surface-variant">Phone</p>
+                  <p className="mt-0.5 text-sm text-on-surface">
                     {profile.phoneNumber?.trim() || "Not added"}
                   </p>
                 </div>
                 <div>
-                  <p className="text-xs text-muted-foreground">Role</p>
-                  <p className="mt-0.5 text-sm capitalize text-foreground">
+                  <p className="text-xs text-on-surface-variant">Role</p>
+                  <p className="mt-0.5 text-sm capitalize text-on-surface">
                     {profile.role}
                   </p>
                 </div>
                 <div>
-                  <p className="text-xs text-muted-foreground">Email</p>
-                  <p className="mt-0.5 text-sm text-foreground">
+                  <p className="text-xs text-on-surface-variant">Email</p>
+                  <p className="mt-0.5 text-sm text-on-surface">
                     {profile.isEmailVerified ? "✓ Verified" : "Not verified"}
                   </p>
                 </div>

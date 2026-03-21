@@ -120,7 +120,7 @@ export default function RichTextEditor({
     editorProps: {
       attributes: {
         class:
-          "tiptap-content min-h-[260px] w-full rounded-b-lg border border-border/70 bg-background p-4 text-sm leading-relaxed outline-none focus-visible:ring-2 focus-visible:ring-ring/40 [&_.selectedCell]:bg-primary/10",
+          "tiptap-content min-h-[260px] w-full rounded-b-lg border border-border/70 bg-surface p-4 text-sm leading-relaxed outline-none focus-visible:ring-2 focus-visible:ring-ring/40 [&_.selectedCell]:bg-primary/10",
       },
     },
     onUpdate: ({ editor: editorInstance }) => {
@@ -209,8 +209,8 @@ export default function RichTextEditor({
   const overLimit = charCount >= MAX_CHARACTERS;
 
   return (
-    <div className="rounded-xl border border-border/70 bg-card shadow-sm">
-      <div className="flex flex-wrap gap-1 border-b border-border/60 bg-muted/40 p-2">
+    <div className="rounded-xl border border-border/70 bg-surface-container-lowest shadow-sm">
+      <div className="flex flex-wrap gap-1 border-b border-border/60 bg-surface-container/40 p-2">
         <ToolbarButton
           title="Undo"
           onClick={() => editor.chain().focus().undo().run()}
@@ -431,9 +431,9 @@ export default function RichTextEditor({
 
       <EditorContent editor={editor} />
 
-      <div className="flex items-center justify-between border-t border-border/60 bg-muted/20 px-3 py-2 text-xs text-muted-foreground">
+      <div className="flex items-center justify-between border-t border-border/60 bg-surface-container-low/50 px-3 py-2 text-xs text-on-surface-variant">
         <span>{imageCount} / {MAX_IMAGES} images</span>
-        <span className={overLimit ? "font-semibold text-destructive" : ""}>
+        <span className={overLimit ? "font-semibold text-error" : ""}>
           {charCount} / {MAX_CHARACTERS} characters
         </span>
       </div>

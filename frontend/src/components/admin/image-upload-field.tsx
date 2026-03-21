@@ -104,12 +104,12 @@ export function ImageUploadField({
         </Button>
       </div>
       {hint ? (
-        <p className="rounded-md bg-muted/30 px-3 py-2 text-xs leading-5 text-muted-foreground">
+        <p className="rounded-md bg-surface-container-low px-3 py-2 text-xs leading-5 text-on-surface-variant">
           {hint}
         </p>
       ) : null}
       {showPreview && value ? (
-        <div className="rounded-lg border border-border/50 bg-muted/30 p-3">
+        <div className="rounded-lg border border-border/50 bg-surface-container-low p-3">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={value} alt={`${label} preview`} className={previewClassName} />
         </div>

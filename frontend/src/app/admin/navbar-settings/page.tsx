@@ -303,7 +303,7 @@ export default function NavbarSettingsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 className="size-6 animate-spin text-muted-foreground" />
+        <Loader2 className="size-6 animate-spin text-on-surface-variant" />
       </div>
     );
   }
@@ -325,7 +325,7 @@ export default function NavbarSettingsPage() {
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Navbar Settings</h1>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-on-surface-variant">
             Drag to reorder main/sub nav items. URLs are generated automatically
             from titles.
           </p>
@@ -355,8 +355,8 @@ export default function NavbarSettingsPage() {
       </div>
 
       {items.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-border bg-card p-12 text-center">
-          <p className="text-sm text-muted-foreground">
+        <div className="rounded-xl border border-dashed border-border bg-surface-container-lowest p-12 text-center">
+          <p className="text-sm text-on-surface-variant">
             No navbar items yet. Click &quot;Add Main Nav&quot; to start.
           </p>
         </div>
@@ -375,17 +375,17 @@ export default function NavbarSettingsPage() {
             return (
               <div
                 key={item.id}
-                className="rounded-xl border border-border bg-card p-5 space-y-4"
+                className="rounded-xl border border-border bg-surface-container-lowest p-5 space-y-4"
               >
                 <div className="flex flex-wrap items-center gap-2">
                   <button
                     type="button"
-                    className="main-handle cursor-grab text-muted-foreground active:cursor-grabbing"
+                    className="main-handle cursor-grab text-on-surface-variant active:cursor-grabbing"
                     aria-label="Drag main nav item"
                   >
                     <GripVertical className="size-4" />
                   </button>
-                  <span className="rounded-full border border-border/70 px-2 py-0.5 text-xs font-medium text-muted-foreground">
+                  <span className="rounded-full border border-border/70 px-2 py-0.5 text-xs font-medium text-on-surface-variant">
                     Main Nav #{itemIndex + 1}
                   </span>
                   <Button
@@ -411,7 +411,7 @@ export default function NavbarSettingsPage() {
                     )}
                   </Button>
                   <div className="ml-auto flex items-center gap-3">
-                    <label className="flex items-center gap-2 text-xs text-muted-foreground">
+                    <label className="flex items-center gap-2 text-xs text-on-surface-variant">
                       <Checkbox
                         checked={item.isActive}
                         onCheckedChange={(checked) =>
@@ -424,7 +424,7 @@ export default function NavbarSettingsPage() {
                       variant="ghost"
                       size="sm"
                       onClick={() => removeMainItem(itemIndex)}
-                      className="text-destructive hover:text-destructive"
+                      className="text-error hover:text-error"
                     >
                       <Trash2 className="size-4" />
                     </Button>
@@ -446,7 +446,7 @@ export default function NavbarSettingsPage() {
                       </div>
                       <div className="space-y-1">
                         <Label className="text-xs">URL (Auto)</Label>
-                        <div className="flex h-9 items-center gap-2 rounded-md border border-input bg-muted/25 px-3 text-sm text-muted-foreground">
+                        <div className="flex h-9 items-center gap-2 rounded-md border border-input bg-surface-container/25 px-3 text-sm text-on-surface-variant">
                           <Route className="size-3.5" />
                           <span>{generatedItem?.url || "/"}</span>
                         </div>
@@ -465,7 +465,7 @@ export default function NavbarSettingsPage() {
                       </div>
                     </div>
 
-                    <div className="rounded-lg border border-border/60 bg-muted/20 p-3 space-y-3">
+                    <div className="rounded-lg border border-border/60 bg-surface-container-low/50 p-3 space-y-3">
                       <div className="flex items-center justify-between">
                         <h3 className="text-sm font-semibold">Sub Nav</h3>
                         <Button
@@ -479,7 +479,7 @@ export default function NavbarSettingsPage() {
                       </div>
 
                       {item.subNav.length === 0 ? (
-                        <p className="text-xs text-muted-foreground">
+                        <p className="text-xs text-on-surface-variant">
                           No sub nav items yet.
                         </p>
                       ) : (
@@ -498,21 +498,21 @@ export default function NavbarSettingsPage() {
                             return (
                               <div
                                 key={subItem.id}
-                                className="rounded-md border border-border bg-card p-3 space-y-3"
+                                className="rounded-md border border-border bg-surface-container-lowest p-3 space-y-3"
                               >
                                 <div className="flex items-center gap-2">
                                   <button
                                     type="button"
-                                    className="sub-handle cursor-grab text-muted-foreground active:cursor-grabbing"
+                                    className="sub-handle cursor-grab text-on-surface-variant active:cursor-grabbing"
                                     aria-label="Drag sub nav item"
                                   >
                                     <GripVertical className="size-4" />
                                   </button>
-                                  <span className="text-xs text-muted-foreground">
+                                  <span className="text-xs text-on-surface-variant">
                                     Sub Nav #{subIndex + 1}
                                   </span>
                                   <div className="ml-auto flex items-center gap-3">
-                                    <label className="flex items-center gap-2 text-xs text-muted-foreground">
+                                    <label className="flex items-center gap-2 text-xs text-on-surface-variant">
                                       <Checkbox
                                         checked={subItem.isActive}
                                         onCheckedChange={(checked) =>
@@ -532,7 +532,7 @@ export default function NavbarSettingsPage() {
                                       onClick={() =>
                                         removeSubItem(itemIndex, subIndex)
                                       }
-                                      className="text-destructive hover:text-destructive"
+                                      className="text-error hover:text-error"
                                     >
                                       <Trash2 className="size-4" />
                                     </Button>
@@ -557,7 +557,7 @@ export default function NavbarSettingsPage() {
                                   </div>
                                   <div className="space-y-1">
                                     <Label className="text-xs">URL (Auto)</Label>
-                                    <div className="flex h-9 items-center gap-2 rounded-md border border-input bg-muted/25 px-3 text-sm text-muted-foreground">
+                                    <div className="flex h-9 items-center gap-2 rounded-md border border-input bg-surface-container/25 px-3 text-sm text-on-surface-variant">
                                       <Route className="size-3.5" />
                                       <span>{generatedSub?.url || "/"}</span>
                                     </div>

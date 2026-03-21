@@ -74,19 +74,19 @@ export function ProfileEditForm({ profile }: ProfileEditFormProps) {
   }
 
   return (
-    <div className="rounded-xl border border-border/60 bg-background sm:rounded-2xl">
-      <div className="border-b border-border/60 px-4 py-3 sm:px-5 sm:py-4">
-        <h2 className="text-base font-semibold text-foreground sm:text-lg">
+    <div className="rounded-sm bg-surface-container-lowest ">
+      <div className="px-5 py-4 sm:px-6 sm:py-5">
+        <h2 className="font-headline text-lg font-extrabold tracking-tighter text-primary sm:text-xl">
           Edit profile
         </h2>
-        <p className="mt-0.5 text-xs text-muted-foreground sm:text-sm">
+        <p className="mt-1 font-body text-xs text-on-surface-variant sm:text-sm">
           Keep your personal details up to date.
         </p>
       </div>
 
       <form className="p-4 sm:p-5" onSubmit={handleSubmit}>
         {/* ── Avatar preview ── */}
-        <div className="flex items-center gap-3 rounded-xl bg-muted/30 p-3 sm:p-4">
+        <div className="flex items-center gap-3 rounded-sm bg-surface-container-low p-3 sm:p-4">
           {form.avatarUrl.trim() ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
@@ -95,15 +95,15 @@ export function ProfileEditForm({ profile }: ProfileEditFormProps) {
               className="size-12 rounded-xl object-cover sm:size-14"
             />
           ) : (
-            <div className="flex size-12 items-center justify-center rounded-xl bg-primary text-base font-semibold text-primary-foreground sm:size-14">
+            <div className="flex size-12 items-center justify-center rounded-sm bg-primary font-headline text-base font-bold text-on-primary sm:size-14">
               {initials}
             </div>
           )}
           <div>
-            <p className="text-sm font-medium text-foreground">
+            <p className="text-sm font-medium text-on-surface">
               Profile preview
             </p>
-            <p className="mt-0.5 text-xs text-muted-foreground">
+            <p className="mt-0.5 text-xs text-on-surface-variant">
               Paste an image URL or upload directly.
             </p>
           </div>
@@ -201,14 +201,14 @@ export function ProfileEditForm({ profile }: ProfileEditFormProps) {
         </div>
 
         {/* ── Actions ── */}
-        <div className="mt-5 flex flex-col gap-2 border-t border-border/60 pt-4 sm:flex-row sm:justify-end sm:gap-3">
+        <div className="mt-5 flex flex-col gap-2 pt-4 sm:flex-row sm:justify-end sm:gap-3">
           <Button
             type="button"
             variant="outline"
             size="sm"
             onClick={() => router.push("/profile")}
             disabled={isPending}
-            className="order-2 sm:order-1"
+            className="order-2 rounded-full px-6 font-headline text-[10px] font-bold uppercase tracking-widest sm:order-1"
           >
             Cancel
           </Button>
@@ -216,7 +216,7 @@ export function ProfileEditForm({ profile }: ProfileEditFormProps) {
             type="submit"
             size="sm"
             disabled={isPending}
-            className="order-1 sm:order-2"
+            className="order-1 rounded-full px-6 font-headline text-[10px] font-bold uppercase tracking-widest shadow-none hover:opacity-90 sm:order-2"
           >
             {isPending ? (
               <>

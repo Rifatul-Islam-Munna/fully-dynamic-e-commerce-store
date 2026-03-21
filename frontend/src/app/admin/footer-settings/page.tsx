@@ -182,7 +182,7 @@ export default function FooterSettingsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 className="size-6 animate-spin text-muted-foreground" />
+        <Loader2 className="size-6 animate-spin text-on-surface-variant" />
       </div>
     );
   }
@@ -191,13 +191,13 @@ export default function FooterSettingsPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Footer Settings</h1>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-on-surface-variant">
           Configure footer content, social links, and sections
         </p>
       </div>
 
       {/* Basic Info */}
-      <div className="rounded-xl border border-border bg-card p-6 space-y-5">
+      <div className="rounded-xl border border-border bg-surface-container-lowest p-6 space-y-5">
         <h2 className="text-base font-semibold">General</h2>
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-1">
@@ -246,7 +246,7 @@ export default function FooterSettingsPage() {
       </div>
 
       {/* Social Links */}
-      <div className="rounded-xl border border-border bg-card p-6 space-y-4">
+      <div className="rounded-xl border border-border bg-surface-container-lowest p-6 space-y-4">
         <div className="flex items-center justify-between">
           <h2 className="text-base font-semibold">Social Links</h2>
           <Button variant="outline" size="sm" onClick={addSocialLink}>
@@ -278,19 +278,19 @@ export default function FooterSettingsPage() {
               variant="ghost"
               size="sm"
               onClick={() => removeSocialLink(i)}
-              className="text-destructive"
+              className="text-error"
             >
               <Trash2 className="size-4" />
             </Button>
           </div>
         ))}
         {form.socialLinks.length === 0 && (
-          <p className="text-sm text-muted-foreground">No social links added</p>
+          <p className="text-sm text-on-surface-variant">No social links added</p>
         )}
       </div>
 
       {/* Footer Sections */}
-      <div className="rounded-xl border border-border bg-card p-6 space-y-4">
+      <div className="rounded-xl border border-border bg-surface-container-lowest p-6 space-y-4">
         <div className="flex items-center justify-between">
           <h2 className="text-base font-semibold">Footer Sections</h2>
           <Button variant="outline" size="sm" onClick={addSection}>
@@ -313,7 +313,7 @@ export default function FooterSettingsPage() {
                 variant="ghost"
                 size="sm"
                 onClick={() => removeSection(sIdx)}
-                className="text-destructive ml-auto"
+                className="text-error ml-auto"
               >
                 <Trash2 className="size-4" />
               </Button>
@@ -349,7 +349,7 @@ export default function FooterSettingsPage() {
                   variant="ghost"
                   size="sm"
                   onClick={() => removeLink(sIdx, lIdx)}
-                  className="text-destructive"
+                  className="text-error"
                 >
                   <Trash2 className="size-3.5" />
                 </Button>
@@ -360,7 +360,7 @@ export default function FooterSettingsPage() {
                 variant="ghost"
                 size="sm"
                 onClick={() => addLink(sIdx)}
-                className="text-xs text-muted-foreground"
+                className="text-xs text-on-surface-variant"
               >
                 <Plus className="mr-1 size-3" /> Add Link
               </Button>
@@ -368,7 +368,7 @@ export default function FooterSettingsPage() {
           </div>
         ))}
         {form.sections.length === 0 && (
-          <p className="text-sm text-muted-foreground">No sections added</p>
+          <p className="text-sm text-on-surface-variant">No sections added</p>
         )}
       </div>
 

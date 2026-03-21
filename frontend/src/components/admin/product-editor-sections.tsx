@@ -39,7 +39,7 @@ type UpdateVariantField = <K extends keyof VariantForm>(
 export function ProductEditorLoadingState() {
   return (
     <div className="flex items-center justify-center py-16">
-      <Loader2 className="size-6 animate-spin text-muted-foreground" />
+      <Loader2 className="size-6 animate-spin text-on-surface-variant" />
     </div>
   );
 }
@@ -57,7 +57,7 @@ export function ProductEditorHeader({
         <h1 className="text-2xl font-bold tracking-tight">
           {mode === "edit" ? "Edit Product" : "Add Product"}
         </h1>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-on-surface-variant">
           Configure product details, images, navbar placement, and variants.
         </p>
       </div>
@@ -83,7 +83,7 @@ export function ProductBasicInformationSection({
   onSlugChange: (value: string) => void;
 }) {
   return (
-    <div className="space-y-5 rounded-xl border border-border bg-card p-6">
+    <div className="space-y-5 rounded-xl border border-border bg-surface-container-lowest p-6">
       <h2 className="text-base font-semibold">Basic Information</h2>
       <ImageUploadField
         id="product-thumbnail"
@@ -110,7 +110,7 @@ export function ProductBasicInformationSection({
             value={form.slug}
             onChange={(event) => onSlugChange(event.target.value)}
           />
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-on-surface-variant">
             {isSlugManuallyEdited
               ? "Custom slug mode"
               : "Slug updates automatically from title"}
@@ -153,7 +153,7 @@ export function ProductBasicInformationSection({
               onUpdateField("orderPayableAmount", event.target.value)
             }
           />
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-on-surface-variant">
             Optional per-unit minimum amount the customer must pay up front in
             bKash checkout. Leave empty to charge the full unit amount.
           </p>
@@ -170,7 +170,7 @@ export function ProductBasicInformationSection({
               value={form.stock}
               onChange={(event) => onUpdateField("stock", event.target.value)}
             />
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-on-surface-variant">
               Set available units for this simple product. Variant products
               manage stock per variant below.
             </p>
@@ -201,11 +201,11 @@ export function ProductGallerySection({
   onReorderGallery: (items: GalleryItem[]) => void;
 }) {
   return (
-    <div className="space-y-5 rounded-xl border border-border bg-card p-6">
+    <div className="space-y-5 rounded-xl border border-border bg-surface-container-lowest p-6">
       <h2 className="text-base font-semibold">
         Product Gallery (Array of image URLs)
       </h2>
-      <p className="text-xs text-muted-foreground">
+      <p className="text-xs text-on-surface-variant">
         Recommended: keep gallery images close to 4:5 ratio (for example
         `1200x1500`) so catalog cards and product galleries stay consistent.
       </p>
@@ -252,12 +252,12 @@ export function ProductGallerySection({
       </div>
 
       {imageGallery.length === 0 ? (
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-on-surface-variant">
           No gallery images yet. Add URLs or upload images.
         </p>
       ) : (
         <>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-on-surface-variant">
             Drag and drop to rearrange image order.
           </p>
           <ReactSortable
@@ -269,12 +269,12 @@ export function ProductGallerySection({
             {imageGallery.map((item) => (
               <div
                 key={item.id}
-                className="overflow-hidden rounded-lg border border-border/70 bg-background"
+                className="overflow-hidden rounded-lg border border-border/70 bg-surface"
               >
                 <div className="flex items-center justify-between border-b border-border/60 px-2 py-1.5">
                   <button
                     type="button"
-                    className="cursor-grab text-muted-foreground active:cursor-grabbing"
+                    className="cursor-grab text-on-surface-variant active:cursor-grabbing"
                     aria-label="Drag to reorder"
                   >
                     <GripVertical className="size-4" />
@@ -284,7 +284,7 @@ export function ProductGallerySection({
                     size="icon"
                     variant="ghost"
                     onClick={() => onRemoveGalleryItem(item.id)}
-                    className="size-7 text-destructive hover:text-destructive"
+                    className="size-7 text-error hover:text-error"
                   >
                     <Trash2 className="size-4" />
                   </Button>
@@ -295,7 +295,7 @@ export function ProductGallerySection({
                   alt="Product gallery item"
                   className="h-40 w-full object-cover"
                 />
-                <div className="break-all px-2 py-1.5 text-[11px] text-muted-foreground">
+                <div className="break-all px-2 py-1.5 text-[11px] text-on-surface-variant">
                   {item.url}
                 </div>
               </div>
@@ -323,10 +323,10 @@ export function ProductNavbarPlacementSection({
   onSubNavChange: (value: string) => void;
 }) {
   return (
-    <div className="space-y-5 rounded-xl border border-border bg-card p-6">
+    <div className="space-y-5 rounded-xl border border-border bg-surface-container-lowest p-6">
       <h2 className="text-base font-semibold">Navbar Placement</h2>
       {loadingNav ? (
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+        <div className="flex items-center gap-2 text-sm text-on-surface-variant">
           <Loader2 className="size-4 animate-spin" />
           Loading navbar options...
         </div>
@@ -380,7 +380,7 @@ export function ProductDescriptionSection({
   onRichTextChange: (value: string) => void;
 }) {
   return (
-    <div className="space-y-5 rounded-xl border border-border bg-card p-6">
+    <div className="space-y-5 rounded-xl border border-border bg-surface-container-lowest p-6">
       <h2 className="text-base font-semibold">Description</h2>
       <RichTextEditor
         description={richText}
@@ -411,7 +411,7 @@ export function ProductVariantsSection({
   onRemoveVariant: (index: number) => void;
 }) {
   return (
-    <div className="space-y-5 rounded-xl border border-border bg-card p-6">
+    <div className="space-y-5 rounded-xl border border-border bg-surface-container-lowest p-6">
       <h2 className="text-base font-semibold">Variants</h2>
       <label className="flex items-center gap-2 text-sm">
         <Checkbox
@@ -426,7 +426,7 @@ export function ProductVariantsSection({
           {variants.map((variant, index) => (
             <div
               key={index}
-              className="space-y-3 rounded-lg border border-border/60 bg-background p-3"
+              className="space-y-3 rounded-lg border border-border/60 bg-surface p-3"
             >
               <div className="flex items-center justify-between">
                 <p className="text-sm font-medium">Variant #{index + 1}</p>
@@ -435,7 +435,7 @@ export function ProductVariantsSection({
                   variant="ghost"
                   size="sm"
                   onClick={() => onRemoveVariant(index)}
-                  className="text-destructive hover:text-destructive"
+                  className="text-error hover:text-error"
                 >
                   <X className="size-4" />
                 </Button>
@@ -515,7 +515,7 @@ export function ProductVariantsSection({
           </Button>
         </div>
       ) : (
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-on-surface-variant">
           Variants are disabled for this product. Stock is controlled from the
           basic information section above.
         </p>
@@ -532,7 +532,7 @@ export function ProductFlagsSection({
   onUpdateField: UpdateField;
 }) {
   return (
-    <div className="space-y-4 rounded-xl border border-border bg-card p-6">
+    <div className="space-y-4 rounded-xl border border-border bg-surface-container-lowest p-6">
       <h2 className="text-base font-semibold">Product Flags</h2>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         <label className="flex items-center gap-2 text-sm">

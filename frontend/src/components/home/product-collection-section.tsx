@@ -44,7 +44,7 @@ export function renderProductCollectionSection(
           <div className="max-w-2xl space-y-3">
             <SectionEyebrow label="Collection" secondary={metaText} />
             <SectionHeading title={title} copy={introCopy} compact />
-            <p className="text-sm leading-6 text-muted-foreground">
+            <p className="text-sm leading-6 text-on-surface-variant">
               {guidanceText}
             </p>
           </div>
@@ -59,7 +59,7 @@ export function renderProductCollectionSection(
     return (
       <section
         key={sectionKey}
-        className="rounded-2xl border border-border/70 bg-background p-3 shadow-[0_22px_60px_-50px_rgba(15,23,42,0.22)] sm:rounded-[32px] sm:p-6"
+        className="rounded-2xl border border-border/70 bg-surface p-3 shadow-[0_22px_60px_-50px_rgba(15,23,42,0.22)] sm:rounded-[32px] sm:p-6"
       >
         <div className="flex flex-col gap-4 border-b border-border/70 pb-4 sm:flex-row sm:items-end sm:justify-between">
           <div className="max-w-2xl space-y-3">
@@ -72,8 +72,8 @@ export function renderProductCollectionSection(
           items={["Quick compare", sectionFlag, itemText]}
           className="mt-4"
         />
-        <div className="mt-5 rounded-[24px] bg-muted/18 p-3 sm:p-4">
-          <p className="mb-4 text-sm leading-6 text-muted-foreground">
+        <div className="mt-5 rounded-[24px] bg-surface-container/18 p-3 sm:p-4">
+          <p className="mb-4 text-sm leading-6 text-on-surface-variant">
             {guidanceText}
           </p>
           <ProductGrid
@@ -89,21 +89,21 @@ export function renderProductCollectionSection(
     return (
       <section
         key={sectionKey}
-        className="rounded-2xl border border-border/70 bg-background p-3 shadow-[0_22px_60px_-50px_rgba(15,23,42,0.18)] sm:rounded-[32px] sm:p-6"
+        className="rounded-2xl border border-border/70 bg-surface p-3 shadow-[0_22px_60px_-50px_rgba(15,23,42,0.18)] sm:rounded-[32px] sm:p-6"
       >
         <div className="grid gap-4 lg:grid-cols-[300px_minmax(0,1fr)] lg:items-start">
-          <aside className="rounded-[26px] bg-muted/20 px-5 py-6 sm:px-6">
+          <aside className="rounded-[26px] bg-surface-container-low/50 px-5 py-6 sm:px-6">
             <SectionEyebrow label="Guided browse" secondary={metaText} />
             <div className="mt-4 space-y-4">
               <SectionHeading title={title} copy={introCopy} />
               <SectionTagRow items={[sectionFlag, itemText]} />
-              <p className="text-sm leading-6 text-muted-foreground">
+              <p className="text-sm leading-6 text-on-surface-variant">
                 {guidanceText}
               </p>
               {cta}
             </div>
           </aside>
-          <div className="rounded-[26px] border border-border/70 bg-background p-3 sm:p-4">
+          <div className="rounded-[26px] border border-border/70 bg-surface p-3 sm:p-4">
             <ProductGrid products={products} className="gap-4" />
           </div>
         </div>
@@ -115,23 +115,23 @@ export function renderProductCollectionSection(
     return (
       <section
         key={sectionKey}
-        className="rounded-2xl border border-border/70 bg-background p-3 shadow-[0_22px_60px_-50px_rgba(15,23,42,0.18)] sm:rounded-[32px] sm:p-6"
+        className="rounded-2xl border border-border/70 bg-surface p-3 shadow-[0_22px_60px_-50px_rgba(15,23,42,0.18)] sm:rounded-[32px] sm:p-6"
       >
         <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_280px]">
-          <div className="order-2 rounded-[26px] bg-muted/18 p-3 sm:p-4 lg:order-1">
+          <div className="order-2 rounded-[26px] bg-surface-container/18 p-3 sm:p-4 lg:order-1">
             <div className="mb-4 flex flex-col gap-3 border-b border-border/70 pb-4 sm:flex-row sm:items-center sm:justify-between">
               <SectionTagRow items={[sectionFlag, itemText]} />
-              <span className="text-xs font-medium text-muted-foreground">
+              <span className="text-xs font-medium text-on-surface-variant">
                 Browse products
               </span>
             </div>
             <ProductGrid products={products} className="gap-4" />
           </div>
-          <aside className="order-1 rounded-[26px] border border-border/70 bg-muted/10 px-5 py-6 lg:order-2">
+          <aside className="order-1 rounded-[26px] border border-border/70 bg-surface-container-low/30 px-5 py-6 lg:order-2">
             <div className="space-y-5">
               <SectionEyebrow label="Browse guide" secondary={metaText} />
               <SectionHeading title={title} copy={introCopy} compact />
-              <p className="text-sm leading-6 text-muted-foreground">
+              <p className="text-sm leading-6 text-on-surface-variant">
                 {guidanceText}
               </p>
               {cta}
@@ -146,9 +146,9 @@ export function renderProductCollectionSection(
     return (
       <section
         key={sectionKey}
-        className="overflow-hidden rounded-[34px] border border-border/70 bg-background shadow-[0_24px_70px_-54px_rgba(15,23,42,0.2)]"
+        className="overflow-hidden rounded-[34px] border border-border/70 bg-surface shadow-[0_24px_70px_-54px_rgba(15,23,42,0.2)]"
       >
-        <div className="border-b border-border/70 bg-muted/18 px-5 py-6 sm:px-6">
+        <div className="border-b border-border/70 bg-surface-container/18 px-5 py-6 sm:px-6">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-2xl space-y-3">
               <SectionEyebrow
@@ -161,7 +161,7 @@ export function renderProductCollectionSection(
           </div>
           <div className="mt-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
             <SectionTagRow items={["Featured layout", sectionFlag, itemText]} />
-            <p className="text-sm leading-6 text-muted-foreground">
+            <p className="text-sm leading-6 text-on-surface-variant">
               {guidanceText}
             </p>
           </div>
@@ -176,7 +176,7 @@ export function renderProductCollectionSection(
   if (variant === "banner_top") {
     return (
       <section key={sectionKey}>
-        <div className="rounded-2xl bg-primary px-4 py-5 text-primary-foreground sm:rounded-t-[32px] sm:rounded-b-none sm:px-6 sm:py-6">
+        <div className="rounded-2xl bg-primary px-4 py-5 text-on-primary sm:rounded-t-[32px] sm:rounded-b-none sm:px-6 sm:py-6">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="space-y-1">
               <SectionEyebrow label="Collection" secondary={metaText} inverse />
@@ -185,7 +185,7 @@ export function renderProductCollectionSection(
             <SectionCta href={section.buttonUrl} label={ctaLabel} inverse />
           </div>
         </div>
-        <div className="rounded-b-2xl border border-t-0 border-border/70 bg-background p-3 sm:rounded-b-[32px] sm:p-5">
+        <div className="rounded-b-2xl border border-t-0 border-border/70 bg-surface p-3 sm:rounded-b-[32px] sm:p-5">
           <ProductGrid products={products} className="gap-3" />
         </div>
       </section>
@@ -195,14 +195,14 @@ export function renderProductCollectionSection(
   if (variant === "floating_header") {
     return (
       <section key={sectionKey} className="relative pt-8 sm:pt-10">
-        <div className="absolute inset-x-4 top-0 z-10 mx-auto max-w-lg rounded-2xl border border-border/60 bg-background px-4 py-4 shadow-lg sm:rounded-[24px] sm:px-6 sm:py-5">
+        <div className="absolute inset-x-4 top-0 z-10 mx-auto max-w-lg rounded-2xl border border-border/60 bg-surface px-4 py-4 shadow-lg sm:rounded-[24px] sm:px-6 sm:py-5">
           <SectionHeading title={title} copy={introCopy} compact />
           <div className="mt-3 flex flex-wrap items-center gap-2">
             <SectionTagRow items={[sectionFlag, itemText]} />
             {cta}
           </div>
         </div>
-        <div className="rounded-2xl border border-border/70 bg-muted/15 px-3 pb-3 pt-20 sm:rounded-[32px] sm:px-5 sm:pb-5 sm:pt-24">
+        <div className="rounded-2xl border border-border/70 bg-surface-container/15 px-3 pb-3 pt-20 sm:rounded-[32px] sm:px-5 sm:pb-5 sm:pt-24">
           <ProductGrid products={products} className="gap-3" />
         </div>
       </section>
@@ -213,16 +213,16 @@ export function renderProductCollectionSection(
     return (
       <section key={sectionKey} className="space-y-4">
         <div className="grid gap-3 sm:grid-cols-2">
-          <div className="rounded-2xl border border-border/70 bg-background px-4 py-4 sm:rounded-[24px] sm:px-5 sm:py-5">
+          <div className="rounded-2xl border border-border/70 bg-surface px-4 py-4 sm:rounded-[24px] sm:px-5 sm:py-5">
             <SectionEyebrow label="Collection" secondary={metaText} />
-            <h2 className="mt-2 text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
+            <h2 className="mt-2 text-xl font-semibold tracking-tight text-on-surface sm:text-2xl">
               {title}
             </h2>
           </div>
-          <div className="flex items-center rounded-2xl border border-border/70 bg-muted/15 px-4 py-4 sm:rounded-[24px] sm:px-5 sm:py-5">
+          <div className="flex items-center rounded-2xl border border-border/70 bg-surface-container/15 px-4 py-4 sm:rounded-[24px] sm:px-5 sm:py-5">
             <div className="space-y-3">
               {introCopy ? (
-                <p className="text-sm leading-relaxed text-muted-foreground">
+                <p className="text-sm leading-relaxed text-on-surface-variant">
                   {introCopy}
                 </p>
               ) : null}
@@ -254,7 +254,7 @@ export function renderProductCollectionSection(
           </div>
           {cta}
         </div>
-        <div className="rounded-2xl border border-border/70 bg-background p-3 sm:rounded-[28px] sm:p-4">
+        <div className="rounded-2xl border border-border/70 bg-surface p-3 sm:rounded-[28px] sm:p-4">
           <ProductGrid products={products} className="gap-3" />
         </div>
       </section>
@@ -265,7 +265,7 @@ export function renderProductCollectionSection(
     return (
       <section
         key={sectionKey}
-        className="rounded-2xl border border-border/70 bg-background p-3 sm:rounded-[32px] sm:p-5"
+        className="rounded-2xl border border-border/70 bg-surface p-3 sm:rounded-[32px] sm:p-5"
       >
         <div className="flex items-start gap-3 border-b border-border/70 pb-4 sm:gap-4">
           <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-xl font-bold text-primary sm:size-14">
@@ -289,7 +289,7 @@ export function renderProductCollectionSection(
   return (
     <section
       key={sectionKey}
-      className="rounded-2xl bg-muted/20 p-3 sm:rounded-[34px] sm:p-6"
+      className="rounded-2xl bg-surface-container-low/50 p-3 sm:rounded-[34px] sm:p-6"
     >
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div className="max-w-2xl space-y-2">
@@ -298,7 +298,7 @@ export function renderProductCollectionSection(
         </div>
         {cta}
       </div>
-      <div className="mt-5 rounded-[28px] bg-background p-3 sm:p-4">
+      <div className="mt-5 rounded-[28px] bg-surface p-3 sm:p-4">
         <ProductGrid products={products} />
       </div>
     </section>
