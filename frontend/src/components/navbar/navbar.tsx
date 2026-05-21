@@ -61,7 +61,7 @@ export async function Navbar({
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-5 sm:pt-4">
-      <div className="storefront-panel mx-auto flex w-full max-w-[1500px] items-center justify-between rounded-[24px] px-3 py-3 sm:rounded-[28px] sm:px-5 sm:py-4 lg:px-8">
+      <div className="storefront-panel mx-auto flex w-full max-w-[1500px] items-center justify-between rounded-none px-3 py-3 sm:px-5 sm:py-4 lg:px-8">
         <div className="min-w-0 flex items-center gap-3 sm:gap-6 lg:gap-12">
           <Link
             href="/"
