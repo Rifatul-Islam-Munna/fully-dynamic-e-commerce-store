@@ -35,6 +35,9 @@ export default function LoginPage() {
         setSuccessMessage("Login successful. Redirecting...");
         setErrorMessage("");
 
+        // Dispatch a custom event so NavbarAuth updates immediately
+        window.dispatchEvent(new Event("auth-change"));
+
         const role = data.role;
         if (role === "admin") {
           router.push("/admin");

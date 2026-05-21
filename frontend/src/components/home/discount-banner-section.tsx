@@ -36,7 +36,7 @@ export function renderDiscountBannerSection(
     return (
       <section
         key={sectionKey}
-        className="relative overflow-hidden rounded-[32px] bg-[linear-gradient(120deg,#0f172a,#1e293b_52%,#2563eb)] text-white"
+        className="relative overflow-hidden rounded-none bg-[linear-gradient(120deg,#0f172a,#1e293b_52%,#2563eb)] text-white"
       >
         <div className="absolute -right-8 top-0 h-28 w-28 rounded-full bg-white/10 blur-3xl" />
         <div className="absolute bottom-0 left-10 h-20 w-20 rounded-full bg-sky-400/18 blur-3xl" />
@@ -57,8 +57,8 @@ export function renderDiscountBannerSection(
               <MediaFrame
                 src={imageUrl}
                 alt={title}
-                className="h-20 w-24 rounded-[18px]"
-                frameClassName="rounded-[22px] border border-white/12 bg-white/8 p-1.5"
+                className="h-20 w-24 rounded-none"
+                frameClassName="rounded-none border border-white/12 bg-white/8 p-1.5"
               />
             ) : null}
             <SectionCta href={section.buttonUrl} label={ctaLabel} inverse />
@@ -72,7 +72,7 @@ export function renderDiscountBannerSection(
     return (
       <section
         key={sectionKey}
-        className="relative overflow-hidden rounded-[40px] border border-border/70 bg-[#0f172a] px-5 py-12 text-white sm:px-8"
+        className="relative overflow-hidden rounded-none border border-border/70 bg-[#0f172a] px-5 py-12 text-white sm:px-8"
         style={{
           backgroundImage: backgroundImageUrl
             ? `url('${backgroundImageUrl}')`
@@ -83,7 +83,7 @@ export function renderDiscountBannerSection(
       >
         <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(15,23,42,0.88),rgba(30,41,59,0.72),rgba(79,70,229,0.58))]" />
         <div className="relative z-10 mx-auto max-w-4xl">
-          <div className="rounded-[32px] border border-white/12 bg-white/10 px-6 py-8 text-center backdrop-blur-md">
+          <div className="rounded-none border border-white/12 bg-white/10 px-6 py-8 text-center backdrop-blur-md">
             <SectionEyebrow
               label="Campaign poster"
               secondary={subtitle}
@@ -110,8 +110,8 @@ export function renderDiscountBannerSection(
               <MediaFrame
                 src={imageUrl}
                 alt={title}
-                className="h-56 w-full max-w-2xl rounded-[28px] object-cover"
-                frameClassName="rounded-[32px] border border-white/12 bg-white/8 p-3"
+                className="h-56 w-full max-w-2xl rounded-none object-cover"
+                frameClassName="rounded-none border border-white/12 bg-white/8 p-3"
               />
             </div>
           ) : null}
@@ -124,10 +124,10 @@ export function renderDiscountBannerSection(
     return (
       <section
         key={sectionKey}
-        className="rounded-2xl border border-border/70 bg-surface p-3 shadow-[0_30px_90px_-65px_rgba(15,23,42,0.3)] sm:rounded-[38px] sm:p-6"
+        className="rounded-none border border-border/70 bg-surface p-3 shadow-none sm:p-6"
       >
         <div className="grid gap-4 lg:grid-cols-[1.06fr_0.94fr] lg:items-stretch">
-          <div className="rounded-[32px] bg-[linear-gradient(135deg,rgba(79,70,229,0.08),rgba(15,23,42,0.04),rgba(255,255,255,1))] px-5 py-6 sm:px-6">
+          <div className="rounded-none bg-[linear-gradient(135deg,rgba(79,70,229,0.08),rgba(15,23,42,0.04),rgba(255,255,255,1))] px-5 py-6 sm:px-6">
             <SectionEyebrow label="Offer" secondary={subtitle} />
             <div className="mt-5 space-y-5">
               <SectionHeading title={title} copy={sectionCopy} />
@@ -152,8 +152,8 @@ export function renderDiscountBannerSection(
             <MediaFrame
               src={imageUrl}
               alt={title}
-              className="h-72 rounded-[28px] sm:h-full"
-              frameClassName="rounded-[32px] border border-border/70 bg-surface-container/24 p-3"
+              className="h-72 rounded-none sm:h-full"
+              frameClassName="rounded-none border border-border/70 bg-surface-container/24 p-3"
             />
           ) : (
             <SupportPanel
@@ -171,7 +171,7 @@ export function renderDiscountBannerSection(
     return (
       <section
         key={sectionKey}
-        className="relative overflow-hidden rounded-[40px] border border-border/70 bg-[#0f172a] text-white"
+        className="relative overflow-hidden rounded-none border border-border/70 bg-[#0f172a] text-white"
         style={{
           backgroundImage: backgroundImageUrl
             ? `url('${backgroundImageUrl}')`
@@ -182,8 +182,8 @@ export function renderDiscountBannerSection(
       >
         <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(15,23,42,0.78),rgba(15,23,42,0.52),rgba(79,70,229,0.3))]" />
         <div className="relative z-10 grid gap-4 p-5 sm:p-7 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-end">
-          <div className="max-w-xl rounded-[32px] border border-white/12 bg-white/10 p-2 backdrop-blur-md">
-            <div className="rounded-[28px] bg-black/32 px-5 py-6">
+          <div className="max-w-xl rounded-none border border-white/12 bg-white/10 p-2 backdrop-blur-md">
+            <div className="rounded-none bg-black/32 px-5 py-6">
               <SectionEyebrow label="Offer" secondary={subtitle} inverse />
               <div className="mt-5 space-y-5">
                 <SectionHeading title={title} copy={sectionCopy} inverse />
@@ -200,8 +200,8 @@ export function renderDiscountBannerSection(
               <MediaFrame
                 src={imageUrl}
                 alt={title}
-                className="h-56 rounded-[28px] object-cover"
-                frameClassName="rounded-[30px] border border-white/12 bg-white/8 p-3"
+                className="h-56 rounded-none object-cover"
+                frameClassName="rounded-none border border-white/12 bg-white/8 p-3"
               />
             ) : null}
             <DetailTile
@@ -220,7 +220,7 @@ export function renderDiscountBannerSection(
     return (
       <section
         key={sectionKey}
-        className="overflow-hidden rounded-[38px] border border-border/70 bg-[linear-gradient(135deg,rgba(248,250,252,1),rgba(238,242,255,0.9))]"
+        className="overflow-hidden rounded-none border border-border/70 bg-[linear-gradient(135deg,rgba(248,250,252,1),rgba(238,242,255,0.9))]"
       >
         <div className="grid gap-0 lg:grid-cols-[1fr_360px]">
           <div className="px-5 py-6 sm:px-7 sm:py-8">
@@ -250,10 +250,10 @@ export function renderDiscountBannerSection(
                 <MediaFrame
                   src={imageUrl}
                   alt={title}
-                  className="h-full min-h-[220px] rounded-[28px] object-cover"
-                  frameClassName="h-full rounded-[32px] bg-surface p-3 shadow-[0_28px_80px_-58px_rgba(15,23,42,0.28)]"
+                  className="h-full min-h-[220px] rounded-none object-cover"
+                  frameClassName="h-full rounded-none bg-surface p-3 shadow-none"
                 />
-                <div className="absolute left-8 top-8 rounded-full bg-surface/90 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-on-surface shadow-sm">
+                <div className="absolute left-8 top-8 rounded-none bg-surface/90 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-on-surface shadow-sm">
                   Visual edge
                 </div>
               </>
@@ -276,9 +276,9 @@ export function renderDiscountBannerSection(
     return (
       <section
         key={sectionKey}
-        className="relative overflow-hidden rounded-2xl bg-primary sm:rounded-[32px]"
+        className="relative overflow-hidden rounded-none bg-primary"
       >
-        <div className="absolute -right-10 -top-10 size-40 rotate-12 rounded-[40px] bg-white/10 sm:size-60" />
+        <div className="absolute -right-10 -top-10 size-40 rotate-12 rounded-none bg-white/10 sm:size-60" />
         <div className="relative z-10 flex flex-col gap-4 p-4 text-on-primary sm:flex-row sm:items-center sm:justify-between sm:p-6">
           <div className="space-y-1.5">
             <SectionEyebrow
@@ -293,8 +293,8 @@ export function renderDiscountBannerSection(
               <MediaFrame
                 src={imageUrl}
                 alt={title}
-                className="size-16 rounded-xl sm:size-20 sm:rounded-2xl"
-                frameClassName="rounded-xl sm:rounded-2xl"
+                className="size-16 rounded-none sm:size-20"
+                frameClassName="rounded-none"
               />
             ) : null}
             <SectionCta href={section.buttonUrl} label={ctaLabel} inverse />
@@ -308,7 +308,7 @@ export function renderDiscountBannerSection(
     return (
       <section
         key={sectionKey}
-        className="relative overflow-hidden rounded-2xl bg-cover bg-center sm:rounded-[34px]"
+        className="relative overflow-hidden rounded-none bg-cover bg-center"
         style={{
           backgroundImage: backgroundImageUrl
             ? `url('${backgroundImageUrl}')`
@@ -316,7 +316,7 @@ export function renderDiscountBannerSection(
         }}
       >
         <div className="flex min-h-48 items-center justify-center p-4 sm:min-h-64 sm:p-6">
-          <div className="w-full max-w-xl rounded-2xl border border-white/20 bg-white/15 px-5 py-5 text-center text-white backdrop-blur-xl sm:rounded-[28px] sm:px-8 sm:py-8">
+          <div className="w-full max-w-xl rounded-none border border-white/20 bg-white/15 px-5 py-5 text-center text-white backdrop-blur-xl sm:px-8 sm:py-8">
             {section.subtitle?.trim() ? (
               <p className="text-[11px] font-semibold uppercase tracking-widest text-white/75">
                 {section.subtitle}
@@ -345,12 +345,12 @@ export function renderDiscountBannerSection(
     return (
       <section
         key={sectionKey}
-        className="rounded-2xl border-2 border-primary/30 bg-primary/5 p-4 sm:rounded-[32px] sm:p-6"
+        className="rounded-none border-2 border-primary/30 bg-primary/5 p-4 sm:p-6"
       >
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="space-y-2">
             {section.subtitle?.trim() ? (
-              <span className="inline-block rounded-full bg-primary px-3 py-1 text-xs font-bold text-on-primary">
+              <span className="inline-block rounded-none bg-primary px-3 py-1 text-xs font-bold text-on-primary">
                 {section.subtitle}
               </span>
             ) : null}
@@ -370,8 +370,8 @@ export function renderDiscountBannerSection(
               <MediaFrame
                 src={imageUrl}
                 alt={title}
-                className="h-24 w-32 rounded-xl object-cover sm:h-28 sm:w-36"
-                frameClassName="rounded-xl"
+                className="h-24 w-32 rounded-none object-cover sm:h-28 sm:w-36"
+                frameClassName="rounded-none"
               />
             ) : null}
             <SectionCta href={section.buttonUrl} label={ctaLabel} />
@@ -385,11 +385,11 @@ export function renderDiscountBannerSection(
     return (
       <section
         key={sectionKey}
-        className="rounded-full border border-border/70 bg-surface px-4 py-2.5 shadow-sm sm:px-6 sm:py-3"
+        className="rounded-none border border-border/70 bg-surface px-4 py-2.5 shadow-sm sm:px-6 sm:py-3"
       >
         <div className="flex flex-col items-center gap-2 text-center sm:flex-row sm:gap-4 sm:text-left">
           {section.subtitle?.trim() ? (
-            <span className="shrink-0 rounded-full bg-primary px-3 py-1 text-[11px] font-bold text-on-primary">
+            <span className="shrink-0 rounded-none bg-primary px-3 py-1 text-[11px] font-bold text-on-primary">
               {section.subtitle}
             </span>
           ) : null}
@@ -406,7 +406,7 @@ export function renderDiscountBannerSection(
     return (
       <section
         key={sectionKey}
-        className="relative overflow-hidden rounded-2xl sm:rounded-[36px]"
+        className="relative overflow-hidden rounded-none"
         style={{
           backgroundImage: backgroundImageUrl
             ? `linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url('${backgroundImageUrl}')`
@@ -437,8 +437,8 @@ export function renderDiscountBannerSection(
               <MediaFrame
                 src={imageUrl}
                 alt={title}
-                className="h-16 w-24 rounded-xl object-cover sm:h-20 sm:w-28"
-                frameClassName="rounded-xl"
+                className="h-16 w-24 rounded-none object-cover sm:h-20 sm:w-28"
+                frameClassName="rounded-none"
               />
             ) : null}
           </div>
@@ -450,7 +450,7 @@ export function renderDiscountBannerSection(
   return (
     <section
       key={sectionKey}
-      className="relative overflow-hidden rounded-[34px] bg-[#15171b] text-white"
+      className="relative overflow-hidden rounded-none bg-[#15171b] text-white"
       style={{
         backgroundImage: backgroundImageUrl
           ? `linear-gradient(120deg, rgba(21,23,27,.92), rgba(21,23,27,.78)), url('${backgroundImageUrl}')`
@@ -473,8 +473,8 @@ export function renderDiscountBannerSection(
           <MediaFrame
             src={imageUrl}
             alt={title}
-            className="h-56 rounded-[22px] sm:h-64"
-            frameClassName="rounded-[28px] bg-white/6 p-2"
+            className="h-56 rounded-none sm:h-64"
+            frameClassName="rounded-none bg-white/6 p-2"
           />
         ) : null}
       </div>

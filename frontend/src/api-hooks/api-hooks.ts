@@ -16,10 +16,9 @@ export const getToken = async ()=>{
 }
 
 const baseUrl = process.env.BASE_URL
-
 function parseAxiosError(error: AxiosError): { message: string, statusCode: number } {
-  const res = error?.response?.data as any ;
-  const statusCode = error?.response?.data?.statusCode ?? 500;
+  const res = error?.response?.data as any;
+  const statusCode = (error?.response?.data as any)?.statusCode ?? 500;
 
   let message = 'Something went wrong';
 

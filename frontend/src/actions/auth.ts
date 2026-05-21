@@ -80,7 +80,7 @@ export const getUser = async ()=>{
 }
 
 export const requestNumber = async (payoad:{userId:string, requestUserId:string}) => {
-    const [data, error] = await PostRequestAxios("/user/request-for-number",payoad);
+    const [data, error] = await PostRequestAxios<any>("/user/request-for-number",payoad);
     console.log("requestNumberdata",data);
     if(data){
         const cookie = await cookies();
@@ -97,7 +97,7 @@ export const setUserData = async (data:Record<string,unknown>) =>{
 }
 
 export const setOtpData = async (payoad:Record<string,unknown>) =>{
-    const [data, error] = await PostRequestAxios("/user/verify-otp",payoad);
+    const [data, error] = await PostRequestAxios<any>("/user/verify-otp",payoad);
     if(data){
         const cookie = await cookies();
         cookie.set("user", JSON.stringify(data?.data) || "",{  httpOnly: true,secure: true,path:"/", maxAge:60*60*24*10 });
