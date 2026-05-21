@@ -71,8 +71,8 @@ export function HeroSlider({ slides, variant = "original" }: HeroSliderProps) {
         asChild
         variant={light ? "secondary" : "default"}
         className={cn(
-          "h-12 rounded-full px-8 font-headline text-xs font-bold uppercase tracking-widest shadow-none transition-all duration-300",
-          light ? "bg-white text-primary hover:bg-white/90" : "bg-primary text-on-primary hover:opacity-90",
+          "h-12 rounded-full px-8 font-body text-[11px] font-semibold uppercase tracking-[0.18em] transition-all duration-300",
+          light ? "bg-white text-primary hover:bg-white/92" : "bg-primary text-on-primary hover:opacity-92",
           className,
         )}
       >
@@ -92,8 +92,8 @@ export function HeroSlider({ slides, variant = "original" }: HeroSliderProps) {
     if (variant === "split_panel") {
       return (
         <div className="w-full max-w-[520px]">
-          <div className="rounded-2xl border border-white/12 bg-black/24 p-2 backdrop-blur-md sm:rounded-[30px]">
-            <div className="rounded-xl bg-[linear-gradient(160deg,rgba(15,23,42,0.96),rgba(30,41,59,0.84))] px-4 py-5 text-white sm:rounded-[26px] sm:px-6 sm:py-7">
+          <div className="rounded-[30px] border border-white/12 bg-black/18 p-2 backdrop-blur-md">
+            <div className="rounded-[24px] bg-[linear-gradient(160deg,rgba(15,23,42,0.94),rgba(30,41,59,0.78))] px-4 py-5 text-white sm:px-6 sm:py-7">
               <div className="flex flex-wrap items-center gap-3 font-body text-[10px] font-semibold uppercase tracking-[0.2em] text-white/60">
                 {activeSlide.subtitle?.trim() ? (
                   <span className="rounded-full bg-white/10 px-3 py-1.5 text-white">
@@ -104,7 +104,7 @@ export function HeroSlider({ slides, variant = "original" }: HeroSliderProps) {
               </div>
               <div className="mt-4 space-y-3 sm:mt-5 sm:space-y-4">
                 {activeSlide.title?.trim() ? (
-                  <h2 className="font-headline text-3xl font-extrabold leading-tight tracking-tighter sm:text-4xl lg:text-5xl">
+                  <h2 className="font-headline text-4xl font-semibold leading-[0.92] tracking-tight sm:text-5xl lg:text-6xl">
                     {activeSlide.title}
                   </h2>
                 ) : null}
@@ -120,8 +120,8 @@ export function HeroSlider({ slides, variant = "original" }: HeroSliderProps) {
 
     if (variant === "bottom_story") {
       return (
-        <div className="w-full max-w-5xl rounded-2xl border border-border/70 bg-surface/94 p-1.5 shadow-[0_35px_110px_-70px_rgba(15,23,42,0.28)] backdrop-blur-md sm:rounded-[30px] sm:p-2">
-          <div className="grid gap-4 rounded-xl bg-surface px-4 py-5 sm:rounded-[26px] sm:px-6 sm:py-7 lg:grid-cols-[1fr_auto] lg:items-end">
+        <div className="storefront-panel-strong w-full max-w-5xl rounded-[34px] p-1.5 sm:p-2">
+          <div className="grid gap-4 rounded-[28px] bg-surface px-4 py-5 sm:px-6 sm:py-7 lg:grid-cols-[1fr_auto] lg:items-end">
             <div>
               <div className="flex flex-wrap items-center gap-3 font-body text-[10px] font-semibold uppercase tracking-[0.2em] text-on-surface-variant">
                 {activeSlide.subtitle?.trim() ? (
@@ -132,7 +132,7 @@ export function HeroSlider({ slides, variant = "original" }: HeroSliderProps) {
                 <span>{slidePositionLabel}</span>
               </div>
               {activeSlide.title?.trim() ? (
-                <h2 className="mt-3 font-headline text-2xl font-extrabold leading-tight tracking-tighter text-primary sm:mt-4 sm:text-4xl lg:text-5xl">
+                <h2 className="mt-3 font-headline text-3xl font-semibold leading-[0.94] tracking-tight text-primary sm:mt-4 sm:text-5xl">
                   {activeSlide.title}
                 </h2>
               ) : null}
@@ -147,8 +147,8 @@ export function HeroSlider({ slides, variant = "original" }: HeroSliderProps) {
 
     if (variant === "center_stage") {
       return (
-        <div className="mx-auto max-w-4xl rounded-2xl border border-white/12 bg-black/22 p-1.5 text-white shadow-[0_35px_110px_-70px_rgba(15,23,42,0.52)] backdrop-blur-md sm:rounded-[32px] sm:p-2">
-          <div className="rounded-xl bg-[linear-gradient(180deg,rgba(15,23,42,0.56),rgba(15,23,42,0.34))] px-5 py-6 sm:rounded-[28px] sm:px-8 sm:py-8">
+        <div className="mx-auto max-w-4xl rounded-[34px] border border-white/12 bg-black/18 p-1.5 text-white shadow-[0_35px_110px_-70px_rgba(15,23,42,0.52)] backdrop-blur-md sm:p-2">
+          <div className="rounded-[28px] bg-[linear-gradient(180deg,rgba(15,23,42,0.54),rgba(15,23,42,0.28))] px-5 py-6 sm:px-8 sm:py-8">
             <div className="mx-auto flex max-w-fit flex-wrap items-center justify-center gap-3 font-body text-[10px] font-semibold uppercase tracking-[0.2em] text-white/60">
               {activeSlide.subtitle?.trim() ? (
                 <span className="rounded-full bg-white/10 px-3 py-1.5 text-white">
@@ -158,7 +158,7 @@ export function HeroSlider({ slides, variant = "original" }: HeroSliderProps) {
               <span>{slidePositionLabel}</span>
             </div>
             {activeSlide.title?.trim() ? (
-              <h2 className="mt-4 font-headline text-3xl font-extrabold leading-tight tracking-tighter sm:mt-5 sm:text-5xl lg:text-6xl">
+              <h2 className="mt-4 font-headline text-4xl font-semibold leading-[0.9] tracking-tight sm:mt-5 sm:text-6xl">
                 {activeSlide.title}
               </h2>
             ) : null}
@@ -172,8 +172,8 @@ export function HeroSlider({ slides, variant = "original" }: HeroSliderProps) {
 
     if (variant === "editorial_frame") {
       return (
-        <div className="max-w-xl rounded-2xl border border-black/6 bg-surface/96 p-1.5 shadow-[0_32px_90px_-64px_rgba(15,23,42,0.24)] sm:rounded-[32px] sm:p-2">
-          <div className="rounded-xl border border-border/70 bg-surface px-4 py-5 text-on-surface sm:rounded-[28px] sm:px-6 sm:py-7">
+        <div className="storefront-panel-strong max-w-xl rounded-[34px] p-1.5 sm:p-2">
+          <div className="rounded-[28px] border border-border/70 bg-surface px-4 py-5 text-on-surface sm:px-6 sm:py-7">
             <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/70 pb-3 text-[11px] font-semibold uppercase tracking-[0.16em] text-on-surface-variant sm:pb-4">
               {activeSlide.subtitle?.trim() ? (
                 <span>{activeSlide.subtitle}</span>
@@ -186,7 +186,7 @@ export function HeroSlider({ slides, variant = "original" }: HeroSliderProps) {
             </div>
             <div className="mt-4 space-y-3 sm:mt-5 sm:space-y-4">
               {activeSlide.title?.trim() ? (
-                <h2 className="text-xl font-semibold leading-tight tracking-tight sm:text-3xl lg:text-4xl">
+                <h2 className="font-headline text-[2rem] font-semibold leading-[0.94] tracking-tight sm:text-[3rem]">
                   {activeSlide.title}
                 </h2>
               ) : null}

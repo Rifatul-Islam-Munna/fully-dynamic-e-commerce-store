@@ -81,67 +81,66 @@ export async function Footer({ settingKey = "default" }: { settingKey?: string }
   const sections = buildSections(footer.sections, navbarItems);
 
   return (
-    <footer className="w-full bg-[#001819] text-[#f9f9f9]">
-      <div className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-12 px-8 py-20 md:grid-cols-4 lg:px-12">
-        {/* Brand column */}
-        <div className="col-span-1 space-y-6">
-          <h2 className="font-headline text-xl font-bold text-white">
-            {footer.title}
-          </h2>
-          <p className="font-label text-xs uppercase leading-loose tracking-widest text-white/60">
-            {footer.description}
-          </p>
-          <ThemeSwitcher />
+    <footer className="w-full px-4 pb-4 pt-10 sm:px-6 lg:px-8">
+      <div className="mx-auto w-full max-w-7xl overflow-hidden rounded-[36px] bg-[linear-gradient(135deg,#0f172a,#111827_46%,#1f2937)] text-[#f9f9f9] shadow-[0_40px_120px_-58px_rgba(15,23,42,0.8)]">
+        <div className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-12 px-8 py-16 md:grid-cols-[1.2fr_repeat(3,minmax(0,1fr))] lg:px-12">
+          <div className="col-span-1 space-y-6">
+            <h2 className="font-headline text-3xl font-semibold tracking-[0.08em] text-white uppercase">
+              {footer.title}
+            </h2>
+            <p className="max-w-sm font-body text-sm leading-7 text-white/65">
+              {footer.description}
+            </p>
+            <ThemeSwitcher />
 
-          {footer.socialLinks.length > 0 && (
-            <div className="flex items-center gap-4 pt-2">
-              {footer.socialLinks.map((social) => {
-                const Icon = SOCIAL_ICONS[social.platform];
-                return (
-                  <a
-                    key={`${social.platform}-${social.url}`}
-                    href={social.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-white/60 transition-colors duration-300 hover:text-white"
-                    aria-label={social.platform}
-                  >
-                    {Icon ? <Icon className="size-4" /> : <span className="text-xs uppercase">{social.platform.slice(0, 2)}</span>}
-                  </a>
-                );
-              })}
+            {footer.socialLinks.length > 0 && (
+              <div className="flex items-center gap-4 pt-2">
+                {footer.socialLinks.map((social) => {
+                  const Icon = SOCIAL_ICONS[social.platform];
+                  return (
+                    <a
+                      key={`${social.platform}-${social.url}`}
+                      href={social.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex size-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/70 transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/10 hover:text-white"
+                      aria-label={social.platform}
+                    >
+                      {Icon ? <Icon className="size-4" /> : <span className="text-xs uppercase">{social.platform.slice(0, 2)}</span>}
+                    </a>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          {sections.map((section) => (
+            <div key={section.title} className="space-y-4">
+              <h5 className="mb-6 font-body text-[11px] font-semibold uppercase tracking-[0.2em] text-white/80">
+                {section.title}
+              </h5>
+              <ul className="space-y-3">
+                {section.links.map((link) => (
+                  <li key={`${section.title}-${link.url}`}>
+                    <Link
+                      href={link.url}
+                      className="font-body text-sm text-white/60 transition-colors duration-300 hover:text-white"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
-          )}
+          ))}
         </div>
 
-        {/* Navigation sections */}
-        {sections.map((section) => (
-          <div key={section.title} className="space-y-4">
-            <h5 className="font-label text-xs font-bold uppercase tracking-widest text-white mb-8">
-              {section.title}
-            </h5>
-            <ul className="space-y-3">
-              {section.links.map((link) => (
-                <li key={`${section.title}-${link.url}`}>
-                  <Link
-                    href={link.url}
-                    className="font-body text-xs uppercase tracking-widest text-white/60 transition-opacity hover:text-white"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+        <div className="mx-auto w-full max-w-7xl border-t border-white/8 px-8 py-6 lg:px-12">
+          <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
+            <p className="font-body text-xs uppercase tracking-[0.18em] text-[#eeeeee]/55">
+              {footer.copyrightText}
+            </p>
           </div>
-        ))}
-      </div>
-
-      {/* Bottom bar */}
-      <div className="mx-auto w-full max-w-7xl border-t border-white/5 px-8 py-8 lg:px-12">
-        <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-          <p className="font-body text-xs uppercase tracking-widest text-[#eeeeee]/60">
-            {footer.copyrightText}
-          </p>
         </div>
       </div>
     </footer>

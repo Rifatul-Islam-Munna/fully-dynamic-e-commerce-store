@@ -36,7 +36,7 @@ function MobileSidebarTrigger() {
       variant="ghost"
       size="icon"
       onClick={toggleSidebar}
-      className="size-10 rounded-full text-primary transition-all duration-300 hover:bg-surface-container"
+      className="size-10 rounded-full border border-border/60 bg-white/70 text-primary shadow-[0_16px_40px_-32px_rgba(15,23,42,0.4)] transition-all duration-300 hover:bg-white"
       aria-label="Open mobile menu"
     >
       <RiMenu4Fill className="size-5" />
@@ -74,15 +74,18 @@ export function NavbarMobile({ items }: NavbarMobileProps) {
         <Sidebar
           side="right"
           collapsible="offcanvas"
-          className="border-l-0 bg-surface-container-low shadow-none"
+          className="max-w-[88vw] border-l-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(249,249,249,0.96))] shadow-none [--sidebar-width:22rem]"
         >
           <SidebarHeader className="px-6 py-6">
             <MobileNavLink
               href="/"
-              className="font-headline text-xl font-extrabold tracking-tighter text-primary"
+              className="font-headline text-[1.7rem] font-semibold uppercase tracking-[0.18em] text-primary"
             >
               Menu
             </MobileNavLink>
+            <p className="mt-2 font-body text-sm text-on-surface-variant">
+              Explore collections, search products, manage account.
+            </p>
           </SidebarHeader>
 
           <SidebarContent className="px-4 py-2">
@@ -95,7 +98,7 @@ export function NavbarMobile({ items }: NavbarMobileProps) {
                     <SidebarMenuItem key={item.url} className="space-y-1">
                       <SidebarMenuButton
                         asChild
-                        className="h-10 rounded-lg px-4 font-headline text-sm font-bold uppercase tracking-widest text-on-surface-variant hover:bg-surface-container hover:text-primary"
+                        className="h-12 rounded-[18px] px-4 font-body text-[11px] font-semibold uppercase tracking-[0.18em] text-on-surface-variant hover:bg-white hover:text-primary"
                       >
                         <MobileNavLink href={item.url}>
                           {item.title}
@@ -110,7 +113,7 @@ export function NavbarMobile({ items }: NavbarMobileProps) {
                             >
                               <SidebarMenuSubButton
                                 asChild
-                                className="rounded-lg px-4 text-sm text-on-surface-variant hover:bg-surface-container hover:text-primary"
+                                className="rounded-[16px] px-4 text-sm text-on-surface-variant hover:bg-white hover:text-primary"
                               >
                                 <MobileNavLink href={subItem.url}>
                                   {subItem.title}
@@ -131,14 +134,14 @@ export function NavbarMobile({ items }: NavbarMobileProps) {
             <div className="flex flex-col gap-3">
               <MobileNavLink
                 href="/login"
-                className="flex items-center justify-center gap-2 rounded-full bg-surface-container px-5 py-3 font-headline text-xs font-bold uppercase tracking-widest text-primary transition-colors hover:bg-surface-container-high"
+                className="flex items-center justify-center gap-2 rounded-full border border-border/70 bg-white/80 px-5 py-3 font-body text-[11px] font-semibold uppercase tracking-[0.18em] text-primary transition-colors hover:bg-white"
               >
                 <LogIn className="size-4" />
                 Sign In
               </MobileNavLink>
               <MobileNavLink
                 href="/signup"
-                className="flex items-center justify-center gap-2 rounded-full bg-primary px-5 py-3 font-headline text-xs font-bold uppercase tracking-widest text-on-primary transition-opacity hover:opacity-90"
+                className="flex items-center justify-center gap-2 rounded-full bg-primary px-5 py-3 font-body text-[11px] font-semibold uppercase tracking-[0.18em] text-on-primary transition-opacity hover:opacity-90"
               >
                 <UserPlus className="size-4" />
                 Join

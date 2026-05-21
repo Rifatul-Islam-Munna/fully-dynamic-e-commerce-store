@@ -71,52 +71,54 @@ export function renderProductDetailsLayout(
 
 function OriginalDetails(props: LayoutProps) {
   return (
-    <section className="grid gap-6 xl:grid-cols-[1.08fr_0.92fr] xl:gap-8">
-      <ProductImageGallery images={props.gallery} title={props.product.title} />
+    <div className="space-y-8">
+      <section className="grid gap-6 xl:grid-cols-[1.08fr_0.92fr] xl:gap-8">
+        <ProductImageGallery images={props.gallery} title={props.product.title} />
 
-      <div className="space-y-4 xl:sticky xl:top-24 xl:self-start">
-        <section className="rounded-[28px] bg-surface-container-lowest p-5 sm:p-6">
-          <Breadcrumbs
-            mainNavUrl={props.mainNavUrl}
-            subNavUrl={props.subNavUrl}
-            mainLabel={props.mainLabel}
-            subLabel={props.subLabel}
-          />
-
-          <div className="mt-4">
-            <ProductHeader
-              product={props.product}
-              priceText={props.view.priceRangeText}
-              hasVariants={props.view.hasVariants}
-              hasBaseDiscount={props.view.hasBaseDiscount}
-              baseCurrentPrice={props.view.baseCurrentPrice}
-              showDiscountBadge={props.view.showDiscountBadge}
+        <div className="space-y-4 xl:sticky xl:top-24 xl:self-start">
+          <section className="rounded-[28px] bg-surface-container-lowest p-5 sm:p-6">
+            <Breadcrumbs
+              mainNavUrl={props.mainNavUrl}
+              subNavUrl={props.subNavUrl}
+              mainLabel={props.mainLabel}
+              subLabel={props.subLabel}
             />
-          </div>
 
-          {props.view.summary ? (
-            <p className="mt-3 text-sm leading-6 text-on-surface-variant">
-              {props.view.summary}
-            </p>
-          ) : null}
+            <div className="mt-4">
+              <ProductHeader
+                product={props.product}
+                priceText={props.view.priceRangeText}
+                hasVariants={props.view.hasVariants}
+                hasBaseDiscount={props.view.hasBaseDiscount}
+                baseCurrentPrice={props.view.baseCurrentPrice}
+                showDiscountBadge={props.view.showDiscountBadge}
+              />
+            </div>
 
-          <div className="mt-5">
-            <ProductDetailsActions product={props.actionProduct} />
-          </div>
+            {props.view.summary ? (
+              <p className="mt-3 text-sm leading-6 text-on-surface-variant">
+                {props.view.summary}
+              </p>
+            ) : null}
 
-          <div className="mt-5">
-            <InlineRichDescription richText={props.product.richText} />
-          </div>
-        </section>
+            <div className="mt-5">
+              <ProductDetailsActions product={props.actionProduct} />
+            </div>
 
-        <RelatedProductsSection
-          title={props.relatedTitle}
-          products={props.relatedProducts}
-          compact
-        />
-        <TrustList />
-      </div>
-    </section>
+            <div className="mt-5">
+              <InlineRichDescription richText={props.product.richText} />
+            </div>
+          </section>
+
+          <TrustList />
+        </div>
+      </section>
+
+      <RelatedProductsSection
+        title={props.relatedTitle}
+        products={props.relatedProducts}
+      />
+    </div>
   );
 }
 
@@ -134,13 +136,11 @@ function ClassicDetails(props: LayoutProps) {
         </div>
       </section>
 
-      <section className="grid gap-6 xl:grid-cols-[1fr_0.94fr]">
-        <DescriptionSection richText={props.product.richText} />
-        <RelatedProductsSection
-          title={props.relatedTitle}
-          products={props.relatedProducts}
-        />
-      </section>
+      <DescriptionSection richText={props.product.richText} />
+      <RelatedProductsSection
+        title={props.relatedTitle}
+        products={props.relatedProducts}
+      />
     </div>
   );
 }
@@ -213,39 +213,41 @@ function GalleryFirstDetails(props: LayoutProps) {
         </div>
         <div className="space-y-4 xl:sticky xl:top-24 xl:self-start">
           <PurchasePanel {...props} />
-          <RelatedProductsSection
-            title={props.relatedTitle}
-            products={props.relatedProducts}
-            compact
-          />
         </div>
       </section>
+
+      <RelatedProductsSection
+        title={props.relatedTitle}
+        products={props.relatedProducts}
+      />
     </div>
   );
 }
 
 function BuyPanelDetails(props: LayoutProps) {
   return (
-    <section className="grid gap-6 xl:grid-cols-[1.18fr_0.82fr] xl:gap-8">
-      <div className="space-y-6">
-        <HeaderCluster {...props} showCategoryLinks highlightSummary />
-        <ProductImageGallery
-          images={props.gallery}
-          title={props.product.title}
-        />
-        <DescriptionSection richText={props.product.richText} />
-      </div>
+    <div className="space-y-8">
+      <section className="grid gap-6 xl:grid-cols-[1.18fr_0.82fr] xl:gap-8">
+        <div className="space-y-6">
+          <HeaderCluster {...props} showCategoryLinks highlightSummary />
+          <ProductImageGallery
+            images={props.gallery}
+            title={props.product.title}
+          />
+          <DescriptionSection richText={props.product.richText} />
+        </div>
 
-      <div className="space-y-4 xl:sticky xl:top-24 xl:self-start">
-        <PurchasePanel {...props} emphasis="order" />
-        <SupportNotes compact />
-        <RelatedProductsSection
-          title={props.relatedTitle}
-          products={props.relatedProducts}
-          compact
-        />
-      </div>
-    </section>
+        <div className="space-y-4 xl:sticky xl:top-24 xl:self-start">
+          <PurchasePanel {...props} emphasis="order" />
+          <SupportNotes compact />
+        </div>
+      </section>
+
+      <RelatedProductsSection
+        title={props.relatedTitle}
+        products={props.relatedProducts}
+      />
+    </div>
   );
 }
 
@@ -382,26 +384,28 @@ function SpecSheetDetails(props: LayoutProps) {
 
 function MediaRailDetails(props: LayoutProps) {
   return (
-    <section className="grid gap-6 xl:grid-cols-[1.24fr_0.76fr] xl:gap-8">
-      <div className="space-y-6">
-        <HeaderCluster {...props} showCategoryLinks />
-        <ProductImageGallery
-          images={props.gallery}
-          title={props.product.title}
-        />
-        <DescriptionSection richText={props.product.richText} />
-      </div>
+    <div className="space-y-8">
+      <section className="grid gap-6 xl:grid-cols-[1.24fr_0.76fr] xl:gap-8">
+        <div className="space-y-6">
+          <HeaderCluster {...props} showCategoryLinks />
+          <ProductImageGallery
+            images={props.gallery}
+            title={props.product.title}
+          />
+          <DescriptionSection richText={props.product.richText} />
+        </div>
 
-      <div className="space-y-4 xl:sticky xl:top-24 xl:self-start">
-        <PurchasePanel {...props} emphasis="summary" />
-        <SupportNotes compact />
-        <RelatedProductsSection
-          title={props.relatedTitle}
-          products={props.relatedProducts}
-          compact
-        />
-      </div>
-    </section>
+        <div className="space-y-4 xl:sticky xl:top-24 xl:self-start">
+          <PurchasePanel {...props} emphasis="summary" />
+          <SupportNotes compact />
+        </div>
+      </section>
+
+      <RelatedProductsSection
+        title={props.relatedTitle}
+        products={props.relatedProducts}
+      />
+    </div>
   );
 }
 
@@ -432,26 +436,28 @@ function BriefingDetails(props: LayoutProps) {
 
 function ShowroomDetails(props: LayoutProps) {
   return (
-    <section className="grid gap-6 xl:grid-cols-[1.12fr_0.88fr] xl:gap-8">
-      <div className="space-y-6">
-        <ProductImageGallery
-          images={props.gallery}
-          title={props.product.title}
-        />
-        <DescriptionSection richText={props.product.richText} />
-      </div>
+    <div className="space-y-8">
+      <section className="grid gap-6 xl:grid-cols-[1.12fr_0.88fr] xl:gap-8">
+        <div className="space-y-6">
+          <ProductImageGallery
+            images={props.gallery}
+            title={props.product.title}
+          />
+          <DescriptionSection richText={props.product.richText} />
+        </div>
 
-      <div className="space-y-4 xl:sticky xl:top-24 xl:self-start">
-        <HeaderCluster {...props} showCategoryLinks highlightSummary />
-        <PurchasePanel {...props} emphasis="order" />
-        <SupportStrip />
-        <RelatedProductsSection
-          title={props.relatedTitle}
-          products={props.relatedProducts}
-          compact
-        />
-      </div>
-    </section>
+        <div className="space-y-4 xl:sticky xl:top-24 xl:self-start">
+          <HeaderCluster {...props} showCategoryLinks highlightSummary />
+          <PurchasePanel {...props} emphasis="order" />
+          <SupportStrip />
+        </div>
+      </section>
+
+      <RelatedProductsSection
+        title={props.relatedTitle}
+        products={props.relatedProducts}
+      />
+    </div>
   );
 }
 
@@ -473,13 +479,13 @@ function RetailSuiteDetails(props: LayoutProps) {
         <div className="space-y-4 xl:sticky xl:top-24 xl:self-start">
           <PurchasePanel {...props} emphasis="order" />
           <SupportNotes compact />
-          <RelatedProductsSection
-            title={props.relatedTitle}
-            products={props.relatedProducts}
-            compact
-          />
         </div>
       </section>
+
+      <RelatedProductsSection
+        title={props.relatedTitle}
+        products={props.relatedProducts}
+      />
     </div>
   );
 }
@@ -521,44 +527,45 @@ function GalleryStackDetails(props: LayoutProps) {
 
       <ProductImageGallery images={props.gallery} title={props.product.title} />
 
-      <section className="grid gap-6 xl:grid-cols-[1fr_0.94fr]">
-        <DescriptionSection richText={props.product.richText} />
-        <RelatedProductsSection
-          title={props.relatedTitle}
-          products={props.relatedProducts}
-        />
-      </section>
+      <DescriptionSection richText={props.product.richText} />
+      <RelatedProductsSection
+        title={props.relatedTitle}
+        products={props.relatedProducts}
+      />
     </div>
   );
 }
 
 function MerchantBriefDetails(props: LayoutProps) {
   return (
-    <section className="grid gap-6 xl:grid-cols-[0.84fr_1.16fr] xl:gap-8">
-      <div className="space-y-4 xl:sticky xl:top-24 xl:self-start">
-        <HeaderCluster {...props} showCategoryLinks />
+    <div className="space-y-8">
+      <section className="grid gap-6 xl:grid-cols-[0.84fr_1.16fr] xl:gap-8">
+        <div className="space-y-4 xl:sticky xl:top-24 xl:self-start">
+          <HeaderCluster {...props} showCategoryLinks />
 
-        <section className="rounded-[28px] bg-surface-container-lowest p-5 sm:p-6">
-          <ProductDetailsActions product={props.actionProduct} />
-          <div className="mt-5">
-            <InlineRichDescription richText={props.product.richText} />
-          </div>
-        </section>
+          <section className="rounded-[28px] bg-surface-container-lowest p-5 sm:p-6">
+            <ProductDetailsActions product={props.actionProduct} />
+            <div className="mt-5">
+              <InlineRichDescription richText={props.product.richText} />
+            </div>
+          </section>
 
-        <SupportNotes compact />
-      </div>
+          <SupportNotes compact />
+        </div>
 
-      <div className="space-y-6">
-        <ProductImageGallery
-          images={props.gallery}
-          title={props.product.title}
-        />
-        <RelatedProductsSection
-          title={props.relatedTitle}
-          products={props.relatedProducts}
-        />
-      </div>
-    </section>
+        <div className="space-y-6">
+          <ProductImageGallery
+            images={props.gallery}
+            title={props.product.title}
+          />
+        </div>
+      </section>
+
+      <RelatedProductsSection
+        title={props.relatedTitle}
+        products={props.relatedProducts}
+      />
+    </div>
   );
 }
 
@@ -670,13 +677,13 @@ function TechFocusDetails(props: LayoutProps) {
           <HeaderCluster {...props} showCategoryLinks emphasis="tech" />
           <PurchasePanel {...props} emphasis="tech" />
           <SupportNotes compact />
-          <RelatedProductsSection
-            title={props.relatedTitle}
-            products={props.relatedProducts}
-            compact
-          />
         </div>
       </section>
+
+      <RelatedProductsSection
+        title={props.relatedTitle}
+        products={props.relatedProducts}
+      />
     </div>
   );
 }

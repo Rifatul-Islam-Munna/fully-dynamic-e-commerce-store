@@ -90,20 +90,20 @@ export function SearchDialog() {
       <button
         type="button"
         onClick={openDialog}
-        className="inline-flex h-9 items-center gap-2 rounded-full bg-surface-container-low px-3 text-sm text-on-surface-variant transition-colors hover:bg-surface-container/50 hover:text-on-surface"
+        className="inline-flex h-10 items-center gap-2 rounded-full border border-border/60 bg-white/72 px-3 text-sm text-on-surface-variant shadow-[0_14px_36px_-28px_rgba(15,23,42,0.35)] transition-colors hover:bg-white hover:text-on-surface"
         aria-label="Open search dialog"
       >
         <Search className="size-4" />
-        <span className="hidden font-body text-xs tracking-wide sm:inline">Search</span>
-        <kbd className="ml-1 hidden rounded-full bg-surface px-1.5 py-0.5 text-[10px] font-medium text-on-surface-variant sm:inline">
+        <span className="hidden font-body text-[11px] font-semibold uppercase tracking-[0.18em] md:inline">Search</span>
+        <kbd className="ml-1 hidden rounded-full bg-surface px-1.5 py-0.5 text-[10px] font-medium text-on-surface-variant lg:inline">
           Ctrl K
         </kbd>
       </button>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-[560px] rounded-sm border-0 bg-surface-container-lowest p-0 ">
+        <DialogContent className="max-w-[92vw] rounded-[28px] border border-border/60 bg-surface-container-lowest p-0 sm:max-w-[560px]">
           <DialogHeader className="px-6 py-5">
-            <DialogTitle className="font-headline text-xl font-extrabold tracking-tighter text-primary">
+            <DialogTitle className="font-headline text-2xl font-semibold tracking-tight text-primary">
               Search products
             </DialogTitle>
             <DialogDescription className="font-body text-sm text-on-surface-variant">
@@ -118,7 +118,7 @@ export function SearchDialog() {
             }}
             className="space-y-4 px-6 py-5"
           >
-            <div className="flex items-center gap-3 rounded-sm bg-surface-container-low px-3">
+            <div className="flex items-center gap-3 rounded-[22px] border border-border/60 bg-white/72 px-4">
               <Search className="size-4 shrink-0 text-on-surface-variant" />
               <Input
                 ref={inputRef}
@@ -134,13 +134,13 @@ export function SearchDialog() {
               <Button
                 type="button"
                 variant="outline"
-                className="rounded-full px-5 font-headline text-[10px] font-bold uppercase tracking-widest"
+                className="rounded-full px-5 font-body text-[10px] font-semibold uppercase tracking-[0.18em]"
                 onClick={() => navigateToSearch("")}
                 disabled={isPending}
               >
                 Browse all
               </Button>
-              <Button type="submit" className="rounded-full px-5 font-headline text-[10px] font-bold uppercase tracking-widest shadow-none" disabled={isPending}>
+              <Button type="submit" className="rounded-full px-5 font-body text-[10px] font-semibold uppercase tracking-[0.18em] shadow-none" disabled={isPending}>
                 {isPending ? <Loader2 className="size-4 animate-spin" /> : null}
                 Search
               </Button>

@@ -18,7 +18,7 @@ export default function PublicGroupLayout({
       <Suspense fallback={<NavbarSkeleton />}>
         <Navbar />
       </Suspense>
-      <div className="pt-[88px]">
+      <div className="pt-[96px] sm:pt-[104px]">
         {children}
       </div>
       <Suspense fallback={<FooterSkeleton />}>

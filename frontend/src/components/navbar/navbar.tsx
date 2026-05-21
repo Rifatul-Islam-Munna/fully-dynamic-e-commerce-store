@@ -60,23 +60,22 @@ export async function Navbar({
   const brandLogo = normalizeBrandValue(siteBrand?.logoUrl);
 
   return (
-    <header className="fixed top-0 z-50 w-full bg-[#f9f9f9]/80 backdrop-blur-md">
-      <div className="mx-auto flex w-full items-center justify-between px-8 py-6">
-        {/* Left: Brand + Nav */}
-        <div className="flex items-center gap-12">
+    <header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-5 sm:pt-4">
+      <div className="storefront-panel mx-auto flex w-full max-w-[1500px] items-center justify-between rounded-[24px] px-3 py-3 sm:rounded-[28px] sm:px-5 sm:py-4 lg:px-8">
+        <div className="min-w-0 flex items-center gap-3 sm:gap-6 lg:gap-12">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 transition-opacity duration-300 ease-out hover:opacity-80"
+            className="inline-flex min-w-0 items-center gap-2.5 transition-opacity duration-300 ease-out hover:opacity-80"
           >
             {brandLogo ? (
               // eslint-disable-next-line @next/next/no-img-element -- Admin-configured logo can come from any external domain.
               <img
                 src={brandLogo}
                 alt={brandTitle}
-                className="h-8 w-auto max-w-28 object-contain"
+                className="h-8 w-auto max-w-24 object-contain sm:h-9 sm:max-w-32"
               />
             ) : (
-              <span className="text-2xl font-black tracking-tighter text-[#001819]">
+              <span className="truncate font-headline text-[1.15rem] font-semibold tracking-[0.16em] text-[#111827] uppercase sm:text-[1.55rem] lg:text-[1.8rem]">
                 {brandTitle}
               </span>
             )}
@@ -84,8 +83,7 @@ export async function Navbar({
           <NavbarDesktop items={items} />
         </div>
 
-        {/* Right: Search + Cart + Auth + Mobile Menu */}
-        <div className="flex items-center gap-6">
+        <div className="shrink-0 flex items-center gap-1.5 sm:gap-2 lg:gap-4">
           <SearchDialog />
           <CartSheet />
           <div className="hidden md:flex">

@@ -88,7 +88,7 @@ export function CartSheet() {
         variant="ghost"
         size="icon"
         onClick={openCart}
-        className="relative size-10 rounded-full text-[#001819] transition-all duration-300 hover:bg-[#eeeeee]"
+        className="relative size-10 rounded-full border border-border/60 bg-white/72 text-[#001819] shadow-[0_14px_36px_-28px_rgba(15,23,42,0.4)] transition-all duration-300 hover:bg-white"
       >
         <ShoppingBag className="size-[18px]" />
         {totals.quantity > 0 ? (
@@ -102,9 +102,9 @@ export function CartSheet() {
         open={isOpen}
         onOpenChange={(nextOpen) => (nextOpen ? openCart() : closeCart())}
       >
-        <SheetContent side="right" className="w-full border-l-0 bg-surface-container-low sm:max-w-md">
+        <SheetContent side="right" className="w-full border-l-0 bg-surface-container-low px-0 sm:max-w-md">
           <SheetHeader className="px-6 pb-6 pt-2">
-            <SheetTitle className="font-headline text-2xl font-extrabold tracking-tighter text-on-surface">
+            <SheetTitle className="font-headline text-2xl font-semibold tracking-tight text-on-surface">
               Your Bag
             </SheetTitle>
             <SheetDescription className="font-label text-xs uppercase tracking-widest text-on-surface-variant">
@@ -127,20 +127,20 @@ export function CartSheet() {
                   return (
                     <article
                       key={item.key}
-                      className="group flex gap-4 py-4"
+                      className="group flex gap-3 rounded-[24px] border border-border/50 bg-white/64 p-3 sm:gap-4"
                     >
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={item.thumbnailUrl}
                         alt={item.title}
-                        className="size-20 rounded-sm object-cover transition-transform duration-500 group-hover:scale-105"
+                        className="size-20 rounded-[18px] object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-start justify-between">
                           <div>
                             <Link
                               href={`/product/${encodeURIComponent(item.slug)}`}
-                              className="font-headline text-sm font-bold text-on-surface transition-colors hover:text-on-surface-variant"
+                              className="font-body text-sm font-semibold text-on-surface transition-colors hover:text-on-surface-variant"
                               onClick={closeCart}
                             >
                               {item.title}
@@ -153,7 +153,7 @@ export function CartSheet() {
                             type="button"
                             variant="ghost"
                             size="icon"
-                            className="size-8 text-on-surface-variant transition-colors hover:text-error"
+                            className="size-8 rounded-full text-on-surface-variant transition-colors hover:bg-surface-container hover:text-error"
                             onClick={() => removeItem(item.key)}
                           >
                             <Trash2 className="size-3.5" />
@@ -187,7 +187,7 @@ export function CartSheet() {
                               <Plus className="size-3.5" />
                             </button>
                           </div>
-                          <p className="font-headline text-sm font-bold text-on-surface">
+                          <p className="font-body text-sm font-semibold text-on-surface">
                             {formatCurrency(unit * item.quantity)}
                           </p>
                         </div>
@@ -197,10 +197,10 @@ export function CartSheet() {
                 })}
               </div>
 
-              <div className="bg-surface-container px-6 py-6">
+              <div className="border-t border-border/50 bg-surface-container px-6 py-6">
                 <div className="mb-4 flex items-center justify-between">
                   <span className="font-label text-xs uppercase tracking-widest text-on-surface-variant">Total</span>
-                  <span className="font-headline text-xl font-extrabold text-on-surface">
+                  <span className="font-body text-xl font-semibold text-on-surface">
                     {formatCurrency(totals.total)}
                   </span>
                 </div>

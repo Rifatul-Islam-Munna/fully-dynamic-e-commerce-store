@@ -123,6 +123,12 @@
   --footer-muted: rgba(238, 238, 238, 0.6);
   --footer-border: rgba(255, 255, 255, 0.05);
   --footer-chip: rgba(255, 255, 255, 0.06);
+  --storefront-glow: rgba(15, 23, 42, 0.08);
+  --storefront-glow-strong: rgba(15, 23, 42, 0.14);
+  --storefront-panel: rgba(255, 255, 255, 0.78);
+  --storefront-panel-border: rgba(15, 23, 42, 0.08);
+  --storefront-shadow: 0 28px 80px -52px rgba(15, 23, 42, 0.28);
+  --storefront-shadow-strong: 0 36px 120px -58px rgba(15, 23, 42, 0.34);
 }
 
 .cobalt {
@@ -1048,12 +1054,54 @@
 
   body {
     @apply bg-background text-foreground;
+    background-image:
+      radial-gradient(circle at top, rgba(15, 23, 42, 0.06), transparent 28rem),
+      radial-gradient(circle at 100% 10%, rgba(148, 163, 184, 0.12), transparent 24rem),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(249, 249, 249, 1));
+    font-family: var(--font-body), var(--font-geist-sans), sans-serif;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--primary) 16%, white);
+    color: var(--foreground);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-headline), serif;
+    letter-spacing: -0.03em;
   }
 }
 
 /* ── ATELIER Utility Classes ── */
 .hide-scrollbar::-webkit-scrollbar { display: none; }
 .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.storefront-panel {
+  background: color-mix(in srgb, var(--storefront-panel) 100%, transparent);
+  border: 1px solid var(--storefront-panel-border);
+  box-shadow: var(--storefront-shadow);
+  backdrop-filter: blur(18px);
+}
+
+.storefront-panel-strong {
+  background: color-mix(in srgb, white 88%, transparent);
+  border: 1px solid color-mix(in srgb, var(--border) 74%, transparent);
+  box-shadow: var(--storefront-shadow-strong);
+  backdrop-filter: blur(22px);
+}
+
+.storefront-section-frame {
+  border: 1px solid color-mix(in srgb, var(--border) 68%, transparent);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.82)),
+    radial-gradient(circle at top left, rgba(15, 23, 42, 0.03), transparent 18rem);
+  box-shadow: var(--storefront-shadow);
+}
 
 @layer components {
   .tiptap-content ul,

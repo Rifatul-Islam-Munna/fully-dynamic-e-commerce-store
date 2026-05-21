@@ -42,12 +42,12 @@ export function NavbarAuth() {
 
   if (isAuthenticated) {
     return (
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-1.5">
         <Button
           asChild
           variant="ghost"
           size="icon"
-          className="size-10 rounded-full text-[#001819] transition-all duration-300 hover:bg-[#eeeeee]"
+          className="size-10 rounded-full border border-border/60 bg-white/72 text-[#001819] shadow-[0_14px_36px_-28px_rgba(15,23,42,0.4)] transition-all duration-300 hover:bg-white"
         >
           <Link href={userRole === "admin" ? "/admin" : "/profile"} aria-label={userRole === "admin" ? "Admin Panel" : "Profile"}>
             <User className="size-4.5" />
@@ -56,7 +56,7 @@ export function NavbarAuth() {
         <Button
           variant="ghost"
           size="icon"
-          className="size-10 rounded-full text-[#001819] transition-all duration-300 hover:bg-[#eeeeee]"
+          className="size-10 rounded-full border border-border/60 bg-white/72 text-[#001819] shadow-[0_14px_36px_-28px_rgba(15,23,42,0.4)] transition-all duration-300 hover:bg-white"
           onClick={async () => {
             await logOutUser();
             window.dispatchEvent(new Event("auth-change"));
@@ -75,13 +75,13 @@ export function NavbarAuth() {
       <Button
         asChild
         variant="ghost"
-        className="h-9 rounded-full px-4 font-headline text-xs font-bold uppercase tracking-widest text-on-surface-variant hover:bg-surface-container hover:text-primary transition-colors"
+        className="h-10 rounded-full border border-border/60 bg-white/72 px-4 font-body text-[10px] font-semibold uppercase tracking-[0.18em] text-on-surface-variant shadow-[0_14px_36px_-28px_rgba(15,23,42,0.35)] transition-colors hover:bg-white hover:text-primary"
       >
         <Link href="/login">Sign In</Link>
       </Button>
       <Button
         asChild
-        className="h-9 rounded-full bg-primary px-5 font-label text-xs font-bold uppercase tracking-widest text-on-primary hover:opacity-90 transition-opacity"
+        className="h-10 rounded-full bg-primary px-5 font-body text-[10px] font-semibold uppercase tracking-[0.18em] text-on-primary hover:opacity-90 transition-opacity"
       >
         <Link href="/signup">Join</Link>
       </Button>

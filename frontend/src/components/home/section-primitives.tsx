@@ -130,8 +130,8 @@ export function SectionHeading({
     <div className="space-y-3">
       <h2
         className={cn(
-          "font-headline font-extrabold tracking-tighter",
-          compact ? "text-2xl sm:text-3xl" : "text-3xl sm:text-4xl lg:text-5xl",
+          "font-headline font-semibold leading-[0.94] tracking-tight",
+          compact ? "text-[2rem] sm:text-[2.4rem]" : "text-[2.5rem] sm:text-[3.6rem] lg:text-[4.6rem]",
           inverse ? "text-white" : "text-primary",
         )}
       >
@@ -141,7 +141,7 @@ export function SectionHeading({
         <p
           className={cn(
             "max-w-2xl font-body leading-relaxed",
-            compact ? "text-xs sm:text-sm" : "text-sm sm:text-base",
+            compact ? "text-sm sm:text-[0.95rem]" : "text-[0.98rem] sm:text-lg",
             inverse ? "text-white/60" : "text-on-surface-variant",
           )}
         >
@@ -171,7 +171,7 @@ export function SectionCta({
       variant={inverse ? "secondary" : "default"}
       className={cn(
         "h-12 rounded-full px-8 font-headline text-xs font-bold uppercase tracking-widest shadow-none transition-all duration-300",
-        inverse ? "bg-white text-primary hover:bg-white/90" : "bg-primary text-on-primary hover:opacity-90",
+        inverse ? "bg-white text-primary hover:bg-white/92" : "bg-primary text-on-primary hover:opacity-92",
       )}
     >
       <Link href={href} className="inline-flex items-center gap-2">
@@ -205,10 +205,10 @@ export function SectionTagRow({
         <span
           key={`${item}-${index}`}
           className={cn(
-            "rounded-full px-4 py-2 font-body text-[10px] font-semibold uppercase tracking-widest",
+            "rounded-full px-4 py-2 font-body text-[10px] font-semibold uppercase tracking-[0.18em]",
             inverse
               ? "bg-white/10 text-white/70"
-              : "bg-surface-container text-on-surface-variant",
+              : "bg-white/78 text-on-surface-variant shadow-[0_14px_32px_-26px_rgba(15,23,42,0.2)]",
           )}
         >
           {item}
@@ -234,10 +234,10 @@ export function DetailTile({
   return (
     <div
       className={cn(
-        "rounded-sm p-5",
+        "rounded-[26px] p-5 shadow-[0_24px_60px_-42px_rgba(15,23,42,0.2)]",
         inverse
           ? "bg-white/5 text-white"
-          : "bg-surface-container text-on-surface",
+          : "bg-white/82 text-on-surface",
         className,
       )}
     >

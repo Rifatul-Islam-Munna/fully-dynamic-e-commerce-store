@@ -272,7 +272,7 @@ export function CheckoutPageShell({
   }
 
   return (
-    <main className="mx-auto max-w-6xl px-4 py-6 pb-12 sm:px-6 sm:py-8 lg:px-8">
+    <main className="mx-auto max-w-6xl px-4 py-8 pb-14 sm:px-6 sm:py-10 lg:px-8">
       <CheckoutBackLink
         onResetNavigation={handleResetNavigation}
       />
