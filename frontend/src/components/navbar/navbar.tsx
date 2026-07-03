@@ -1,1 +1,1 @@
-export { Navbar } from "./_staged-navbar";
+export { Navbar } from "./professional-navbar";
