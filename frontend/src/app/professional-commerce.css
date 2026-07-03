@@ -1,0 +1,121 @@
+:root {
+  --commerce-max-width: 1480px;
+  --commerce-content-width: 1280px;
+  --commerce-header-height: 72px;
+  --commerce-gutter: clamp(1rem, 2.6vw, 2.5rem);
+  --commerce-section-space: clamp(3rem, 7vw, 7rem);
+  --commerce-border: color-mix(in srgb, var(--foreground) 13%, transparent);
+  --commerce-border-strong: color-mix(in srgb, var(--foreground) 22%, transparent);
+  --commerce-soft: color-mix(in srgb, var(--foreground) 4%, var(--background));
+  --commerce-focus: color-mix(in srgb, var(--primary) 34%, transparent);
+}
+
+body {
+  min-width: 320px;
+  background: var(--background);
+  color: var(--foreground);
+  text-rendering: optimizeLegibility;
+}
+
+.storefront-root,
+.admin-root,
+.account-root {
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.storefront-root *,
+.admin-root *,
+.account-root * {
+  box-shadow: none !important;
+}
+
+.commerce-container {
+  width: min(100%, var(--commerce-max-width));
+  margin-inline: auto;
+  padding-inline: var(--commerce-gutter);
+}
+
+.commerce-content {
+  width: min(100%, var(--commerce-content-width));
+  margin-inline: auto;
+  padding-inline: var(--commerce-gutter);
+}
+
+.commerce-section {
+  padding-block: var(--commerce-section-space);
+}
+
+.commerce-panel {
+  border: 1px solid var(--commerce-border);
+  background: var(--card);
+}
+
+.commerce-panel-muted {
+  border: 1px solid var(--commerce-border);
+  background: var(--commerce-soft);
+}
+
+.commerce-eyebrow {
+  font-family: var(--font-body), sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+
+.commerce-heading {
+  font-family: var(--font-headline), var(--font-body), sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.02;
+  text-wrap: balance;
+}
+
+.commerce-copy {
+  font-family: var(--font-body), sans-serif;
+  line-height: 1.75;
+  color: var(--muted-foreground);
+}
+
+.commerce-interactive {
+  transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease, opacity 180ms ease, transform 180ms ease;
+}
+
+.commerce-interactive:hover {
+  border-color: var(--commerce-border-strong);
+}
+
+.commerce-interactive:focus-visible {
+  outline: 3px solid var(--commerce-focus);
+  outline-offset: 2px;
+}
+
+.commerce-media {
+  overflow: hidden;
+  background: var(--commerce-soft);
+}
+
+.commerce-media img {
+  transition: transform 420ms cubic-bezier(0.2, 0.65, 0.3, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .commerce-media:hover img,
+  .group:hover .commerce-media img {
+    transform: scale(1.025);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
