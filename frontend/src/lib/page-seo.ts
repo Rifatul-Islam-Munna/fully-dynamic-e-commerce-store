@@ -19,7 +19,17 @@ export type PageSeoSetting = {
 
 export function normalizeSeoPath(value?: string | null) {
   const trimmed = value?.trim() || "/";
-  const path = trimmed.split(/[?#]/, 1)[0] || "/";
+  let rawPath = trimmed;
+
+  if (/^https?:\/\//i.test(trimmed)) {
+    try {
+      rawPath = new URL(trimmed).pathname;
+    } catch {
+      rawPath = "/";
+    }
+  }
+
+  const path = rawPath.split(/[?#]/, 1)[0] || "/";
   const withLeadingSlash = path.startsWith("/") ? path : `/${path}`;
   const normalized = withLeadingSlash.replace(/\/{2,}/g, "/");
   return normalized.length > 1 ? normalized.replace(/\/+$/, "") : normalized;
