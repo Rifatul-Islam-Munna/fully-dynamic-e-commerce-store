@@ -7,7 +7,12 @@
   --commerce-border: color-mix(in srgb, var(--foreground) 13%, transparent);
   --commerce-border-strong: color-mix(in srgb, var(--foreground) 22%, transparent);
   --commerce-soft: color-mix(in srgb, var(--foreground) 4%, var(--background));
+  --commerce-soft-strong: color-mix(in srgb, var(--foreground) 7%, var(--background));
   --commerce-focus: color-mix(in srgb, var(--primary) 34%, transparent);
+}
+
+html {
+  scroll-padding-top: calc(var(--commerce-header-height) + 1rem);
 }
 
 body {
@@ -17,6 +22,7 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+.commerce-root,
 .storefront-root,
 .admin-root,
 .account-root {
@@ -25,10 +31,17 @@ body {
   color: var(--foreground);
 }
 
+.commerce-root *,
 .storefront-root *,
 .admin-root *,
 .account-root * {
   box-shadow: none !important;
+}
+
+.commerce-root header:has(> .commerce-container) {
+  position: fixed !important;
+  inset-inline: 0;
+  top: 0;
 }
 
 .commerce-container {
@@ -55,6 +68,10 @@ body {
 .commerce-panel-muted {
   border: 1px solid var(--commerce-border);
   background: var(--commerce-soft);
+}
+
+.commerce-divider {
+  border-color: var(--commerce-border);
 }
 
 .commerce-eyebrow {
@@ -110,12 +127,31 @@ body {
   }
 }
 
+.commerce-scrollbar-hidden {
+  scrollbar-width: none;
+}
+
+.commerce-scrollbar-hidden::-webkit-scrollbar {
+  display: none;
+}
+
+.storefront-panel {
+  border: 1px solid var(--commerce-border) !important;
+  background: color-mix(in srgb, var(--background) 94%, transparent) !important;
+  backdrop-filter: blur(18px);
+}
+
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
   *,
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
   }
 }
