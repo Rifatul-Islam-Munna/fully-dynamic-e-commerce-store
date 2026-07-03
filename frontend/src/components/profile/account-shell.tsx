@@ -25,87 +25,66 @@ export function AccountShell({
   const initials = getInitials(profile);
 
   return (
-    <main className="mx-auto max-w-7xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
-      {/* ── Profile header ── */}
-      <section className="rounded-2xl border border-border/60 bg-linear-to-br from-primary/4 via-background to-primary/2 p-4 sm:rounded-3xl sm:p-5">
-        <div className="flex items-center gap-3 sm:gap-4">
+    <main className="account-root commerce-content py-6 sm:py-10">
+      <section className="commerce-panel grid gap-6 p-5 sm:p-7 lg:grid-cols-[1fr_auto] lg:items-center">
+        <div className="flex min-w-0 items-center gap-4">
           {profile.avatarUrl?.trim() ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
               src={profile.avatarUrl}
               alt={fullName || "User avatar"}
-              className="size-12 rounded-2xl object-cover shadow-sm sm:size-14"
+              className="size-14 border border-border object-cover sm:size-16"
             />
           ) : (
-            <div className="flex size-12 items-center justify-center rounded-2xl bg-primary text-base font-semibold text-on-primary shadow-sm sm:size-14 sm:text-lg">
+            <div className="flex size-14 items-center justify-center bg-primary text-lg font-semibold text-primary-foreground sm:size-16">
               {initials || "U"}
             </div>
           )}
-          <div className="min-w-0 flex-1">
-            <h1 className="truncate text-lg font-semibold tracking-tight text-on-surface sm:text-xl">
+          <div className="min-w-0">
+            <p className="commerce-eyebrow">Customer account</p>
+            <h1 className="mt-1 truncate text-xl font-semibold tracking-tight sm:text-2xl">
               {fullName || "My Account"}
             </h1>
-            <p className="mt-0.5 truncate text-sm text-on-surface-variant">
-              {profile.email}
-            </p>
+            <p className="mt-1 truncate text-sm text-muted-foreground">{profile.email}</p>
           </div>
-          <div className="hidden flex-wrap items-center gap-1.5 sm:flex">
-            <Badge
-              variant="secondary"
-              className="rounded-full px-2.5 py-1 text-[11px]"
-            >
-              {profile.status}
-            </Badge>
-            <Badge
-              variant="outline"
-              className="rounded-full px-2.5 py-1 text-[11px]"
-            >
-              Since {formatMemberSince(profile.createdAt)}
-            </Badge>
-          </div>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <Badge variant="secondary" className="rounded-sm px-3 py-1 capitalize">
+            {profile.status}
+          </Badge>
+          <Badge variant="outline" className="rounded-sm px-3 py-1">
+            Member since {formatMemberSince(profile.createdAt)}
+          </Badge>
         </div>
       </section>
 
-      {/* ── Mobile nav tabs ── */}
-      <div className="mt-3 lg:hidden">
+      <div className="mt-5 lg:hidden">
         <AccountNav />
       </div>
 
-      {/* ── Content layout ── */}
-      <div className="mt-4 grid gap-5 lg:mt-6 lg:grid-cols-[220px_minmax(0,1fr)]">
-        {/* Desktop sidebar */}
+      <div className="mt-6 grid gap-6 lg:grid-cols-[240px_minmax(0,1fr)]">
         <aside className="hidden lg:block">
-          <div className="sticky top-6 space-y-4">
-            <div className="rounded-xl border border-border/60 bg-surface p-4 shadow-sm">
-              <p className="text-xs font-medium uppercase tracking-widest text-on-surface-variant">
-                Account
-              </p>
-              <div className="mt-3 space-y-1.5 border-t border-border/60 pt-3">
-                <div>
-                  <p className="text-xs text-on-surface-variant">Phone</p>
-                  <p className="mt-0.5 text-sm text-on-surface">
-                    {profile.phoneNumber?.trim() || "Not added"}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-xs text-on-surface-variant">Role</p>
-                  <p className="mt-0.5 text-sm capitalize text-on-surface">
-                    {profile.role}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-xs text-on-surface-variant">Email</p>
-                  <p className="mt-0.5 text-sm text-on-surface">
-                    {profile.isEmailVerified ? "✓ Verified" : "Not verified"}
-                  </p>
-                </div>
-              </div>
-            </div>
+          <div className="sticky top-28 space-y-4">
             <AccountNav />
+            <div className="commerce-panel-muted p-4">
+              <p className="commerce-eyebrow">Account details</p>
+              <dl className="mt-4 space-y-3 text-sm">
+                <div>
+                  <dt className="text-xs text-muted-foreground">Phone</dt>
+                  <dd className="mt-0.5 font-medium">{profile.phoneNumber?.trim() || "Not added"}</dd>
+                </div>
+                <div>
+                  <dt className="text-xs text-muted-foreground">Role</dt>
+                  <dd className="mt-0.5 font-medium capitalize">{profile.role}</dd>
+                </div>
+                <div>
+                  <dt className="text-xs text-muted-foreground">Email status</dt>
+                  <dd className="mt-0.5 font-medium">{profile.isEmailVerified ? "Verified" : "Not verified"}</dd>
+                </div>
+              </dl>
+            </div>
           </div>
         </aside>
-
-        {/* Main content */}
         <div className="min-w-0">{children}</div>
       </div>
     </main>
