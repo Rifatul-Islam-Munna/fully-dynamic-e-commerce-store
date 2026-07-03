@@ -39,7 +39,6 @@ export function useCommonMutationApi<TData = unknown, TVariables = unknown>(
 ) {
   const { url, method, mutationKey, successMessage, onSuccess, onError } = config
 
-  // Select the right function based on method
   const getMutationFn = () => {
     switch (method) {
       case 'POST':
@@ -49,7 +48,10 @@ export function useCommonMutationApi<TData = unknown, TVariables = unknown>(
         }
       case 'PATCH':
         return async (data: TVariables) => {
-          const [response, error] = await PatchRequestAxios<TData>(url, data)
+          const [response, error] = await PatchRequestAxios<TData>(
+            url,
+            data as unknown as TData,
+          )
           return { data: response, error }
         }
       case 'DELETE':
@@ -87,7 +89,7 @@ export function useCommonMutationApi<TData = unknown, TVariables = unknown>(
         title: "Something went wrong",
         description: data?.error?.message || "Unknown error",
       })
-      onError?.( {
+      onError?.({
         message: data?.error?.message || "Unknown error"
       } as Error)
     },
@@ -100,5 +102,3 @@ export function useCommonMutationApi<TData = unknown, TVariables = unknown>(
     },
   })
 }
-
-
