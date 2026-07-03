@@ -105,12 +105,18 @@ export function SectionEyebrow({
   return (
     <div
       className={cn(
-        "flex flex-wrap items-center gap-3 font-body text-[10px] font-semibold uppercase tracking-[0.2em]",
-        inverse ? "text-white/60" : "text-on-surface-variant",
+        "flex flex-wrap items-center gap-3 font-body text-[10px] font-bold uppercase tracking-[0.18em]",
+        inverse ? "text-white/70" : "text-muted-foreground",
       )}
     >
+      <span className={cn("h-px w-7", inverse ? "bg-white/45" : "bg-primary")} />
       <span>{label}</span>
-      {secondary ? <span className="opacity-60">{secondary}</span> : null}
+      {secondary ? (
+        <>
+          <span className={cn("size-1", inverse ? "bg-white/45" : "bg-border")} />
+          <span className="opacity-70">{secondary}</span>
+        </>
+      ) : null}
     </div>
   );
 }
@@ -130,9 +136,11 @@ export function SectionHeading({
     <div className="space-y-3">
       <h2
         className={cn(
-          "font-headline font-semibold leading-[0.94] tracking-tight",
-          compact ? "text-[2rem] sm:text-[2.4rem]" : "text-[2.5rem] sm:text-[3.6rem] lg:text-[4.6rem]",
-          inverse ? "text-white" : "text-primary",
+          "commerce-heading",
+          compact
+            ? "text-3xl sm:text-4xl"
+            : "text-4xl sm:text-5xl lg:text-6xl",
+          inverse ? "text-white" : "text-foreground",
         )}
       >
         {title}
@@ -140,9 +148,9 @@ export function SectionHeading({
       {copy ? (
         <p
           className={cn(
-            "max-w-2xl font-body leading-relaxed",
-            compact ? "text-sm sm:text-[0.95rem]" : "text-[0.98rem] sm:text-lg",
-            inverse ? "text-white/60" : "text-on-surface-variant",
+            "max-w-2xl font-body leading-7",
+            compact ? "text-sm" : "text-base sm:text-lg",
+            inverse ? "text-white/70" : "text-muted-foreground",
           )}
         >
           {copy}
@@ -161,20 +169,20 @@ export function SectionCta({
   label?: string;
   inverse?: boolean;
 }) {
-  if (!href?.trim()) {
-    return null;
-  }
+  if (!href?.trim()) return null;
 
   return (
     <Button
       asChild
       variant={inverse ? "secondary" : "default"}
       className={cn(
-        "h-12 rounded-full px-8 font-headline text-xs font-bold uppercase tracking-widest shadow-none transition-all duration-300",
-        inverse ? "bg-white text-primary hover:bg-white/92" : "bg-primary text-on-primary hover:opacity-92",
+        "commerce-interactive h-11 rounded-sm border px-6 font-body text-[11px] font-bold uppercase tracking-[0.13em]",
+        inverse
+          ? "border-white bg-white text-black hover:bg-white/90"
+          : "border-primary bg-primary text-primary-foreground",
       )}
     >
-      <Link href={href} className="inline-flex items-center gap-2">
+      <Link href={href} className="inline-flex items-center gap-2.5">
         <span>{label?.trim() || "Explore"}</span>
         <ArrowRight className="size-4" />
       </Link>
@@ -195,9 +203,7 @@ export function SectionTagRow({
     .map((item) => item?.trim())
     .filter((item): item is string => Boolean(item));
 
-  if (filtered.length === 0) {
-    return null;
-  }
+  if (filtered.length === 0) return null;
 
   return (
     <div className={cn("flex flex-wrap items-center gap-2", className)}>
@@ -205,10 +211,10 @@ export function SectionTagRow({
         <span
           key={`${item}-${index}`}
           className={cn(
-            "rounded-full px-4 py-2 font-body text-[10px] font-semibold uppercase tracking-[0.18em]",
+            "border px-3 py-1.5 font-body text-[10px] font-bold uppercase tracking-[0.14em]",
             inverse
-              ? "bg-white/10 text-white/70"
-              : "bg-white/78 text-on-surface-variant shadow-[0_14px_32px_-26px_rgba(15,23,42,0.2)]",
+              ? "border-white/25 bg-black/15 text-white/75"
+              : "border-border bg-background text-muted-foreground",
           )}
         >
           {item}
@@ -234,35 +240,30 @@ export function DetailTile({
   return (
     <div
       className={cn(
-        "rounded-[26px] p-5 shadow-[0_24px_60px_-42px_rgba(15,23,42,0.2)]",
+        "border p-5",
         inverse
-          ? "bg-white/5 text-white"
-          : "bg-white/82 text-on-surface",
+          ? "border-white/20 bg-black/15 text-white"
+          : "border-border bg-card text-foreground",
         className,
       )}
     >
       <div className="flex items-start gap-4">
         <div
           className={cn(
-            "flex size-10 items-center justify-center rounded-full",
-            inverse ? "bg-white/10 text-white" : "bg-primary/10 text-primary",
+            "flex size-10 shrink-0 items-center justify-center border",
+            inverse
+              ? "border-white/25 text-white"
+              : "border-border bg-muted/35 text-primary",
           )}
         >
           <Icon className="size-4" />
         </div>
         <div className="space-y-1.5">
+          <p className="font-body text-sm font-semibold">{title}</p>
           <p
             className={cn(
-              "font-headline text-sm font-bold",
-              inverse ? "text-white" : "text-primary",
-            )}
-          >
-            {title}
-          </p>
-          <p
-            className={cn(
-              "font-body text-xs leading-relaxed",
-              inverse ? "text-white/60" : "text-on-surface-variant",
+              "font-body text-xs leading-5",
+              inverse ? "text-white/65" : "text-muted-foreground",
             )}
           >
             {text}
@@ -282,8 +283,8 @@ export function ProductGrid({
 }) {
   if (products.length === 0) {
     return (
-      <div className="rounded-sm bg-surface-container px-6 py-12 text-center">
-        <p className="font-body text-sm text-on-surface-variant">
+      <div className="border border-dashed border-border bg-muted/20 px-6 py-16 text-center">
+        <p className="font-body text-sm text-muted-foreground">
           No products found for this section.
         </p>
       </div>
@@ -291,7 +292,12 @@ export function ProductGrid({
   }
 
   return (
-    <div className={cn("grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4", className)}>
+    <div
+      className={cn(
+        "grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 xl:grid-cols-4",
+        className,
+      )}
+    >
       {products.map((product) => (
         <ProductCard key={product.id} product={product} />
       ))}
@@ -310,19 +316,22 @@ export function MediaFrame({
   className?: string;
   frameClassName?: string;
 }) {
-  if (!src?.trim()) {
-    return null;
-  }
+  if (!src?.trim()) return null;
 
   return (
-    <div className={cn("overflow-hidden rounded-sm", frameClassName)}>
+    <div
+      className={cn(
+        "commerce-media overflow-hidden border border-border bg-muted/20",
+        frameClassName,
+      )}
+    >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={src}
         alt={alt}
         loading="lazy"
         decoding="async"
-        className={cn("h-full w-full object-cover transition-transform duration-700 hover:scale-105", className)}
+        className={cn("h-full w-full object-cover", className)}
       />
     </div>
   );
@@ -338,14 +347,14 @@ export function SupportPanel({
   text: string;
 }) {
   return (
-    <div className="rounded-sm bg-primary p-8 text-on-primary">
-      <p className="font-body text-[10px] font-semibold uppercase tracking-[0.2em] text-white/60">
+    <div className="border border-primary bg-primary p-7 text-primary-foreground sm:p-8">
+      <p className="font-body text-[10px] font-bold uppercase tracking-[0.18em] text-primary-foreground/65">
         {label}
       </p>
-      <p className="mt-4 font-headline text-2xl font-extrabold tracking-tighter text-white">
+      <p className="mt-4 font-headline text-3xl font-semibold leading-tight tracking-tight">
         {title}
       </p>
-      <p className="mt-3 font-body text-sm leading-relaxed text-white/60">
+      <p className="mt-3 font-body text-sm leading-6 text-primary-foreground/70">
         {text}
       </p>
     </div>
