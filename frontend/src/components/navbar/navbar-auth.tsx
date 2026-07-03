@@ -1,1 +1,1 @@
-export { NavbarAuth } from "./_staged-navbar-auth.tsx";
+export { NavbarAuth } from "./_staged-navbar-auth";
