@@ -1,1 +1,1 @@
-export { SearchDialog } from "./_staged-search-dialog.tsx";
+export { SearchDialog } from "./_staged-search-dialog";
