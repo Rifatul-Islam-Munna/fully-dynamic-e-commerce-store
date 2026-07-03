@@ -4,37 +4,28 @@ import { cookies } from "next/headers";
 import { AdminSidebar } from "@/components/admin/admin-sidebar";
 
 export const metadata: Metadata = {
-  title: "Admin Dashboard",
-  description: "Manage your store from the admin panel",
+  title: "Store Administration",
+  description: "Manage catalogue, orders, customers, content, and storefront settings.",
 };
 
-export default async function AdminLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  // Server-side role check
+export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const cookieStore = await cookies();
   const userCookie = cookieStore.get("user")?.value;
 
-  if (!userCookie) {
-    redirect("/login");
-  }
+  if (!userCookie) redirect("/login");
 
   try {
     const user = JSON.parse(userCookie);
-    if (user.role !== "admin") {
-      redirect("/");
-    }
+    if (user.role !== "admin") redirect("/");
   } catch {
     redirect("/login");
   }
 
   return (
-    <div className="min-h-screen bg-surface">
+    <div className="admin-root min-h-screen bg-muted/20">
       <AdminSidebar />
-      <main className="min-h-screen transition-all lg:pl-64">
-        <div className="mx-auto max-w-7xl px-4 py-8 pt-16 sm:px-6 lg:px-8 lg:pt-8">
+      <main className="min-h-screen transition-[padding] lg:pl-72">
+        <div className="mx-auto w-full max-w-[1480px] px-4 py-8 pt-20 sm:px-6 lg:px-10 lg:py-10">
           {children}
         </div>
       </main>
