@@ -1,0 +1,31 @@
+name: Repository inventory
+
+on:
+  push:
+    branches:
+      - development
+
+permissions:
+  contents: write
+
+jobs:
+  inventory:
+    if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: development
+      - name: Generate inventory
+        run: |
+          find . -type f -not -path './.git/*' -not -path './repository-tree.txt' | sort > repository-tree.txt
+      - name: Commit inventory
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add repository-tree.txt
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "chore: update repository inventory [skip ci]"
+          git push origin HEAD:development
