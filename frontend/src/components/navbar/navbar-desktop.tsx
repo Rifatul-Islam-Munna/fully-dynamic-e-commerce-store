@@ -1,1 +1,1 @@
-export { NavbarDesktop } from "./_staged-navbar-desktop.tsx";
+export { NavbarDesktop } from "./_staged-navbar-desktop";
