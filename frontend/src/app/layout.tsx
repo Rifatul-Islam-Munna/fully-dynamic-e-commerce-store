@@ -4,6 +4,7 @@ import { Geist, Geist_Mono, Cormorant_Garamond, Manrope } from "next/font/google
 import { Toaster } from "sileo";
 import { GetRequestNormal } from "@/api-hooks/api-hooks";
 import { DynamicGtm } from "@/components/seo/dynamic-gtm";
+import { DynamicJsonLd } from "@/components/seo/dynamic-json-ld";
 import { SiteContactLauncher } from "@/components/site/site-contact-launcher";
 import { getPageSeoSetting, normalizeSeoPath, normalizeSeoText, resolveGtmContainerId } from "@/lib/page-seo";
 import { buildSiteAppearanceSettings } from "@/lib/site-appearance";
@@ -93,6 +94,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   return (
     <html lang="en" className={appearance.siteTheme} suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} ${cormorant.variable} ${manrope.variable} commerce-root antialiased`}>
+        <DynamicJsonLd data={pageSeo?.structuredData} />
         <QueryClint appearance={appearance}>
           {children}
           <Toaster position="top-center" />
