@@ -161,6 +161,7 @@
 ./frontend/src/app/favicon.ico
 ./frontend/src/app/globals.css
 ./frontend/src/app/layout.tsx
+./frontend/src/app/professional-commerce.css
 ./frontend/src/components/admin/admin-sidebar.tsx
 ./frontend/src/components/admin/image-upload-field.tsx
 ./frontend/src/components/admin/order-management-page.tsx
