@@ -31,7 +31,7 @@ https://nextjs.org/telemetry
 ▲ Next.js 16.1.6 (Turbopack)
 
   Creating an optimized production build ...
-✓ Compiled successfully in 8.4s
+✓ Compiled successfully in 9.4s
   Running TypeScript ...
 Failed to compile.
 
