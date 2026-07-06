@@ -1,10 +1,10 @@
-Frontend build status: 1
+Frontend build status: 0
 Backend build status: 0
 
 --- Frontend build tail ---
 npm warn deprecated node-domexception@1.0.0: Use your platform's native DOMException instead
 
-added 845 packages, and audited 846 packages in 19s
+added 845 packages, and audited 846 packages in 16s
 
 279 packages are looking for funding
   run `npm fund` for details
@@ -31,21 +31,58 @@ https://nextjs.org/telemetry
 ▲ Next.js 16.1.6 (Turbopack)
 
   Creating an optimized production build ...
-✓ Compiled successfully in 9.4s
+✓ Compiled successfully in 8.8s
   Running TypeScript ...
-Failed to compile.
+  Collecting page data using 3 workers ...
+  Generating static pages using 3 workers (0/33) ...
+  Generating static pages using 3 workers (8/33) 
+  Generating static pages using 3 workers (16/33) 
+  Generating static pages using 3 workers (24/33) 
+✓ Generating static pages using 3 workers (33/33) in 323.0ms
+  Finalizing page optimization ...
 
-./src/components/admin/home-section-card.tsx:54:12
-Type error: Property 'id' is missing in type '{ label: string; value: string; onChange: (value: string) => void; }' but required in type 'ImageUploadFieldProps'.
+Route (app)
+┌ ƒ /
+├ ƒ /_not-found
+├ ƒ /[main-nav]
+├ ƒ /[main-nav]/[sub-nav]
+├ ƒ /admin
+├ ƒ /admin/coupons
+├ ƒ /admin/footer-settings
+├ ƒ /admin/home-settings
+├ ƒ /admin/navbar-settings
+├ ƒ /admin/orders
+├ ƒ /admin/products
+├ ƒ /admin/products/[productId]/edit
+├ ƒ /admin/products/new
+├ ƒ /admin/seo-settings
+├ ƒ /admin/site-settings
+├ ƒ /admin/stock-management
+├ ƒ /admin/users
+├ ƒ /api/admin/upload-image
+├ ƒ /api/cart/sync
+├ ƒ /api/checkout
+├ ƒ /api/checkout/bkash
+├ ƒ /api/checkout/coupon
+├ ƒ /api/profile/upload-avatar
+├ ƒ /api/storefront/search
+├ ƒ /checkout
+├ ƒ /login
+├ ƒ /payment/failed
+├ ƒ /payment/successful
+├ ƒ /product/[slug]
+├ ƒ /profile
+├ ƒ /profile/edit
+├ ƒ /profile/orders
+├ ƒ /profile/password
+├ ƒ /search
+└ ƒ /signup
 
-[0m [90m 52 |[39m         {section[33m.[39mslides[33m.[39mmap((slide[33m,[39m slideIndex) [33m=>[39m [33m<[39m[33mdiv[39m key[33m=[39m{slide[33m.[39mid} className[33m=[39m[32m"space-y-3 rounded-xl border bg-background p-3"[39m[33m>[39m
- [90m 53 |[39m           [33m<[39m[33mdiv[39m className[33m=[39m[32m"flex items-center justify-between"[39m[33m>[39m[33m<[39m[33mspan[39m className[33m=[39m[32m"text-xs font-semibold"[39m[33m>[39m[33mSlide[39m {slideIndex [33m+[39m [35m1[39m}[33m<[39m[35m/span><div className="flex items-center gap-2"><Checkbox checked={slide.isActive} onCheckedChange={(value) => changeSlide(slideIndex, "isActive", value === true)} /[39m[33m>[39m[33m<[39m[33mButton[39m type[33m=[39m[32m"button"[39m size[33m=[39m[32m"icon"[39m variant[33m=[39m[32m"ghost"[39m onClick[33m=[39m{() [33m=>[39m removeSlide(slideIndex)}[33m>[39m[33m<[39m[33mTrash2[39m className[33m=[39m[32m"size-4"[39m [33m/[39m[33m>[39m[33m<[39m[33m/[39m[33mButton[39m[33m>[39m[33m<[39m[33m/[39m[33mdiv[39m[33m>[39m[33m<[39m[33m/[39m[33mdiv[39m[33m>[39m
-[31m[1m>[22m[39m[90m 54 |[39m           [33m<[39m[33mImageUploadField[39m label[33m=[39m[32m"Slide image"[39m value[33m=[39m{slide[33m.[39mimageUrl} onChange[33m=[39m{(value) [33m=>[39m changeSlide(slideIndex[33m,[39m [32m"imageUrl"[39m[33m,[39m value)} [33m/[39m[33m>[39m
- [90m    |[39m            [31m[1m^[22m[39m
- [90m 55 |[39m           [33m<[39m[33mdiv[39m className[33m=[39m[32m"grid gap-3 md:grid-cols-2"[39m[33m>[39m[33m<[39m[33mInput[39m value[33m=[39m{slide[33m.[39mtitle} onChange[33m=[39m{(e) [33m=>[39m changeSlide(slideIndex[33m,[39m [32m"title"[39m[33m,[39m e[33m.[39mtarget[33m.[39mvalue)} placeholder[33m=[39m[32m"Headline"[39m [35m/><Input value={slide.subtitle} onChange={(e) => changeSlide(slideIndex, "subtitle", e.target.value)} placeholder="Supporting text" /[39m[33m>[39m[33m<[39m[33mInput[39m value[33m=[39m{slide[33m.[39mbuttonLabel} onChange[33m=[39m{(e) [33m=>[39m changeSlide(slideIndex[33m,[39m [32m"buttonLabel"[39m[33m,[39m e[33m.[39mtarget[33m.[39mvalue)} placeholder[33m=[39m[32m"Button label"[39m [33m/[39m[33m>[39m[33m<[39m[33mInput[39m value[33m=[39m{slide[33m.[39mlinkUrl} onChange[33m=[39m{(e) [33m=>[39m changeSlide(slideIndex[33m,[39m [32m"linkUrl"[39m[33m,[39m e[33m.[39mtarget[33m.[39mvalue)} placeholder[33m=[39m[32m"/shop"[39m [33m/[39m[33m>[39m[33m<[39m[33m/[39m[33mdiv[39m[33m>[39m
- [90m 56 |[39m         [33m<[39m[33m/[39m[33mdiv[39m[33m>[39m)}
- [90m 57 |[39m       [33m<[39m[33m/[39m[33mdiv[39m[33m>[39m [33m:[39m [33m<[39m[33m>[39m[0m
-Next.js build worker exited with code: 1 and signal: null
+
+ƒ Proxy (Middleware)
+
+ƒ  (Dynamic)  server-rendered on demand
+
 
 --- Backend build tail ---
 npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
@@ -57,7 +94,7 @@ npm warn deprecated glob@10.5.0: Old versions of glob are not supported, and con
 npm warn deprecated glob@10.5.0: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 npm warn deprecated glob@10.5.0: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
-added 975 packages, and audited 976 packages in 14s
+added 975 packages, and audited 976 packages in 11s
 
 181 packages are looking for funding
   run `npm fund` for details
