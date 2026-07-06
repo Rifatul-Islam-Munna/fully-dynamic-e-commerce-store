@@ -4,7 +4,7 @@ Backend build status: 0
 --- Frontend build tail ---
 npm warn deprecated node-domexception@1.0.0: Use your platform's native DOMException instead
 
-added 845 packages, and audited 846 packages in 20s
+added 845 packages, and audited 846 packages in 19s
 
 279 packages are looking for funding
   run `npm fund` for details
@@ -31,14 +31,14 @@ https://nextjs.org/telemetry
 ▲ Next.js 16.1.6 (Turbopack)
 
   Creating an optimized production build ...
-✓ Compiled successfully in 8.7s
+✓ Compiled successfully in 8.6s
   Running TypeScript ...
   Collecting page data using 3 workers ...
   Generating static pages using 3 workers (0/33) ...
   Generating static pages using 3 workers (8/33) 
   Generating static pages using 3 workers (16/33) 
   Generating static pages using 3 workers (24/33) 
-✓ Generating static pages using 3 workers (33/33) in 395.0ms
+✓ Generating static pages using 3 workers (33/33) in 379.1ms
   Finalizing page optimization ...
 
 Route (app)
