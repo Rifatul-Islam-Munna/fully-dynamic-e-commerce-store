@@ -4,5 +4,10 @@ import { useHomeSettingsEditor } from "@/components/admin/use-home-settings-edit
 
 export function PageBuilder() {
   const editor = useHomeSettingsEditor();
-  return <div>{editor.loading ? "Loading page builder..." : "Page builder ready"}</div>;
+
+  if (editor.loading) {
+    return <div className="p-8 text-center">Loading page builder...</div>;
+  }
+
+  return <div className="space-y-6">Page builder ready</div>;
 }
