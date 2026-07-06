@@ -13,7 +13,6 @@ import {
 import { HomeSectionCard } from "@/components/admin/home-section-card";
 import { PageBuilderHeader } from "@/components/admin/page-builder-header";
 import { PageBuilderTarget } from "@/components/admin/page-builder-target";
-import { PagePaletteGrid } from "@/components/admin/page-palette-grid";
 import { useHomeSettingsEditor } from "@/components/admin/use-home-settings-editor";
 import { Button } from "@/components/ui/button";
 
@@ -28,7 +27,7 @@ export function PageBuilder() {
           <div>
             <p className="text-sm font-semibold">Loading page builder</p>
             <p className="text-xs text-on-surface-variant">
-              Preparing your sections, themes, and navigation targets.
+              Preparing your sections and navigation targets.
             </p>
           </div>
         </div>
@@ -66,11 +65,6 @@ export function PageBuilder() {
             setSub={editor.setTargetSubNav}
           />
 
-          <PagePaletteGrid
-            selected={editor.form.theme}
-            choose={(theme) => editor.setForm((current) => ({ ...current, theme }))}
-          />
-
           <section className="overflow-hidden rounded-2xl border bg-surface-container-lowest">
             <div className="flex flex-col gap-3 border-b px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
@@ -82,7 +76,7 @@ export function PageBuilder() {
                   </span>
                 </div>
                 <p className="mt-1 text-xs text-on-surface-variant">
-                  Drag sections to change their storefront order. Open a section to edit content and preview every design option.
+                  Drag sections to change their storefront order. Click a component or design to open its preview before applying it.
                 </p>
               </div>
 
@@ -115,27 +109,8 @@ export function PageBuilder() {
                 </div>
                 <h3 className="text-base font-semibold">Create a modern storefront page</h3>
                 <p className="mt-1 max-w-md text-sm text-on-surface-variant">
-                  Add a hero, product collection, promotional banner, or custom content section. Each section includes selectable visual previews.
+                  Use the component buttons above. Every component opens in a large preview first, then you can add and customize it.
                 </p>
-                <div className="mt-5 flex flex-wrap justify-center gap-2">
-                  <Button type="button" onClick={() => editor.addSection("hero_slider")}>
-                    Add hero slider
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => editor.addSection("product_collection")}
-                  >
-                    Add products
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => editor.addSection("custom_banner")}
-                  >
-                    Add custom banner
-                  </Button>
-                </div>
               </div>
             ) : (
               <ReactSortable
@@ -199,14 +174,14 @@ export function PageBuilder() {
                 <Eye className="size-5" />
               </div>
               <div>
-                <h2 className="text-sm font-semibold">Visual design workflow</h2>
+                <h2 className="text-sm font-semibold">Preview-first workflow</h2>
                 <p className="mt-1 text-xs leading-5 text-on-surface-variant">
-                  Theme palettes show their real colors. Every section design shows a miniature example before selection, so merchants always know what they are applying.
+                  Component buttons open a large example before adding. Every section design also opens a full preview before it is selected.
                 </p>
               </div>
             </div>
 
-            <div className="mt-5 grid grid-cols-3 gap-2 text-center">
+            <div className="mt-5 grid grid-cols-2 gap-2 text-center">
               <div className="rounded-xl bg-surface-container-low p-3">
                 <strong className="block text-lg">{editor.form.sections.length}</strong>
                 <span className="text-[10px] uppercase tracking-wide text-on-surface-variant">Sections</span>
@@ -217,12 +192,6 @@ export function PageBuilder() {
                 </strong>
                 <span className="text-[10px] uppercase tracking-wide text-on-surface-variant">Active</span>
               </div>
-              <div className="rounded-xl bg-surface-container-low p-3">
-                <strong className="block truncate text-sm leading-7">
-                  {editor.form.theme || "Default"}
-                </strong>
-                <span className="text-[10px] uppercase tracking-wide text-on-surface-variant">Theme</span>
-              </div>
             </div>
           </section>
 
@@ -230,11 +199,14 @@ export function PageBuilder() {
             <h2 className="text-sm font-semibold">Publishing checklist</h2>
             <div className="mt-3 space-y-2 text-xs text-on-surface-variant">
               <p>• Confirm the correct page target.</p>
-              <p>• Choose a readable palette.</p>
-              <p>• Preview the design card for every section.</p>
+              <p>• Preview every component and section design.</p>
               <p>• Keep the most important content near the top.</p>
+              <p>• Check mobile-friendly text length and imagery.</p>
               <p>• Disable unfinished sections before saving.</p>
             </div>
+            <p className="mt-4 rounded-xl bg-primary/10 p-3 text-xs leading-5 text-primary">
+              Global colors, product cards, and product detail layouts remain in Site Settings.
+            </p>
           </section>
         </aside>
       </div>
@@ -246,7 +218,7 @@ export function PageBuilder() {
               Editing {editor.targetSubNav || editor.targetMainNav || "Homepage"}
             </p>
             <p className="hidden text-xs text-on-surface-variant sm:block">
-              Save to publish this layout, section order, selected designs, and theme.
+              Save to publish this layout, section order, content, and selected designs.
             </p>
           </div>
           <Button
