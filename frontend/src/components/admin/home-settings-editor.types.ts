@@ -46,3 +46,8 @@ export type HomeSettingsForm = {
   theme: string;
   sections: SectionForm[];
 };
+
+export const EMPTY_HOME_FORM: HomeSettingsForm = {
+  theme: "",
+  sections: [],
+};
