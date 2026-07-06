@@ -4,7 +4,7 @@ Backend build status: 0
 --- Frontend build tail ---
 npm warn deprecated node-domexception@1.0.0: Use your platform's native DOMException instead
 
-added 845 packages, and audited 846 packages in 19s
+added 845 packages, and audited 846 packages in 16s
 
 279 packages are looking for funding
   run `npm fund` for details
@@ -31,14 +31,14 @@ https://nextjs.org/telemetry
 ▲ Next.js 16.1.6 (Turbopack)
 
   Creating an optimized production build ...
-✓ Compiled successfully in 8.8s
+✓ Compiled successfully in 8.7s
   Running TypeScript ...
   Collecting page data using 3 workers ...
   Generating static pages using 3 workers (0/33) ...
   Generating static pages using 3 workers (8/33) 
   Generating static pages using 3 workers (16/33) 
   Generating static pages using 3 workers (24/33) 
-✓ Generating static pages using 3 workers (33/33) in 379.6ms
+✓ Generating static pages using 3 workers (33/33) in 366.3ms
   Finalizing page optimization ...
 
 Route (app)
@@ -94,7 +94,7 @@ npm warn deprecated glob@10.5.0: Old versions of glob are not supported, and con
 npm warn deprecated glob@10.5.0: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 npm warn deprecated glob@10.5.0: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
-added 975 packages, and audited 976 packages in 13s
+added 975 packages, and audited 976 packages in 11s
 
 181 packages are looking for funding
   run `npm fund` for details
